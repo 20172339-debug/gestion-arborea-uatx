@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UATx | Sistema de Gestión Arbórea</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; scroll-behavior: smooth; }
+        
+        /* Animaciones de Navegación */
+        .tab-section { display: none; opacity: 0; transform: translateY(15px); transition: all 0.4s ease; }
+        .tab-section.active { display: block; opacity: 1; transform: translateY(0); }
+        
+        .glass-card { background: white; border: 1px solid #e2e8f0; border-radius: 1.5rem; transition: all 0.3s ease; }
+        .glass-card:hover { transform: translateY(-5px); border-color: #10b981; box-shadow: 0 15px 30px -10px rgba(0,0,0,0.05); }
+        
+        .nav-link { position: relative; font-weight: 700; color: #64748b; transition: 0.3s; padding: 0.5rem 0; }
+        .nav-link.active { color: #065f46; }
+        .nav-link.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background: #10b981; border-radius: 10px; }
+        
+        /* Efecto de pulso para Focos de Infección */
+        .pulse-red { animation: pulse-red 2s infinite; }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-800 p-2 rounded-xl text-white shadow-lg shadow-emerald-200">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tighter text-slate-800 uppercase">UATx</h1>
+                    <p class="text-[10px] font-bold text-emerald-600 tracking-widest uppercase">Sistema de Gestión Arbórea</p>
+                </div>
+            </div>
+            
+            <nav class="hidden md:flex gap-8">
+                <button onclick="showTab('inicio')" id="btn-inicio" class="nav-link active">Inicio</button>
+                <button onclick="showTab('catastro')" id="btn-catastro" class="nav-link">Catastro</button>
+                <button onclick="showTab('educacion')" id="btn-educacion" class="nav-link">Educación</button>
+                <button onclick="showTab('cultura')" id="btn-cultura" class="nav-link">Cultura</button>
+                <button onclick="showTab('redes')" id="btn-redes" class="nav-link">Redes</button>
+            </nav>
+
+            <button class="bg-slate-900 text-white px-5 py-2.5 rounded-full text-[11px] font-black uppercase tracking-wider hover:bg-emerald-800 transition">
+                <i class="fas fa-user-shield mr-2"></i> Acceso Institucional
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+
+        <section id="inicio" class="tab-section active">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight italic">Observatorio Universitario</h2>
+                    <p class="text-slate-500">Diagnóstico fitopatológico del campus en tiempo real.</p>
+                </div>
+                <button onclick="showTab('catastro')" class="bg-emerald-600 text-white px-6 py-3 rounded-2xl shadow-xl hover:bg-emerald-500 transition flex items-center gap-3">
+                    <i class="fas fa-plus-circle"></i> <span class="font-bold text-sm">NUEVO REGISTRO</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div class="glass-card p-6 flex flex-col justify-between">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Censo Total</span>
+                    <h3 class="text-5xl font-black text-slate-800 mt-2 tracking-tighter">340</h3>
+                    <p class="text-[10px] text-emerald-600 font-bold mt-2"><i class="fas fa-check-circle"></i> Campus Sincronizado</p>
+                </div>
+                <div class="glass-card p-6 flex flex-col justify-between border-t-4 border-red-500 pulse-red">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest text-red-500">Foco de Infección</span>
+                    <h3 class="text-5xl font-black text-red-600 mt-2 tracking-tighter">85</h3>
+                    <p class="text-[10px] text-red-400 font-bold mt-2 italic">Árboles parasitados</p>
+                </div>
+                <div class="glass-card p-6 flex flex-col justify-between">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Biodiversidad</span>
+                    <h3 class="text-5xl font-black text-slate-800 mt-2 tracking-tighter">20</h3>
+                    <p class="text-[10px] text-slate-400 font-bold mt-2">Especies identificadas</p>
+                </div>
+                <div class="glass-card p-6 flex flex-col items-center justify-center relative overflow-hidden">
+                    <canvas id="radialHealth" width="100" height="100"></canvas>
+                    <div class="text-center mt-2">
+                        <span class="text-xl font-black text-emerald-700">75%</span>
+                        <p class="text-[9px] font-bold text-slate-400 uppercase">Salud Global</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <div class="glass-card p-8">
+                    <h4 class="text-xs font-bold text-slate-400 uppercase mb-8 italic flex items-center gap-2">
+                        <i class="fas fa-chart-pie text-emerald-500"></i> Proporción de Salud
+                    </h4>
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <div class="lg:col-span-2 glass-card p-8">
+                    <h4 class="text-xs font-bold text-slate-400 uppercase mb-8 italic flex items-center gap-2">
+                        <i class="fas fa-chart-bar text-red-500"></i> Top 5 Especies con Carga Parasitaria
+                    </h4>
+                    <canvas id="barChart" height="130"></canvas>
+                </div>
+            </div>
+
+            <div class="glass-card p-8">
+                <h4 class="text-xs font-bold text-slate-400 uppercase mb-8 italic flex items-center gap-2">
+                    <i class="fas fa-history text-blue-500"></i> Avance de la Plaga (Propagación por Meses)
+                </h4>
+                <canvas id="timeChart" height="80"></canvas>
+            </div>
+        </section>
+
+        <section id="catastro" class="tab-section">
+            <div class="mb-10">
+                <h2 class="text-3xl font-extrabold text-slate-900 italic">Inventario por Especie</h2>
+                <p class="text-slate-500">Registro técnico y prefijos automáticos.</p>
+            </div>
+            <div class="glass-card overflow-hidden">
+                <div class="p-6 border-b border-slate-100 flex gap-4">
+                    <input type="text" placeholder="Buscar por código (ej. DUR-001)..." class="bg-slate-50 border-none rounded-xl px-4 py-2 text-sm w-full focus:ring-2 focus:ring-emerald-500">
+                    <select class="bg-slate-50 border-none rounded-xl px-4 py-2 text-sm text-slate-500">
+                        <option>Todos los Estados</option>
+                        <option>Sano</option>
+                        <option>Parasitado</option>
+                    </select>
+                </div>
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 text-[10px] font-black uppercase text-slate-400 border-b border-slate-100">
+                        <tr>
+                            <th class="p-5">ID Único</th>
+                            <th class="p-5">Nombre Científico</th>
+                            <th class="p-5">Ubicación</th>
+                            <th class="p-5">Estado</th>
+                            <th class="p-5">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm divide-y divide-slate-50">
+                        <tr class="hover:bg-emerald-50/30 transition">
+                            <td class="p-5 font-bold text-emerald-800 tracking-tighter uppercase">DUR-005</td>
+                            <td class="p-5 italic font-medium">Prunus persica (Durazno)</td>
+                            <td class="p-5 text-slate-400">Zona 1 / Campus Central</td>
+                            <td class="p-5"><span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-[10px] font-black">NIVEL 5</span></td>
+                            <td class="p-5"><button class="text-emerald-600 hover:underline font-bold">Ver Ficha</button></td>
+                        </tr>
+                        <tr class="hover:bg-emerald-50/30 transition">
+                            <td class="p-5 font-bold text-emerald-800 tracking-tighter uppercase">CHI-002</td>
+                            <td class="p-5 italic font-medium">Annona cherimola (Chirimolla)</td>
+                            <td class="p-5 text-slate-400">Zona 2 / Huertos</td>
+                            <td class="p-5"><span class="bg-emerald-100 text-emerald-600 px-3 py-1 rounded-full text-[10px] font-black">SANO</span></td>
+                            <td class="p-5"><button class="text-emerald-600 hover:underline font-bold">Ver Ficha</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="educacion" class="tab-section">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-extrabold text-slate-900 italic">Aula Ambiental UATx</h2>
+                <p class="text-slate-500">Recursos didácticos para la brigada forestal.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="glass-card overflow-hidden group">
+                    <div class="h-48 bg-emerald-900 flex items-center justify-center relative cursor-pointer">
+                        <i class="fas fa-play-circle text-6xl text-white opacity-40 group-hover:scale-110 group-hover:opacity-100 transition"></i>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-bold text-slate-800">Biología del Parásito</h4>
+                        <p class="text-xs text-slate-400 mt-2 leading-relaxed">Video sobre el mecanismo de haustorios y succión de savia bruta.</p>
+                    </div>
+                </div>
+                <div class="glass-card p-8 flex flex-col justify-between bg-emerald-50 border-emerald-100">
+                    <div>
+                        <i class="fas fa-file-pdf text-4xl text-emerald-600 mb-4"></i>
+                        <h4 class="font-bold text-xl text-emerald-900 leading-tight">Guía Técnica de Poda</h4>
+                        <p class="text-xs text-emerald-700 mt-2 italic">Manual institucional para el manejo de infestación.</p>
+                    </div>
+                    <button class="bg-emerald-600 text-white w-full py-3 rounded-xl mt-6 text-xs font-bold uppercase tracking-widest">Descargar PDF</button>
+                </div>
+                <div class="glass-card p-8 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center">
+                    <i class="fas fa-image text-3xl text-slate-300 mb-4"></i>
+                    <h4 class="font-bold text-slate-800 uppercase text-xs tracking-widest italic">Galería de Campo</h4>
+                    <p class="text-[10px] text-slate-400 mt-2">Fotos enviadas por alumnos durante el muestreo.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cultura" class="tab-section">
+            <div class="bg-white rounded-[3rem] p-10 lg:p-20 border border-slate-100 shadow-sm relative overflow-hidden">
+                <div class="max-w-2xl relative z-10">
+                    <span class="text-emerald-600 font-black text-[10px] uppercase tracking-[0.3em] mb-4 block">Investigación Cultural</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900 italic mb-8 leading-tight italic">Entre el Mito Sagrado y la Alerta Botánica</h2>
+                    <div class="space-y-8 text-slate-600 text-sm leading-relaxed">
+                        <p>Para los <strong>Celtas</strong>, el muérdago era "aquel que cura todo". Recolectado con una hoz de oro, nunca podía tocar el suelo para no perder su poder místico. Era el puente entre el mundo espiritual y el terrenal.</p>
+                        <p>En el <strong>Norte de Europa</strong>, su simbolismo se entrelaza con el beso bajo su sombra: una tregua de paz nacida de la tragedia de Balder. Hoy, en la <strong>UATx</strong>, nuestra "tregua" es la intervención científica para salvar nuestros árboles frutales.</p>
+                    </div>
+                    <div class="mt-12 p-8 bg-emerald-50 rounded-[2rem] border-l-8 border-emerald-600 flex items-center gap-6">
+                        <i class="fas fa-paint-brush text-3xl text-emerald-800"></i>
+                        <div>
+                            <h4 class="font-bold text-emerald-900">Historieta Próxima</h4>
+                            <p class="text-xs text-emerald-700 italic">"Las Crónicas de Viscum": Un viaje visual por la historia del campus.</p>
+                        </div>
+                    </div>
+                </div>
+                <i class="fas fa-scroll absolute -right-20 -bottom-20 text-[20rem] text-slate-50 -rotate-12"></i>
+            </div>
+        </section>
+
+        <section id="redes" class="tab-section">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl font-extrabold text-slate-900 italic mb-4">Colectivo Universitario</h2>
+                <p class="text-slate-500 mb-12">Sigue nuestra labor de divulgación y poda en redes sociales.</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <a href="#" class="glass-card p-8 flex flex-col items-center hover:bg-gradient-to-br from-pink-50 to-white group transition">
+                        <i class="fab fa-instagram text-4xl text-pink-500 group-hover:scale-110 transition"></i>
+                        <span class="text-[10px] font-black uppercase mt-4 tracking-widest text-slate-400">Instagram</span>
+                    </a>
+                    <a href="#" class="glass-card p-8 flex flex-col items-center hover:bg-blue-50 transition group">
+                        <i class="fab fa-facebook-f text-4xl text-blue-600 group-hover:scale-110 transition"></i>
+                        <span class="text-[10px] font-black uppercase mt-4 tracking-widest text-slate-400">Facebook</span>
+                    </a>
+                    <a href="#" class="glass-card p-8 flex flex-col items-center hover:bg-slate-100 transition group">
+                        <i class="fab fa-tiktok text-4xl text-slate-900 group-hover:scale-110 transition"></i>
+                        <span class="text-[10px] font-black uppercase mt-4 tracking-widest text-slate-400">TikTok</span>
+                    </a>
+                    <a href="#" class="glass-card p-8 flex flex-col items-center hover:bg-red-50 transition group">
+                        <i class="fab fa-youtube text-4xl text-red-600 group-hover:scale-110 transition"></i>
+                        <span class="text-[10px] font-black uppercase mt-4 tracking-widest text-slate-400">YouTube</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Función de Navegación por Pestañas con Animación
+        function showTab(tabId) {
+            // Desactivar todos los botones
+            document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+            // Ocultar todas las secciones
+            document.querySelectorAll('.tab-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Activar botón y sección correspondiente
+            document.getElementById('btn-' + tabId).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            
+            // Scroll arriba suave
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- Configuración de Gráficas (Chart.js) ---
+        const emerald = '#059669';
+        const red = '#ef4444';
+        const slate = '#f1f5f9';
+
+        // 1. Radial Health KPI
+        new Chart(document.getElementById('radialHealth'), {
+            type: 'doughnut',
+            data: { datasets: [{ data: [75, 25], backgroundColor: [emerald, slate], borderWidth: 0 }] },
+            options: { cutout: '80%', circumference: 180, rotation: 270, plugins: { legend: { display: false } } }
+        });
+
+        // 2. Pie Chart: Proporción
+        new Chart(document.getElementById('pieChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Árboles Sanos', 'Infestados'],
+                datasets: [{ data: [255, 85], backgroundColor: [emerald, red], hoverOffset: 20 }]
+            },
+            options: { plugins: { legend: { position: 'bottom', labels: { font: { weight: 'bold', size: 11 } } } } }
+        });
+
+        // 3. Bar Chart: Especies con Carga (Basado en tu tabla de 340 árboles)
+        new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Durazno', 'Chirimolla', 'Enebro', 'Pino', 'Limpia Bota'],
+                datasets: [{ label: 'Grado de Infestación', data: [45, 18, 12, 8, 2], backgroundColor: emerald, borderRadius: 12 }]
+            },
+            options: { scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+        });
+
+        // 4. Time Chart: Propagación
+        new Chart(document.getElementById('timeChart'), {
+            type: 'line',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+                datasets: [{ label: 'Propagación Mensual', data: [5, 12, 20, 25, 23, 30], borderColor: emerald, backgroundColor: 'rgba(5, 150, 105, 0.05)', fill: true, tension: 0.4 }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
+        });
+    </script>
+</body>
+</html>
