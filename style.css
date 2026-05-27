@@ -8,7 +8,12 @@ body {
   font-family: Arial, sans-serif;
   background: #f5f4ef;
   color: #1e293b;
+  overflow-x: hidden;
 }
+
+/* =========================
+   HEADER
+========================= */
 
 header {
   position: sticky;
@@ -30,6 +35,12 @@ header {
 
 .logo i {
   color: #1f6d4d;
+  font-size: 24px;
+}
+
+.logo h1 {
+  color: #1f6d4d;
+  font-size: 24px;
 }
 
 nav {
@@ -45,11 +56,17 @@ nav button {
   border-radius: 10px;
   cursor: pointer;
   transition: 0.3s;
+  font-weight: bold;
 }
 
 nav button:hover {
   transform: translateY(-2px);
+  background: #285c45;
 }
+
+/* =========================
+   MAIN
+========================= */
 
 main {
   padding: 40px;
@@ -65,11 +82,384 @@ main {
 }
 
 @keyframes fade {
+
   from {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
-  margin-bot
+  }
+
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+  margin-bottom: 40px;
+}
+
+.hero h2 {
+  font-size: 42px;
+  color: #1f6d4d;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #475569;
+  font-size: 18px;
+}
+
+/* =========================
+   TARJETAS
+========================= */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: white;
+  padding: 30px;
+  border-radius: 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.stat-card h3 {
+  margin-bottom: 15px;
+  color: #64748b;
+}
+
+.stat-card span {
+  font-size: 52px;
+  font-weight: bold;
+  color: #1f6d4d;
+}
+
+.stat-card.danger span {
+  color: #b91c1c;
+}
+
+/* =========================
+   GRAFICAS
+========================= */
+
+.charts-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(320px, 1fr));
+
+  gap: 2rem;
+
+  margin-top: 2rem;
+}
+
+.chart-card {
+
+  background: white;
+
+  padding: 1.5rem;
+
+  border-radius: 25px;
+
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+
+  position: relative;
+
+  height: 420px;
+}
+
+.chart-card.large {
+  height: 500px;
+}
+
+.chart-card h3 {
+  margin-bottom: 20px;
+  color: #334155;
+}
+
+.chart-card canvas {
+
+  width: 100% !important;
+
+  height: 320px !important;
+}
+
+.chart-card.large canvas {
+
+  height: 400px !important;
+}
+
+/* =========================
+   TITULOS
+========================= */
+
+.section-title {
+  text-align: center;
+  font-size: 42px;
+  margin-bottom: 50px;
+  color: #1f6d4d;
+}
+
+/* =========================
+   LIBROS
+========================= */
+
+.books-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(250px,1fr));
+
+  gap: 40px;
+}
+
+.book {
+  perspective: 1200px;
+}
+
+.book-inner {
+
+  position: relative;
+
+  width: 100%;
+
+  height: 320px;
+
+  transform-style: preserve-3d;
+
+  transition: transform 1s;
+}
+
+.book:hover .book-inner {
+  transform: rotateY(180deg);
+}
+
+.book-front,
+.book-back {
+
+  position: absolute;
+
+  width: 100%;
+
+  height: 100%;
+
+  border-radius: 20px;
+
+  backface-visibility: hidden;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+
+  padding: 30px;
+}
+
+.book-front {
+
+  background: linear-gradient(
+    135deg,
+    #8b5e34,
+    #c19a6b
+  );
+
+  color: white;
+}
+
+.book-front.nordic {
+
+  background: linear-gradient(
+    135deg,
+    #1d3557,
+    #457b9d
+  );
+}
+
+.book-front.healer {
+
+  background: linear-gradient(
+    135deg,
+    #2d6a4f,
+    #40916c
+  );
+}
+
+.book-front.modern {
+
+  background: linear-gradient(
+    135deg,
+    #7f1d1d,
+    #b91c1c
+  );
+}
+
+.book-front h3 {
+  font-size: 30px;
+  margin-bottom: 15px;
+}
+
+.book-back {
+
+  background: white;
+
+  color: #1e293b;
+
+  transform: rotateY(180deg);
+
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   EDUCACION
+========================= */
+
+.education-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(250px,1fr));
+
+  gap: 25px;
+}
+
+.edu-card {
+
+  background: white;
+
+  padding: 40px 20px;
+
+  border-radius: 20px;
+
+  text-align: center;
+
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+
+  transition: 0.3s;
+}
+
+.edu-card:hover {
+
+  transform: translateY(-8px);
+}
+
+.edu-card i {
+
+  font-size: 50px;
+
+  color: #1f6d4d;
+
+  margin-bottom: 20px;
+}
+
+.edu-card h3 {
+  margin-bottom: 15px;
+}
+
+/* =========================
+   CONTACTO
+========================= */
+
+.contact-box {
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 30px;
+
+  margin-top: 50px;
+
+  flex-wrap: wrap;
+}
+
+.contact-box a {
+
+  width: 80px;
+
+  height: 80px;
+
+  border-radius: 50%;
+
+  background: #1f6d4d;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  color: white;
+
+  font-size: 30px;
+
+  text-decoration: none;
+
+  transition: 0.3s;
+}
+
+.contact-box a:hover {
+
+  transform: scale(1.1);
+
+  background: #285c45;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px) {
+
+  header {
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  nav {
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+  }
+
+  .hero h2 {
+    font-size: 32px;
+  }
+
+  .section-title {
+    font-size: 32px;
+  }
+
+  .chart-card.large {
+    height: 420px;
+  }
+
+  .chart-card.large canvas {
+    height: 320px !important;
+  }
+
+  main {
+    padding: 20px;
+  }
+
+}
