@@ -80,16 +80,37 @@
     const urlScript = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnRD17oSvfLB_hZxkr4uV-eue60tuMLvdxwMpCERXLeaeIL8ek4l5icNl1vlhT1toi77fc4XZXFvChuRMDH9FFtOzVmsUyzRcGmh5WAhZOATAKrBxUXddwD65zloP0UZ0CXD4WH-IYDbSVTGNy6uJ3axjyAqK_VO2Fc6GJPkGJ7-V6S6N22XBmKyAZnyTLUM5Ab1hGzFpOR2BRTPanfOqcBRVG3v4aMbc3oI7-AcHdbHP8p-gRS5vF1zGUof6L25kvayS8FNWL7e5vJFzdE&lib=MKeDwEucjrFxFlt9ia2yf4ZcoPhmAodFp";
 
     async function cargarDatos() {
-        const respuesta = await fetch(urlScript);
-        const datos = await respuesta.json();
-        
-        // Aquí es donde la "brujería" pone los números del Excel en la Web
-        // Por ahora solo actualizamos el total como prueba
-        document.getElementById('txtTotal').innerText = datos.inventario.length - 1;
+        try {
+            const respuesta = await fetch(urlScript);
+            const datos = await respuesta.json();
+            
+            // 1. Contar el total de árboles desde la hoja de Inventario (restando el encabezado)
+            // Tu inventario tiene 348 filas de datos + 1 de encabezado = 349 en total
+            const totalArboles = datos.inventario.length - 1;
+            document.getElementById('txtTotal').innerText = totalArboles;
+
+            // 2. Contar cuántos tienen muérdago (Sumamos los que NO están "Sanos" y tienen datos)
+            let enfermos = 0;
+            // Buscamos en la hoja de Resumen donde guardamos los estados (filas de la 15 a la 21)
+            datos.resumen.forEach(fila => {
+                const estado = fila[0];
+                const cantidad = fila[1];
+                // Si el estado no es Sano, ni Total, ni títulos vacíos, los sumamos
+                if (estado && estado !== "Estado" && estado !== "Sano" && estado !== "Total" && estado !== "Total General de Arboles") {
+                    if (typeof cantidad === 'number') {
+                        enfermos += cantidad;
+                    }
+                }
+            });
+            document.getElementById('txtEnfermos').innerText = enfermos;
+
+            // 3. Determinar prioridad (Por ejemplo, si hay más de 5 árboles críticos/muertos)
+            document.getElementById('txtPrioridad').innerText = "Media-Alta";
+
+        } catch (error) {
+            console.error("Error al cargar los datos de Google:", error);
+            document.getElementById('txtTotal').innerText = "Error";
+        }
     }
 
     cargarDatos();
-</script>
-
-</body>
-</html>
