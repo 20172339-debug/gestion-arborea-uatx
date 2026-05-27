@@ -10,14 +10,14 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Outfit:wght@300;400;600;700&display=swap');
         :root { --bg-crema: #fdfbf7; --verde-musgo: #2c4a3e; --oro: #c5a059; --alerta-roja: #d62828; }
-        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-crema); color: #2b2d42; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-crema); color: #2b2d42; margin: 0; }
         .titulo-medieval { font-family: 'Cinzel', serif; }
         .tab-section { display: none; }
-        .tab-section.active { display: block; animation: fadeIn 0.6s ease; }
+        .tab-section.active { display: block; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .alerta-peligro { animation: parpadeo 2s infinite alternate; border: 2px solid var(--alerta-roja); }
-        @keyframes parpadeo { from { box-shadow: 0 0 5px rgba(214,40,40,0.2); } to { box-shadow: 0 0 20px rgba(214,40,40,0.6); } }
-        .hoja-libro { background: #f7f4eb; border-left: 4px solid #e3dec3; box-shadow: 5px 5px 20px rgba(0,0,0,0.05); min-height: 350px; }
+        .alerta-peligro { animation: parpadeo 2s infinite alternate; border: 2px solid var(--alerta-roja) !important; }
+        @keyframes parpadeo { from { box-shadow: 0 0 5px rgba(214,40,40,0.2); background: #fff; } to { box-shadow: 0 0 20px rgba(214,40,40,0.4); background: #fff5f5; } }
+        .nav-btn.active { color: #2c4a3e; border-bottom: 2px solid #c5a059; }
     </style>
 </head>
 <body>
@@ -25,165 +25,156 @@
     <header class="border-b border-[#e9e3d3] sticky top-0 z-50 bg-[#fdfbf7]/90 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <div class="h-12 w-12 rounded-full flex items-center justify-center text-white bg-[#2c4a3e] shadow-md">
-                    <i class="fas fa-tree text-[#dfcba5]"></i>
+                <div class="h-10 w-10 rounded-full flex items-center justify-center text-white bg-[#2c4a3e]">
+                    <i class="fas fa-tree"></i>
                 </div>
                 <h1 class="text-xl font-bold text-[#2c4a3e] titulo-medieval">UATx | BIOCATASTRO</h1>
             </div>
             <nav class="hidden lg:flex gap-6">
-                <button onclick="nav('inicio')" id="l-inicio" class="nav-btn px-3 py-2 font-semibold text-emerald-900 border-b-2 border-amber-600">Dashboard</button>
-                <button onclick="nav('educacion')" id="l-educacion" class="nav-btn px-3 py-2 font-semibold text-slate-500">Educación</button>
-                <button onclick="nav('viaje')" id="l-viaje" class="nav-btn px-3 py-2 font-semibold text-slate-500">El Viaje</button>
-                <button onclick="nav('comunidad')" id="l-comunidad" class="nav-btn px-3 py-2 font-semibold text-slate-500">Comunidad</button>
+                <button onclick="nav('inicio')" id="l-inicio" class="nav-btn px-2 py-1 font-semibold text-slate-500 active">Dashboard</button>
+                <button onclick="nav('educacion')" id="l-educacion" class="nav-btn px-2 py-1 font-semibold text-slate-500">Educación</button>
+                <button onclick="nav('viaje')" id="l-viaje" class="nav-btn px-2 py-1 font-semibold text-slate-500">El Viaje</button>
+                <button onclick="nav('comunidad')" id="l-comunidad" class="nav-btn px-2 py-1 font-semibold text-slate-500">Comunidad</button>
             </nav>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 py-12">
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        
         <section id="inicio" class="tab-section active">
-            <div class="flex justify-between items-center mb-10">
-                <h2 class="text-3xl font-bold text-[#2c4a3e] titulo-medieval">Dashboard en Tiempo Real</h2>
-                <button onclick="fetchData()" class="bg-amber-600 text-white px-5 py-2 rounded-xl font-bold flex items-center gap-2">
-                    <i class="fas fa-sync-alt" id="sync-icon"></i> Sincronizar
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval">Estado de la Masa Forestal</h2>
+                    <p class="text-sm text-slate-500">Sincronizado con Google Sheets</p>
+                </div>
+                <button onclick="fetchData()" class="bg-amber-600 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-amber-700">
+                    <i class="fas fa-sync-alt" id="sync-icon"></i> Actualizar
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] text-center">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="bg-white p-6 rounded-xl border border-[#e9e3d3] shadow-sm">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Universo Censado</p>
-                    <span id="txt-total" class="text-4xl font-extrabold text-[#2c4a3e]">---</span>
+                    <span id="txt-total" class="text-4xl font-bold text-[#2c4a3e]">---</span>
                 </div>
-                <div id="card-alert" class="bg-white p-6 rounded-2xl border border-[#e9e3d3] text-center">
+                <div id="card-alert" class="bg-white p-6 rounded-xl border border-[#e9e3d3] shadow-sm">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Infestados</p>
-                    <span id="txt-infectados" class="text-4xl font-extrabold">---</span>
+                    <span id="txt-infectados" class="text-4xl font-bold">---</span>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] text-center">
+                <div class="bg-white p-6 rounded-xl border border-[#e9e3d3] shadow-sm">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Índice de Salud</p>
-                    <span id="txt-salud" class="text-4xl font-extrabold text-emerald-700">---%</span>
+                    <span id="txt-salud" class="text-4xl font-bold text-emerald-700">---%</span>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm">
+                <div class="bg-white p-6 rounded-xl border border-[#e9e3d3] shadow-sm">
+                    <h3 class="text-xs font-bold mb-4 uppercase text-slate-400">Distribución por Estado</h3>
                     <canvas id="chartDonut"></canvas>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm">
-                    <canvas id="chartBarras"></canvas>
+                <div class="bg-white p-6 rounded-xl border border-[#e9e3d3] shadow-sm">
+                    <h3 class="text-xs font-bold mb-4 uppercase text-slate-400">Top Especies Afectadas</h3>
+                    <canvas id="chartBarrasHorizontales"></canvas>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-[#e9e3d3] shadow-sm lg:col-span-2">
+                    <h3 class="text-xs font-bold mb-4 uppercase text-slate-400">Infestación por Área</h3>
+                    <canvas id="chartBarrasAgrupadas" height="100"></canvas>
                 </div>
             </div>
         </section>
 
         <section id="educacion" class="tab-section">
-            <h2 class="text-3xl font-bold text-[#2c4a3e] titulo-medieval mb-8">Aula Ambiental</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-[#2c4a3e] p-6 rounded-2xl text-white shadow-lg">
-                    <i class="fas fa-video text-3xl text-amber-400 mb-4"></i>
-                    <h4 class="text-lg font-bold titulo-medieval">Identificación</h4>
-                    <p class="text-xs opacity-80">Cómo reconocer el muérdago en frutales.</p>
+            <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval mb-6">Aula Ambiental</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-[#e9e3d3]">
+                    <i class="fas fa-leaf text-2xl text-emerald-700 mb-2"></i>
+                    <h4 class="font-bold">Manual de Identificación</h4>
+                    <p class="text-sm text-slate-500">Aprende a diferenciar el muérdago de las ramas sanas.</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm">
-                    <i class="fas fa-scissors text-3xl text-amber-600 mb-4"></i>
-                    <h4 class="text-lg font-bold text-[#2c4a3e] titulo-medieval">Poda Sanitaria</h4>
-                    <p class="text-xs text-slate-500">Manual de cortes correctos.</p>
+                <div class="bg-white p-6 rounded-xl border border-[#e9e3d3]">
+                    <i class="fas fa-tools text-2xl text-amber-600 mb-2"></i>
+                    <h4 class="font-bold">Protocolo de Poda</h4>
+                    <p class="text-sm text-slate-500">Guía técnica para la remoción sanitaria.</p>
                 </div>
             </div>
         </section>
 
         <section id="viaje" class="tab-section">
-            <h2 class="text-3xl font-bold text-[#2c4a3e] titulo-medieval mb-8">Historia y Mito</h2>
-            <div id="hoja1" class="hoja-libro p-10 rounded-2xl">
-                <h3 class="text-xl font-bold text-amber-800 mb-4">Capítulo I: El Oro de los Druidas</h3>
-                <p class="text-slate-700 italic">"Los antiguos sacerdotes recolectaban la planta con una hoz de oro..."</p>
+            <div class="max-w-2xl mx-auto bg-[#f7f4eb] p-8 rounded-xl border border-[#dcd6be] shadow-inner">
+                <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval mb-4">El Viaje del Muérdago</h2>
+                <p class="italic text-slate-700">"En la antigüedad, los druidas lo consideraban sagrado. Hoy, el cambio climático lo ha convertido en un reto para nuestra biodiversidad local..."</p>
             </div>
         </section>
+
+        <section id="comunidad" class="tab-section">
+            <div class="text-center py-10">
+                <i class="fas fa-users text-4xl text-slate-300 mb-4"></i>
+                <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval">Comunidad UATx</h2>
+                <p class="text-slate-500">Únete a las brigadas de monitoreo ambiental.</p>
+            </div>
+        </section>
+
     </main>
 
-   // 1. CONFIGURACIÓN INICIAL
-        // Reemplaza esto con tu URL de Google Apps Script
+    <script>
+        // --- 1. PEGA TU URL DE GOOGLE AQUÍ ---
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxHdKyox4PvnEEg8HwsMVrspdZpTI_bnA820N3smP44ZRyL4QqRtPp9kS0jp7eck4/exec";
 
-        // Variables globales para las gráficas (para poder destruirlas y recrearlas al sincronizar)
-        let instDonut = null, instBarrasAgrupadas = null, instLineas = null, instHorizontales = null;
+        let charts = {};
 
-        // 2. NAVEGACIÓN ENTRE PESTAÑAS
         function nav(id) {
             document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.className = "nav-btn px-3 py-2 font-semibold text-slate-500");
-            
-            const seccion = document.getElementById(id);
-            if(seccion) seccion.classList.add('active');
-            
-            const boton = document.getElementById('l-' + id);
-            if(boton) boton.className = "nav-btn px-3 py-2 font-semibold text-emerald-900 border-b-2 border-amber-600";
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.getElementById('l-'+id).classList.add('active');
         }
 
-        // 3. FUNCIÓN PARA PEDIR DATOS A GOOGLE
         function fetchData() {
             const icon = document.getElementById('sync-icon');
             if(icon) icon.classList.add('fa-spin');
-            
             const script = document.createElement('script');
-            // Llamamos a la función "renderData" cuando los datos lleguen
             script.src = SCRIPT_URL + "?callback=renderData";
             document.body.appendChild(script);
         }
 
-        // 4. FUNCIÓN QUE PROCESA LOS DATOS Y DIBUJA TODO
         window.renderData = function(data) {
-            const icon = document.getElementById('sync-icon');
-            if(icon) icon.classList.remove('fa-spin');
+            document.getElementById('sync-icon').classList.remove('fa-spin');
 
-            console.log("Datos recibidos:", data); // Para revisar en la consola si hay dudas
-
-            // --- A. LIMPIEZA DE CONTADORES ---
-            let totalSanos = 0;
-            let totalEnfermos = 0;
-            
+            // Procesar Totales
+            let totalSanos = 0, totalEnfermos = 0;
             data.resumen.forEach(item => {
-                // Convertimos a número puro para evitar el bug de "00CantidadTotal"
-                let valorLimpio = parseFloat(item.cantidad) || 0;
-                
-                if(item.estado.toLowerCase().includes("sano")) {
-                    totalSanos = valorLimpio;
-                } else {
-                    totalEnfermos += valorLimpio;
-                }
+                let n = parseFloat(item.cantidad) || 0;
+                if(item.estado.toLowerCase().includes("sano")) totalSanos = n;
+                else totalEnfermos += n;
             });
 
-            const universoTotal = totalSanos + totalEnfermos;
-            const porcentajeSalud = universoTotal > 0 ? Math.round((totalSanos / universoTotal) * 100) : 0;
-
-            // Inyección en los cuadros de texto
-            document.getElementById('txt-total').innerText = universoTotal;
+            const total = totalSanos + totalEnfermos;
+            document.getElementById('txt-total').innerText = total;
             document.getElementById('txt-infectados').innerText = totalEnfermos;
-            document.getElementById('txt-salud').innerText = porcentajeSalud + "%";
+            document.getElementById('txt-salud').innerText = total > 0 ? Math.round((totalSanos/total)*100) + "%" : "0%";
 
-            // Alerta visual si hay infectados
-            const cardAlert = document.getElementById('card-alert');
-            if (totalEnfermos > 0) {
-                cardAlert.classList.add('alerta-peligro');
-            } else {
-                cardAlert.classList.remove('alerta-peligro');
-            }
+            if(totalEnfermos > 0) document.getElementById('card-alert').classList.add('alerta-peligro');
 
-            // --- B. GRÁFICA DE PASTEL (Niveles de Salud) ---
-            if(instDonut) instDonut.destroy();
-            instDonut = new Chart(document.getElementById('chartDonut'), {
-                type: 'doughnut',
-                data: {
-                    labels: data.resumen.map(r => r.estado),
-                    datasets: [{
-                        data: data.resumen.map(r => parseFloat(r.cantidad) || 0),
-                        backgroundColor: ['#2c4a3e', '#dfcba5', '#bc6c25', '#d62828', '#780000', '#1e293b'],
-                        borderWidth: 2
-                    }]
-                },
-                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-            });
+            // --- GRÁFICAS ---
+            const config = (id, type, labels, d, colors) => {
+                if(charts[id]) charts[id].destroy();
+                charts[id] = new Chart(document.getElementById(id), {
+                    type: type,
+                    data: { labels: labels, datasets: [{ data: d, backgroundColor: colors }] }
+                });
+            };
 
-            // --- C. GRÁFICA DE BARRAS (Por Área) ---
-            if(instBarrasAgrupadas) instBarrasAgrupadas.destroy();
-            instBarrasAgrupadas = new Chart(document.getElementById('chartBarrasAgrupadas'), {
+            // Donut
+            config('chartDonut', 'doughnut', data.resumen.map(r => r.estado), data.resumen.map(r => r.cantidad), ['#2c4a3e', '#dfcba5', '#bc6c25', '#d62828', '#780000']);
+            
+            // Top Especies
+            config('chartBarrasHorizontales', 'bar', data.topEspecies.nombres, data.topEspecies.severidad, '#d62828');
+            charts['chartBarrasHorizontales'].options.indexAxis = 'y';
+            charts['chartBarrasHorizontales'].update();
+
+            // Áreas
+            if(charts['chartBarrasAgrupadas']) charts['chartBarrasAgrupadas'].destroy();
+            charts['chartBarrasAgrupadas'] = new Chart(document.getElementById('chartBarrasAgrupadas'), {
                 type: 'bar',
                 data: {
                     labels: data.inventario.map(i => i.area),
@@ -191,43 +182,11 @@
                         { label: 'Sanos', data: data.inventario.map(i => i.sano), backgroundColor: '#2c4a3e' },
                         { label: 'Enfermos', data: data.inventario.map(i => i.enfermo), backgroundColor: '#bc6c25' }
                     ]
-                },
-                options: { responsive: true }
+                }
             });
+        }
 
-            // --- D. GRÁFICA DE LÍNEAS (Evolución) ---
-            if(instLineas) instLineas.destroy();
-            instLineas = new Chart(document.getElementById('chartLineas'), {
-                type: 'line',
-                data: {
-                    labels: data.historico.meses,
-                    datasets: [{
-                        label: 'Avance de la Plaga',
-                        data: data.historico.valores,
-                        borderColor: '#bc6c25',
-                        backgroundColor: 'rgba(188, 108, 37, 0.1)',
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: { responsive: true }
-            });
-
-            // --- E. TOP ESPECIES (Horizontal) ---
-            if(instHorizontales) instHorizontales.destroy();
-            instHorizontales = new Chart(document.getElementById('chartBarrasHorizontales'), {
-                type: 'bar',
-                data: {
-                    labels: data.topEspecies.nombres,
-                    datasets: [{
-                        label: 'Nivel de Severidad',
-                        data: data.topEspecies.severidad,
-                        backgroundColor: '#d62828'
-                    }]
-                },
-                options: { indexAxis: 'y', responsive: true }
-            });
-        };
-
-        // Al cargar la página, ejecutar la primera sincronización
         window.onload = fetchData;
+    </script>
+</body>
+</html>
