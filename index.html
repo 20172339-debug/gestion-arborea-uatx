@@ -3,164 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UATx | Biocatastro Arbóreo</title>
+    <title>UATx | Biocatastro Universal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Outfit:wght@300;400;600;700&display=swap');
-        :root { --verde: #2c4a3e; --oro: #c5a059; --crema: #fdfbf7; --rojo: #d62828; }
-        body { font-family: 'Outfit', sans-serif; background-color: var(--crema); color: #1e293b; }
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Outfit:wght@300;400;600&display=swap');
+        
+        :root { --verde: #2c4a3e; --oro: #c5a059; --crema: #fdfbf7; }
+        body { font-family: 'Outfit', sans-serif; background: var(--crema); color: #1e293b; overflow-x: hidden; }
         .titulo-medieval { font-family: 'Cinzel', serif; }
+        
+        /* Animación de Libro */
+        .book-container { perspective: 1500px; }
+        .book { 
+            position: relative; width: 100%; height: 400px; 
+            transition: transform 0.5s; transform-style: preserve-3d;
+        }
+        .page {
+            position: absolute; width: 100%; height: 100%; padding: 2rem;
+            background: #f7f4eb; border: 1px solid #dcd6be;
+            box-shadow: inset 5px 0 20px rgba(0,0,0,0.05);
+            backface-visibility: hidden; border-radius: 0 15px 15px 0;
+        }
+        .page-front { z-index: 2; }
+        
         .tab-section { display: none; }
-        .tab-section.active { display: block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .nav-btn.active { color: var(--verde); border-bottom: 2px solid var(--oro); font-weight: 700; }
-        .card-stats { background: white; border: 1px solid #e9e3d3; border-radius: 1.5rem; padding: 1.5rem; text-align: center; }
+        .tab-section.active { display: block; animation: fadeIn 0.5s forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .nav-link.active { color: var(--verde); border-bottom: 3px solid var(--oro); }
     </style>
 </head>
 <body>
 
-    <header class="border-b border-[#e9e3d3] sticky top-0 z-50 bg-[#fdfbf7]/90 backdrop-blur-md">
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-[#e9e3d3]">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="h-10 w-10 rounded-full flex items-center justify-center text-white bg-[#2c4a3e] shadow-md">
-                    <i class="fas fa-tree"></i>
-                </div>
-                <h1 class="text-lg font-bold text-[#2c4a3e] titulo-medieval">UATx | BIOCATASTRO</h1>
+            <div class="flex items-center gap-3">
+                <i class="fas fa-scroll text-amber-700 text-2xl"></i>
+                <h1 class="titulo-medieval text-xl text-[#2c4a3e]">Biocatastro UATx</h1>
             </div>
-            <nav class="flex gap-4">
-                <button onclick="nav('inicio')" id="l-inicio" class="nav-btn px-2 py-1 text-sm text-slate-500 active">Dashboard</button>
-                <button onclick="nav('educacion')" id="l-educacion" class="nav-btn px-2 py-1 text-sm text-slate-500">Aula</button>
-                <button onclick="nav('historia')" id="l-historia" class="nav-btn px-2 py-1 text-sm text-slate-500">Historia</button>
+            <nav class="flex gap-6 text-sm font-bold uppercase tracking-wider">
+                <button onclick="showTab('inicio')" id="btn-inicio" class="nav-link active">Dashboard</button>
+                <button onclick="showTab('biblioteca')" id="btn-biblioteca" class="nav-link">Historia</button>
+                <button onclick="showTab('educacion')" id="btn-educacion" class="nav-link">Educación</button>
+                <button onclick="showTab('contacto')" id="btn-contacto" class="nav-link">Contacto</button>
             </nav>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 py-8">
-        
+    <main class="max-w-7xl mx-auto px-6 py-10">
+
         <section id="inicio" class="tab-section active">
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval">Estado de la Masa Forestal</h2>
-                <p class="text-sm text-slate-500 italic">Reporte basado en el inventario de 347 ejemplares</p>
+            <div class="flex justify-between items-end mb-10">
+                <h2 class="titulo-medieval text-3xl text-emerald-900">Estado del Bosque Universitario</h2>
+                <button onclick="fetchData()" class="text-xs bg-emerald-800 text-white px-4 py-2 rounded-full hover:bg-emerald-700 transition">
+                    <i class="fas fa-sync-alt mr-2"></i>Sincronizar Datos
+                </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-                <div class="card-stats">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Árboles</p>
-                    <span class="text-4xl font-black text-[#2c4a3e]">347</span>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm text-center">
+                    <p class="text-xs font-bold text-stone-400 uppercase">Universo Total</p>
+                    <span id="stat-total" class="text-4xl font-black text-emerald-900">---</span>
                 </div>
-                <div class="card-stats border-b-4 border-b-red-500">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Infestados</p>
-                    <span class="text-4xl font-black text-red-600">16</span>
+                <div class="bg-white p-6 rounded-2xl border-l-4 border-l-red-500 shadow-sm text-center">
+                    <p class="text-xs font-bold text-stone-400 uppercase">Infestados</p>
+                    <span id="stat-enfermos" class="text-4xl font-black text-red-600">---</span>
                 </div>
-                <div class="card-stats">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Salud General</p>
-                    <span class="text-4xl font-black text-emerald-600">95%</span>
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center">
+                    <p class="text-xs font-bold text-stone-400 uppercase">Salud Forestal</p>
+                    <span id="stat-salud" class="text-4xl font-black text-emerald-600">---%</span>
                 </div>
-                <div class="card-stats">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Biodiversidad</p>
-                    <span class="text-4xl font-black text-amber-800">23</span>
-                    <p class="text-[9px] text-slate-400 uppercase">Especies</p>
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center">
+                    <p class="text-xs font-bold text-stone-400 uppercase">Foco Crítico</p>
+                    <span id="stat-critico" class="text-4xl font-black text-amber-700">Peral</span>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-3xl border border-[#e9e3d3] shadow-sm">
-                    <h3 class="text-xs font-bold mb-6 uppercase text-slate-500">Niveles de Infestación Detectados</h3>
-                    <canvas id="chartDonut"></canvas>
+                <div class="bg-white p-6 rounded-3xl border border-stone-100 shadow-xl">
+                    <h3 class="text-sm font-bold mb-6 text-stone-500 uppercase">Distribución Sanitaria (Niveles)</h3>
+                    <canvas id="chartNiveles"></canvas>
                 </div>
-                
-                <div class="bg-white p-6 rounded-3xl border border-[#e9e3d3] shadow-sm">
-                    <h3 class="text-xs font-bold mb-6 uppercase text-slate-500">Vulnerabilidad por Especie (Casos)</h3>
+                <div class="bg-white p-6 rounded-3xl border border-stone-100 shadow-xl">
+                    <h3 class="text-sm font-bold mb-6 text-stone-500 uppercase">Impacto por Especie</h3>
                     <canvas id="chartEspecies"></canvas>
                 </div>
-
-                <div class="bg-white p-6 rounded-3xl border border-[#e9e3d3] shadow-sm lg:col-span-2">
-                    <h3 class="text-xs font-bold mb-6 uppercase text-slate-500">Comparativa por Parcelas del Campus</h3>
-                    <canvas id="chartAreas" height="100"></canvas>
+                <div class="bg-white p-6 rounded-3xl border border-stone-100 shadow-xl">
+                    <h3 class="text-sm font-bold mb-6 text-stone-500 uppercase">Comparativa por Parcelas</h3>
+                    <canvas id="chartParcelas"></canvas>
                 </div>
+                <div class="bg-white p-6 rounded-3xl border border-stone-100 shadow-xl text-center flex flex-col justify-center">
+                    <h3 class="text-sm font-bold mb-6 text-stone-500 uppercase">Vulnerabilidad por Tipo</h3>
+                    <canvas id="chartTipos"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="biblioteca" class="tab-section">
+            <h2 class="titulo-medieval text-3xl text-center text-emerald-900 mb-12">El Viaje del Muérdago por el Tiempo</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                
+                <div class="book-container">
+                    <div class="book">
+                        <div class="page page-front">
+                            <h4 class="titulo-medieval text-amber-800">I. El Oro Druida</h4>
+                            <p class="text-sm mt-4 italic text-stone-600">Para los Celtas, el muérdago no era una plaga, sino "Ail-iach" (el que todo lo cura).</p>
+                            <img src="https://cdn-icons-png.flaticon.com/512/2321/2321453.png" class="w-24 mx-auto mt-6 opacity-30" alt="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-container">
+                    <div class="book">
+                        <div class="page page-front">
+                            <h4 class="titulo-medieval text-blue-900">II. La Flecha de Baldr</h4>
+                            <p class="text-sm mt-4 italic text-stone-600">En el Edda Prosaica, es la única planta que no juró no dañar al dios Baldr...</p>
+                            <img src="https://cdn-icons-png.flaticon.com/512/1150/1150332.png" class="w-24 mx-auto mt-6 opacity-30" alt="">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="book-container">
+                    <div class="book">
+                        <div class="page page-front">
+                            <h4 class="titulo-medieval text-emerald-800">III. El Saber Popular</h4>
+                            <p class="text-sm mt-4 italic text-stone-600">Medicina tradicional: infusiones para la presión y el misticismo del abrazo vegetal.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-container">
+                    <div class="book">
+                        <div class="page page-front">
+                            <h4 class="titulo-medieval text-red-800">IV. El Reto Moderno</h4>
+                            <p class="text-sm mt-4 italic text-stone-600">De lo sagrado a lo invasivo. El cambio climático impulsa su expansión en Tlaxcala.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
         <section id="educacion" class="tab-section">
-            <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval mb-6">Aula Ambiental</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-[#2c4a3e] p-8 rounded-3xl text-white">
-                    <h4 class="font-bold text-lg mb-2">¿Qué es el Muérdago?</h4>
-                    <p class="text-sm opacity-80">Es una planta hemiparásita que extrae agua y minerales de nuestros árboles. En la UATx afecta principalmente a los frutales.</p>
+            <h2 class="titulo-medieval text-3xl text-emerald-900 mb-10 text-center">Recursos de Aprendizaje</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-4 rounded-2xl shadow-lg border border-stone-200">
+                    <div class="aspect-video bg-stone-800 rounded-lg mb-4 flex items-center justify-center">
+                        <i class="fas fa-play-circle text-4xl text-white opacity-50"></i>
+                    </div>
+                    <h5 class="font-bold">Video: Cómo Podar</h5>
+                    <p class="text-xs text-stone-500">Tutorial técnico de la brigada UATx.</p>
                 </div>
-                <div class="bg-white p-8 rounded-3xl border border-[#e9e3d3]">
-                    <h4 class="font-bold text-lg mb-2 text-[#2c4a3e]">Acción Colectiva</h4>
-                    <p class="text-sm text-slate-600">La poda fitosanitaria es la única solución efectiva. Identificar a tiempo los niveles 'Leve' evita la muerte del ejemplar.</p>
+                <div class="bg-white p-4 rounded-2xl shadow-lg border border-stone-200">
+                    <div class="h-48 bg-emerald-50 rounded-lg mb-4 flex items-center justify-center italic text-emerald-800">
+                        [Infografía: Ciclo de Vida]
+                    </div>
+                    <h5 class="font-bold">Infografía Educativa</h5>
+                    <p class="text-xs text-stone-500">Visualiza la dispersión por aves.</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-lg border border-stone-200">
+                    <div class="h-48 bg-amber-50 rounded-lg mb-4 flex items-center justify-center">
+                        <i class="fas fa-microphone-alt text-4xl text-amber-800 opacity-40"></i>
+                    </div>
+                    <h5 class="font-bold">Podcast: Mitos vs Realidad</h5>
+                    <p class="text-xs text-stone-500">Entrevista con especialistas.</p>
                 </div>
             </div>
         </section>
 
-        <section id="historia" class="tab-section">
-            <div class="max-w-2xl mx-auto bg-white p-10 rounded-3xl border border-[#e9e3d3] text-center">
-                <i class="fas fa-scroll text-4xl text-amber-600 mb-4"></i>
-                <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval mb-4">Mística y Ciencia</h2>
-                <p class="text-slate-600 italic leading-relaxed">"Sagrado para los druidas, letal para el Peral. El muérdago viaja en las alas de las aves para desafiar nuestro ecosistema universitario."</p>
+        <section id="contacto" class="tab-section text-center">
+            <h2 class="titulo-medieval text-3xl text-emerald-900 mb-6">Nuestras Raíces Digitales</h2>
+            <div class="flex justify-center gap-10 mt-10">
+                <a href="#" class="text-4xl text-emerald-800 hover:scale-110 transition"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="text-4xl text-emerald-800 hover:scale-110 transition"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-4xl text-emerald-800 hover:scale-110 transition"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" class="text-4xl text-emerald-800 hover:scale-110 transition"><i class="fas fa-envelope"></i></a>
             </div>
+            <p class="mt-12 text-sm text-stone-400">© 2026 Universidad Autónoma de Tlaxcala | Investigación Botánica</p>
         </section>
 
     </main>
 
     <script>
-        function nav(id) {
+        // CONFIGURACIÓN: PEGA TU URL DE GOOGLE AQUÍ
+        const SCRIPT_URL = "TU_URL_DE_GOOGLE_SCRIPT";
+
+        let charts = {};
+
+        function showTab(id) {
             document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            document.getElementById('l-'+id).classList.add('active');
+            document.getElementById('btn-' + id).classList.add('active');
         }
 
-        window.onload = function() {
-            // 1. Gráfica de Niveles (Datos de tu tabla 'Resumen de infestación')
-            new Chart(document.getElementById('chartDonut'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Sano', 'Leve', 'Moderado', 'Medio', 'Severo', 'Crítico'],
-                    datasets: [{
-                        data: [331, 2, 6, 4, 2, 2],
-                        backgroundColor: ['#2c4a3e', '#dfcba5', '#bc6c25', '#a44a3f', '#d62828', '#780000'],
-                        hoverOffset: 15
-                    }]
-                },
-                options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
+        function fetchData() {
+            const script = document.createElement('script');
+            script.src = SCRIPT_URL + "?callback=updateDashboard";
+            document.body.appendChild(script);
+        }
+
+        window.updateDashboard = function(data) {
+            // 1. Procesar Totales
+            let sanos = 0, enfermos = 0;
+            data.niveles.forEach(r => {
+                let val = parseFloat(r[1]) || 0;
+                if(String(r[0]).includes("Sano")) sanos = val;
+                else enfermos += val;
+            });
+            const total = sanos + enfermos;
+
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-enfermos').innerText = enfermos;
+            document.getElementById('stat-salud').innerText = Math.round((sanos/total)*100);
+
+            // 2. Gráfica Niveles (Pastel)
+            renderChart('chartNiveles', 'pie', data.niveles.map(r => r[0]), data.niveles.map(r => r[1]), ['#2c4a3e','#dfcba5','#bc6c25','#d62828','#780000','#1e293b']);
+            
+            // 3. Gráfica Parcelas (Barras)
+            renderChart('chartParcelas', 'bar', data.parcelas.map(r => r[0]), {
+                sanos: data.parcelas.map(r => r[1]),
+                enfermos: data.parcelas.map(r => r[2])
             });
 
-            // 2. Especies Críticas (Casos totales de infestación por especie)
-            new Chart(document.getElementById('chartEspecies'), {
-                type: 'bar',
-                data: {
-                    labels: ['Peral', 'Capulín', 'Tejocote', 'Zapote', 'Durazno'],
-                    datasets: [{
-                        label: 'Ejemplares Afectados',
-                        data: [12, 2, 1, 1, 0], // Peral es el más afectado según tu tabla
-                        backgroundColor: '#bc6c25',
-                        borderRadius: 8
-                    }]
-                },
-                options: { indexAxis: 'y', plugins: { legend: { display: false } } }
-            });
+            // 4. Gráfica Tipos (Dona)
+            renderChart('chartTipos', 'doughnut', data.tipos.map(r => r[0]), data.tipos.map(r => r[1]), ['#bc6c25', '#2c4a3e']);
 
-            // 3. Distribución por Áreas (Datos de tu tabla 'Resumen por Parcela')
-            new Chart(document.getElementById('chartAreas'), {
-                type: 'bar',
-                data: {
-                    labels: ['Área 1', 'Área 2', 'Área 3'],
-                    datasets: [
-                        { label: 'Sanos', data: [180, 73, 78], backgroundColor: '#2c4a3e' },
-                        { label: 'Infestados', data: [9, 6, 1], backgroundColor: '#d62828' }
-                    ]
-                },
+            // 5. Gráfica Especies (Barras Horizontales)
+            // Tomamos las primeras 5 especies para que no se amontone
+            const topEsp = data.especies.slice(0,5);
+            renderChart('chartEspecies', 'bar', topEsp.map(r => r[0]), topEsp.map(r => r[4]), '#d62828', true);
+        }
+
+        function renderChart(id, type, labels, data, colors, isHorizontal = false) {
+            if(charts[id]) charts[id].destroy();
+            
+            let dataset;
+            if(id === 'chartParcelas') {
+                dataset = [
+                    { label: 'Sanos', data: data.sanos, backgroundColor: '#2c4a3e' },
+                    { label: 'Enfermos', data: data.enfermos, backgroundColor: '#d62828' }
+                ];
+            } else {
+                dataset = [{ data: data, backgroundColor: colors }];
+            }
+
+            charts[id] = new Chart(document.getElementById(id), {
+                type: type,
+                data: { labels: labels, datasets: dataset },
                 options: { 
-                    scales: { y: { stacked: true, beginAtZero: true }, x: { stacked: true } },
-                    plugins: { legend: { position: 'top' } }
+                    indexAxis: isHorizontal ? 'y' : 'x',
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom' } }
                 }
             });
-        };
+        }
+
+        window.onload = fetchData;
     </script>
 </body>
 </html>
