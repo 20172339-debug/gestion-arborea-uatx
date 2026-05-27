@@ -1,267 +1,67 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UATx | Biocatastro Universal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Outfit:wght@300;400;600&display=swap');
-        
-        :root { --verde: #2c4a3e; --oro: #c5a059; --crema: #fdfbf7; }
-        body { font-family: 'Outfit', sans-serif; background: var(--crema); color: #1e293b; overflow-x: hidden; }
-        .titulo-medieval { font-family: 'Cinzel', serif; }
-        
-        /* Animación de Libro */
-        .book-container { perspective: 1500px; }
-        .book { 
-            position: relative; width: 100%; height: 400px; 
-            transition: transform 0.5s; transform-style: preserve-3d;
-        }
-        .page {
-            position: absolute; width: 100%; height: 100%; padding: 2rem;
-            background: #f7f4eb; border: 1px solid #dcd6be;
-            box-shadow: inset 5px 0 20px rgba(0,0,0,0.05);
-            backface-visibility: hidden; border-radius: 0 15px 15px 0;
-        }
-        .page-front { z-index: 2; }
-        
-        .tab-section { display: none; }
-        .tab-section.active { display: block; animation: fadeIn 0.5s forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        <i class="fa-solid fa-image"></i>
+        <h3>Infografías</h3>
+        <p>Material visual sobre dispersión, control y especies.</p>
+      </div>
 
-        .nav-link.active { color: var(--verde); border-bottom: 3px solid var(--oro); }
-    </style>
-</head>
-<body>
+      <div class="edu-card">
+        <i class="fa-solid fa-scroll"></i>
+        <h3>Carteles</h3>
+        <p>Campañas de sensibilización ambiental.</p>
+      </div>
 
-    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-[#e9e3d3]">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <i class="fas fa-scroll text-amber-700 text-2xl"></i>
-                <h1 class="titulo-medieval text-xl text-[#2c4a3e]">Biocatastro UATx</h1>
-            </div>
-            <nav class="flex gap-6 text-sm font-bold uppercase tracking-wider">
-                <button onclick="showTab('inicio')" id="btn-inicio" class="nav-link active">Dashboard</button>
-                <button onclick="showTab('biblioteca')" id="btn-biblioteca" class="nav-link">Historia</button>
-                <button onclick="showTab('educacion')" id="btn-educacion" class="nav-link">Educación</button>
-                <button onclick="showTab('contacto')" id="btn-contacto" class="nav-link">Contacto</button>
-            </nav>
-        </div>
-    </header>
+      <div class="edu-card">
+        <i class="fa-solid fa-book-open"></i>
+        <h3>Historietas</h3>
+        <p>Material ilustrado para divulgación educativa.</p>
+      </div>
 
-    <main class="max-w-7xl mx-auto px-6 py-10">
+      <div class="edu-card">
+        <i class="fa-solid fa-microphone"></i>
+        <h3>Audios</h3>
+        <p>Podcast y entrevistas con investigadores.</p>
+      </div>
 
-        <section id="inicio" class="tab-section active">
-            <div class="flex justify-between items-end mb-10">
-                <h2 class="titulo-medieval text-3xl text-emerald-900">Estado del Bosque Universitario</h2>
-                <button onclick="fetchData()" class="text-xs bg-emerald-800 text-white px-4 py-2 rounded-full hover:bg-emerald-700 transition">
-                    <i class="fas fa-sync-alt mr-2"></i>Sincronizar Datos
-                </button>
-            </div>
+      <div class="edu-card">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <h3>Investigación</h3>
+        <p>Documentos y avances científicos del proyecto.</p>
+      </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm text-center">
-                    <p class="text-xs font-bold text-stone-400 uppercase">Universo Total</p>
-                    <span id="stat-total" class="text-4xl font-black text-emerald-900">---</span>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border-l-4 border-l-red-500 shadow-sm text-center">
-                    <p class="text-xs font-bold text-stone-400 uppercase">Infestados</p>
-                    <span id="stat-enfermos" class="text-4xl font-black text-red-600">---</span>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm text-center">
-                    <p class="text-xs font-bold text-stone-400 uppercase">Salud Forestal</p>
-                    <span id="stat-salud" class="text-4xl font-black text-emerald-600">---%</span>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm text-center">
-                    <p class="text-xs font-bold text-stone-400 uppercase">Foco Crítico</p>
-                    <span id="stat-critico" class="text-4xl font-black text-amber-700">Peral</span>
-                </div>
-            </div>
+    </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-3xl border border-stone-100 shadow-xl">
-                    <h3 class="text-sm font-bold mb-6 text-stone-500 uppercase">Distribución Sanitaria (Niveles)</h3>
-                    <canvas id="chartNiveles"></canvas>
-                </div>
-                <div class="bg-white p-6 rounded-3xl border border-stone-100 shadow-xl">
-                    <h3 class="text-sm font-bold mb-6 text-stone-500 uppercase">Impacto por Especie</h3>
-                    <canvas id="chartEspecies"></canvas>
-                </div>
-                <div class="bg-white p-6 rounded-3xl border border-stone-100 shadow-xl">
-                    <h3 class="text-sm font-bold mb-6 text-stone-500 uppercase">Comparativa por Parcelas</h3>
-                    <canvas id="chartParcelas"></canvas>
-                </div>
-                <div class="bg-white p-6 rounded-3xl border border-stone-100 shadow-xl text-center flex flex-col justify-center">
-                    <h3 class="text-sm font-bold mb-6 text-stone-500 uppercase">Vulnerabilidad por Tipo</h3>
-                    <canvas id="chartTipos"></canvas>
-                </div>
-            </div>
-        </section>
+  </section>
 
-        <section id="biblioteca" class="tab-section">
-            <h2 class="titulo-medieval text-3xl text-center text-emerald-900 mb-12">El Viaje del Muérdago por el Tiempo</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                
-                <div class="book-container">
-                    <div class="book">
-                        <div class="page page-front">
-                            <h4 class="titulo-medieval text-amber-800">I. El Oro Druida</h4>
-                            <p class="text-sm mt-4 italic text-stone-600">Para los Celtas, el muérdago no era una plaga, sino "Ail-iach" (el que todo lo cura).</p>
-                            <img src="https://cdn-icons-png.flaticon.com/512/2321/2321453.png" class="w-24 mx-auto mt-6 opacity-30" alt="">
-                        </div>
-                    </div>
-                </div>
+  <!-- CONTACTO -->
 
-                <div class="book-container">
-                    <div class="book">
-                        <div class="page page-front">
-                            <h4 class="titulo-medieval text-blue-900">II. La Flecha de Baldr</h4>
-                            <p class="text-sm mt-4 italic text-stone-600">En el Edda Prosaica, es la única planta que no juró no dañar al dios Baldr...</p>
-                            <img src="https://cdn-icons-png.flaticon.com/512/1150/1150332.png" class="w-24 mx-auto mt-6 opacity-30" alt="">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="book-container">
-                    <div class="book">
-                        <div class="page page-front">
-                            <h4 class="titulo-medieval text-emerald-800">III. El Saber Popular</h4>
-                            <p class="text-sm mt-4 italic text-stone-600">Medicina tradicional: infusiones para la presión y el misticismo del abrazo vegetal.</p>
-                        </div>
-                    </div>
-                </div>
+  <section id="contacto" class="section">
 
-                <div class="book-container">
-                    <div class="book">
-                        <div class="page page-front">
-                            <h4 class="titulo-medieval text-red-800">IV. El Reto Moderno</h4>
-                            <p class="text-sm mt-4 italic text-stone-600">De lo sagrado a lo invasivo. El cambio climático impulsa su expansión en Tlaxcala.</p>
-                        </div>
-                    </div>
-                </div>
+    <h2 class="section-title">Contacto</h2>
 
-            </div>
-        </section>
+    <div class="contact-box">
 
-        <section id="educacion" class="tab-section">
-            <h2 class="titulo-medieval text-3xl text-emerald-900 mb-10 text-center">Recursos de Aprendizaje</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-4 rounded-2xl shadow-lg border border-stone-200">
-                    <div class="aspect-video bg-stone-800 rounded-lg mb-4 flex items-center justify-center">
-                        <i class="fas fa-play-circle text-4xl text-white opacity-50"></i>
-                    </div>
-                    <h5 class="font-bold">Video: Cómo Podar</h5>
-                    <p class="text-xs text-stone-500">Tutorial técnico de la brigada UATx.</p>
-                </div>
-                <div class="bg-white p-4 rounded-2xl shadow-lg border border-stone-200">
-                    <div class="h-48 bg-emerald-50 rounded-lg mb-4 flex items-center justify-center italic text-emerald-800">
-                        [Infografía: Ciclo de Vida]
-                    </div>
-                    <h5 class="font-bold">Infografía Educativa</h5>
-                    <p class="text-xs text-stone-500">Visualiza la dispersión por aves.</p>
-                </div>
-                <div class="bg-white p-4 rounded-2xl shadow-lg border border-stone-200">
-                    <div class="h-48 bg-amber-50 rounded-lg mb-4 flex items-center justify-center">
-                        <i class="fas fa-microphone-alt text-4xl text-amber-800 opacity-40"></i>
-                    </div>
-                    <h5 class="font-bold">Podcast: Mitos vs Realidad</h5>
-                    <p class="text-xs text-stone-500">Entrevista con especialistas.</p>
-                </div>
-            </div>
-        </section>
+      <a href="#">
+        <i class="fa-brands fa-facebook"></i>
+      </a>
 
-        <section id="contacto" class="tab-section text-center">
-            <h2 class="titulo-medieval text-3xl text-emerald-900 mb-6">Nuestras Raíces Digitales</h2>
-            <div class="flex justify-center gap-10 mt-10">
-                <a href="#" class="text-4xl text-emerald-800 hover:scale-110 transition"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="text-4xl text-emerald-800 hover:scale-110 transition"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="text-4xl text-emerald-800 hover:scale-110 transition"><i class="fab fa-whatsapp"></i></a>
-                <a href="#" class="text-4xl text-emerald-800 hover:scale-110 transition"><i class="fas fa-envelope"></i></a>
-            </div>
-            <p class="mt-12 text-sm text-stone-400">© 2026 Universidad Autónoma de Tlaxcala | Investigación Botánica</p>
-        </section>
+      <a href="#">
+        <i class="fa-brands fa-instagram"></i>
+      </a>
 
-    </main>
+      <a href="#">
+        <i class="fa-brands fa-whatsapp"></i>
+      </a>
 
-    <script>
-        // CONFIGURACIÓN: PEGA TU URL DE GOOGLE AQUÍ
-        const SCRIPT_URL = "TU_URL_DE_GOOGLE_SCRIPT";
+      <a href="#">
+        <i class="fa-solid fa-envelope"></i>
+      </a>
 
-        let charts = {};
+    </div>
 
-        function showTab(id) {
-            document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.getElementById('btn-' + id).classList.add('active');
-        }
+  </section>
 
-        function fetchData() {
-            const script = document.createElement('script');
-            script.src = SCRIPT_URL + "?callback=updateDashboard";
-            document.body.appendChild(script);
-        }
+</main>
 
-        window.updateDashboard = function(data) {
-            // 1. Procesar Totales
-            let sanos = 0, enfermos = 0;
-            data.niveles.forEach(r => {
-                let val = parseFloat(r[1]) || 0;
-                if(String(r[0]).includes("Sano")) sanos = val;
-                else enfermos += val;
-            });
-            const total = sanos + enfermos;
-
-            document.getElementById('stat-total').innerText = total;
-            document.getElementById('stat-enfermos').innerText = enfermos;
-            document.getElementById('stat-salud').innerText = Math.round((sanos/total)*100);
-
-            // 2. Gráfica Niveles (Pastel)
-            renderChart('chartNiveles', 'pie', data.niveles.map(r => r[0]), data.niveles.map(r => r[1]), ['#2c4a3e','#dfcba5','#bc6c25','#d62828','#780000','#1e293b']);
-            
-            // 3. Gráfica Parcelas (Barras)
-            renderChart('chartParcelas', 'bar', data.parcelas.map(r => r[0]), {
-                sanos: data.parcelas.map(r => r[1]),
-                enfermos: data.parcelas.map(r => r[2])
-            });
-
-            // 4. Gráfica Tipos (Dona)
-            renderChart('chartTipos', 'doughnut', data.tipos.map(r => r[0]), data.tipos.map(r => r[1]), ['#bc6c25', '#2c4a3e']);
-
-            // 5. Gráfica Especies (Barras Horizontales)
-            // Tomamos las primeras 5 especies para que no se amontone
-            const topEsp = data.especies.slice(0,5);
-            renderChart('chartEspecies', 'bar', topEsp.map(r => r[0]), topEsp.map(r => r[4]), '#d62828', true);
-        }
-
-        function renderChart(id, type, labels, data, colors, isHorizontal = false) {
-            if(charts[id]) charts[id].destroy();
-            
-            let dataset;
-            if(id === 'chartParcelas') {
-                dataset = [
-                    { label: 'Sanos', data: data.sanos, backgroundColor: '#2c4a3e' },
-                    { label: 'Enfermos', data: data.enfermos, backgroundColor: '#d62828' }
-                ];
-            } else {
-                dataset = [{ data: data, backgroundColor: colors }];
-            }
-
-            charts[id] = new Chart(document.getElementById(id), {
-                type: type,
-                data: { labels: labels, datasets: dataset },
-                options: { 
-                    indexAxis: isHorizontal ? 'y' : 'x',
-                    responsive: true,
-                    plugins: { legend: { position: 'bottom' } }
-                }
-            });
-        }
-
-        window.onload = fetchData;
-    </script>
+<script src="app.js"></script>
 </body>
 </html>
