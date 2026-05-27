@@ -9,15 +9,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Outfit:wght@300;400;600;700&display=swap');
-        :root { --bg-crema: #fdfbf7; --verde-musgo: #2c4a3e; --oro: #c5a059; --alerta-roja: #d62828; }
-        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-crema); color: #1e293b; margin: 0; }
+        :root { --verde: #2c4a3e; --oro: #c5a059; --crema: #fdfbf7; --rojo: #d62828; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--crema); color: #1e293b; }
         .titulo-medieval { font-family: 'Cinzel', serif; }
         .tab-section { display: none; }
         .tab-section.active { display: block; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .card-peligro { border: 2px solid var(--alerta-roja); background: #fff5f5; animation: shadowPulse 2s infinite; }
-        @keyframes shadowPulse { 0% { box-shadow: 0 0 0 0 rgba(214, 40, 40, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(214, 40, 40, 0); } 100% { box-shadow: 0 0 0 0 rgba(214, 40, 40, 0); } }
-        .nav-btn.active { color: #2c4a3e; border-bottom: 2px solid #c5a059; font-weight: 700; }
+        .nav-btn.active { color: var(--verde); border-bottom: 2px solid var(--oro); font-weight: 700; }
+        .card-stats { background: white; border: 1px solid #e9e3d3; border-radius: 1.5rem; padding: 1.5rem; text-align: center; }
     </style>
 </head>
 <body>
@@ -25,18 +24,15 @@
     <header class="border-b border-[#e9e3d3] sticky top-0 z-50 bg-[#fdfbf7]/90 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <div class="h-10 w-10 rounded-full flex items-center justify-center text-white bg-[#2c4a3e] shadow-lg">
+                <div class="h-10 w-10 rounded-full flex items-center justify-center text-white bg-[#2c4a3e] shadow-md">
                     <i class="fas fa-tree"></i>
                 </div>
-                <div>
-                    <h1 class="text-lg font-bold text-[#2c4a3e] titulo-medieval leading-none">UATx | BIOCATASTRO</h1>
-                    <span class="text-[9px] uppercase tracking-tighter text-amber-700 font-bold">Gestión de Salud Forestal</span>
-                </div>
+                <h1 class="text-lg font-bold text-[#2c4a3e] titulo-medieval">UATx | BIOCATASTRO</h1>
             </div>
             <nav class="flex gap-4">
                 <button onclick="nav('inicio')" id="l-inicio" class="nav-btn px-2 py-1 text-sm text-slate-500 active">Dashboard</button>
-                <button onclick="nav('educacion')" id="l-educacion" class="nav-btn px-2 py-1 text-sm text-slate-500">Educación</button>
-                <button onclick="nav('viaje')" id="l-viaje" class="nav-btn px-2 py-1 text-sm text-slate-500">Historia</button>
+                <button onclick="nav('educacion')" id="l-educacion" class="nav-btn px-2 py-1 text-sm text-slate-500">Aula</button>
+                <button onclick="nav('historia')" id="l-historia" class="nav-btn px-2 py-1 text-sm text-slate-500">Historia</button>
             </nav>
         </div>
     </header>
@@ -45,41 +41,43 @@
         
         <section id="inicio" class="tab-section active">
             <div class="mb-8">
-                <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval">Análisis Fitopatológico</h2>
-                <p class="text-sm text-slate-500 italic">Reporte consolidado del Inventario General</p>
+                <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval">Estado de la Masa Forestal</h2>
+                <p class="text-sm text-slate-500 italic">Reporte basado en el inventario de 347 ejemplares</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm text-center">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Universo Censado</p>
-                    <span class="text-5xl font-extrabold text-[#2c4a3e]">347</span>
-                    <p class="text-[10px] text-slate-400 mt-2 italic">Ejemplares totales en campus</p>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+                <div class="card-stats">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Árboles</p>
+                    <span class="text-4xl font-black text-[#2c4a3e]">347</span>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm text-center card-peligro">
-                    <p class="text-[10px] font-bold text-red-400 uppercase tracking-widest mb-1">Focos de Infección</p>
-                    <span class="text-5xl font-extrabold text-red-600">16</span>
-                    <p class="text-[10px] text-red-500 mt-2 font-bold italic">¡Requieren Intervención!</p>
+                <div class="card-stats border-b-4 border-b-red-500">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Infestados</p>
+                    <span class="text-4xl font-black text-red-600">16</span>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm text-center">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Índice de Salud</p>
-                    <span class="text-5xl font-extrabold text-emerald-600">95%</span>
-                    <p class="text-[10px] text-slate-400 mt-2 italic">Masa forestal libre de plaga</p>
+                <div class="card-stats">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Salud General</p>
+                    <span class="text-4xl font-black text-emerald-600">95%</span>
+                </div>
+                <div class="card-stats">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Biodiversidad</p>
+                    <span class="text-4xl font-black text-amber-800">23</span>
+                    <p class="text-[9px] text-slate-400 uppercase">Especies</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm">
-                    <h3 class="text-xs font-bold mb-6 uppercase text-slate-500 tracking-wider">Estado Sanitario Detallado</h3>
+                <div class="bg-white p-6 rounded-3xl border border-[#e9e3d3] shadow-sm">
+                    <h3 class="text-xs font-bold mb-6 uppercase text-slate-500">Niveles de Infestación Detectados</h3>
                     <canvas id="chartDonut"></canvas>
                 </div>
                 
-                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm">
-                    <h3 class="text-xs font-bold mb-6 uppercase text-slate-500 tracking-wider">Especies con Mayor Vulnerabilidad</h3>
+                <div class="bg-white p-6 rounded-3xl border border-[#e9e3d3] shadow-sm">
+                    <h3 class="text-xs font-bold mb-6 uppercase text-slate-500">Vulnerabilidad por Especie (Casos)</h3>
                     <canvas id="chartEspecies"></canvas>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm lg:col-span-2">
-                    <h3 class="text-xs font-bold mb-6 uppercase text-slate-500 tracking-wider">Distribución por Áreas del Campus</h3>
+                <div class="bg-white p-6 rounded-3xl border border-[#e9e3d3] shadow-sm lg:col-span-2">
+                    <h3 class="text-xs font-bold mb-6 uppercase text-slate-500">Comparativa por Parcelas del Campus</h3>
                     <canvas id="chartAreas" height="100"></canvas>
                 </div>
             </div>
@@ -88,33 +86,28 @@
         <section id="educacion" class="tab-section">
             <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval mb-6">Aula Ambiental</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-[#2c4a3e] p-8 rounded-2xl text-white">
-                    <i class="fas fa-microscope text-3xl text-amber-400 mb-4"></i>
-                    <h4 class="text-lg font-bold mb-2">Identificación de Muérdago</h4>
-                    <p class="text-sm opacity-80 leading-relaxed">El muérdago (*Phoradendron*) es una planta parásita que absorbe agua y nutrientes del árbol. Se identifica por sus hojas carnosas y bayas blancas/amarillas en las copas.</p>
+                <div class="bg-[#2c4a3e] p-8 rounded-3xl text-white">
+                    <h4 class="font-bold text-lg mb-2">¿Qué es el Muérdago?</h4>
+                    <p class="text-sm opacity-80">Es una planta hemiparásita que extrae agua y minerales de nuestros árboles. En la UATx afecta principalmente a los frutales.</p>
                 </div>
-                <div class="bg-white p-8 rounded-2xl border border-[#e9e3d3]">
-                    <i class="fas fa-leaf text-3xl text-emerald-700 mb-4"></i>
-                    <h4 class="text-lg font-bold mb-2 text-[#2c4a3e]">Poda Fitosanitaria</h4>
-                    <p class="text-sm text-slate-600 leading-relaxed">Para una remoción efectiva, es necesario cortar la rama infectada al menos 30 cm por debajo del punto de inserción para eliminar los haustorios (raíces internas).</p>
+                <div class="bg-white p-8 rounded-3xl border border-[#e9e3d3]">
+                    <h4 class="font-bold text-lg mb-2 text-[#2c4a3e]">Acción Colectiva</h4>
+                    <p class="text-sm text-slate-600">La poda fitosanitaria es la única solución efectiva. Identificar a tiempo los niveles 'Leve' evita la muerte del ejemplar.</p>
                 </div>
             </div>
         </section>
 
-        <section id="viaje" class="tab-section">
-            <div class="max-w-3xl mx-auto bg-white p-10 rounded-3xl border border-[#e9e3d3] shadow-sm">
-                <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval mb-6">El Viaje del Muérdago</h2>
-                <div class="space-y-6 text-slate-700 leading-relaxed">
-                    <p class="italic">"Desde los antiguos rituales celtas donde los druidas lo cortaban con hoces de oro por su carácter sagrado, hasta las leyendas nórdicas de la flecha de Baldr, el muérdago ha sido protagonista de la mística forestal."</p>
-                    <p>Hoy, en nuestro campus, este "viaje" nos enfrenta a un desafío ecológico. Lo que antes era un equilibrio natural, se ha convertido en una plaga invasiva debido al estrés hídrico y la pérdida de biodiversidad urbana.</p>
-                </div>
+        <section id="historia" class="tab-section">
+            <div class="max-w-2xl mx-auto bg-white p-10 rounded-3xl border border-[#e9e3d3] text-center">
+                <i class="fas fa-scroll text-4xl text-amber-600 mb-4"></i>
+                <h2 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval mb-4">Mística y Ciencia</h2>
+                <p class="text-slate-600 italic leading-relaxed">"Sagrado para los druidas, letal para el Peral. El muérdago viaja en las alas de las aves para desafiar nuestro ecosistema universitario."</p>
             </div>
         </section>
 
     </main>
 
     <script>
-        // FUNCIÓN DE NAVEGACIÓN
         function nav(id) {
             document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -122,49 +115,50 @@
             document.getElementById('l-'+id).classList.add('active');
         }
 
-        // DATOS FIJOS PARA TU PRESENTACIÓN (Basados en tu resumen real)
         window.onload = function() {
-            // 1. Gráfica de Pastel (Resumen)
+            // 1. Gráfica de Niveles (Datos de tu tabla 'Resumen de infestación')
             new Chart(document.getElementById('chartDonut'), {
                 type: 'doughnut',
                 data: {
-                    labels: ['Sano', 'Leve', 'Moderado', 'Severo', 'Crítico', 'Muerto'],
+                    labels: ['Sano', 'Leve', 'Moderado', 'Medio', 'Severo', 'Crítico'],
                     datasets: [{
-                        data: [331, 5, 6, 3, 2, 0],
-                        backgroundColor: ['#2c4a3e', '#dfcba5', '#bc6c25', '#d62828', '#780000', '#1e293b'],
-                        borderWidth: 2,
-                        borderColor: '#fdfbf7'
+                        data: [331, 2, 6, 4, 2, 2],
+                        backgroundColor: ['#2c4a3e', '#dfcba5', '#bc6c25', '#a44a3f', '#d62828', '#780000'],
+                        hoverOffset: 15
                     }]
                 },
-                options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } } }
+                options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
             });
 
-            // 2. Top Especies (Horizontal)
+            // 2. Especies Críticas (Casos totales de infestación por especie)
             new Chart(document.getElementById('chartEspecies'), {
                 type: 'bar',
                 data: {
-                    labels: ['Peral', 'Capulín', 'Zapote', 'Tejocote', 'Durazno'],
+                    labels: ['Peral', 'Capulín', 'Tejocote', 'Zapote', 'Durazno'],
                     datasets: [{
-                        label: 'Nivel de Infestación',
-                        data: [12, 2, 1, 1, 0],
+                        label: 'Ejemplares Afectados',
+                        data: [12, 2, 1, 1, 0], // Peral es el más afectado según tu tabla
                         backgroundColor: '#bc6c25',
-                        borderRadius: 5
+                        borderRadius: 8
                     }]
                 },
                 options: { indexAxis: 'y', plugins: { legend: { display: false } } }
             });
 
-            // 3. Áreas
+            // 3. Distribución por Áreas (Datos de tu tabla 'Resumen por Parcela')
             new Chart(document.getElementById('chartAreas'), {
                 type: 'bar',
                 data: {
-                    labels: ['Rectoría / Área 1', 'Comedor / Área 2', 'Facultades / Área 3'],
+                    labels: ['Área 1', 'Área 2', 'Área 3'],
                     datasets: [
-                        { label: 'Sanos', data: [180, 73, 78], backgroundColor: '#2c4a3e', borderRadius: 5 },
-                        { label: 'Enfermos', data: [9, 6, 1], backgroundColor: '#d62828', borderRadius: 5 }
+                        { label: 'Sanos', data: [180, 73, 78], backgroundColor: '#2c4a3e' },
+                        { label: 'Infestados', data: [9, 6, 1], backgroundColor: '#d62828' }
                     ]
                 },
-                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+                options: { 
+                    scales: { y: { stacked: true, beginAtZero: true }, x: { stacked: true } },
+                    plugins: { legend: { position: 'top' } }
+                }
             });
         };
     </script>
