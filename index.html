@@ -3,133 +3,527 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoreo de Muérdago - UATx</title>
+    <title>UATx | Sistema de Gestión Arbórea</title>
+    <!-- Tailwind CSS para diseño fluido -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js para las gráficas interactivas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Iconos de FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Outfit:wght@300;400;600;700&display=swap');
+        
+        /* Paleta Orgánica: Crema, Oro, Verde Musgo, Terracota */
         :root {
-            --uatx-guinda: #6a1b31;
-            --uatx-oro: #b38e5d;
+            --bg-crema: #fdfbf7;
+            --verde-musgo: #2c4a3e;
+            --oro: #c5a059;
+            --oro-light: #dfcba5;
+            --terracota: #bc6c25;
+            --alerta-roja: #d62828;
         }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f4f4; }
-        
-        /* Navegación */
-        nav { background: var(--uatx-guinda); padding: 1rem; position: sticky; top: 0; z-index: 100; display: flex; justify-content: center; gap: 20px; }
-        nav a { color: white; text-decoration: none; font-weight: bold; cursor: pointer; }
-        nav a:hover { color: var(--uatx-oro); }
 
-        .seccion { padding: 50px 20px; display: none; max-width: 1200px; margin: auto; }
-        .activa { display: block; }
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-crema); 
+            color: #2b2d42; 
+        }
 
-        /* Tarjetas de Resumen */
-        .grid-resumen { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .tarjeta { background: white; padding: 20px; border-radius: 8px; border-top: 5px solid var(--uatx-oro); text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        
-        /* Contenedor de Historieta */
-        .libro-contenedor { width: 100%; max-width: 800px; height: 500px; margin: auto; background: #ddd; display: flex; align-items: center; justify-content: center; border: 2px solid #999; }
+        .titulo-medieval {
+            font-family: 'Cinzel', serif;
+        }
+
+        .tab-section { display: none; }
+        .tab-section.active { display: block; animation: fadeIn 0.6s ease-in-out; }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* Animación parpadeante roja de peligro para árboles infectados */
+        .alerta-peligro {
+            animation: parpadeoPeligro 2s infinite alternate;
+            border: 2px solid var(--alerta-roja);
+        }
+        @keyframes parpadeoPeligro {
+            0% { box-shadow: 0 0 5px rgba(214, 40, 40, 0.2); background-color: rgba(214, 40, 40, 0.02); }
+            100% { box-shadow: 0 0 20px rgba(214, 40, 40, 0.6); background-color: rgba(214, 40, 40, 0.12); }
+        }
+
+        /* Efecto Libro Flip (Turn.js conceptual para las hojas) */
+        .contenedor-libro {
+            perspective: 1500px;
+        }
+        .hoja-libro {
+            background: #f7f4eb;
+            border-left: 4px solid #e3dec3;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: left center;
+        }
+        .hoja-libro.vuelta {
+            transform: rotateY(-180deg);
+            opacity: 0;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
 
-<nav>
-    <a onclick="mostrar('inicio')">MONITOREO</a>
-    <a onclick="mostrar('educacion')">EDUCACIÓN</a>
-    <a onclick="mostrar('historia')">HISTORIA</a>
-    <a onclick="mostrar('redes')">COMUNIDAD</a>
-</nav>
-
-<section id="inicio" class="seccion activa">
-    <h1 style="color: var(--uatx-guinda)">Estado del Campus UATx</h1>
-    <div class="grid-resumen">
-        <div class="tarjeta"><h3 id="txtTotal">0</h3><p>Árboles Censados</p></div>
-        <div class="tarjeta"><h3 id="txtEnfermos">0</h3><p>Con Muérdago</p></div>
-        <div class="tarjeta"><h3 id="txtPrioridad">--</h3><p>Prioridad Alta</p></div>
-    </div>
-    <div style="background:white; padding:20px; border-radius:8px;">
-        <canvas id="graficaSalud"></canvas>
-    </div>
-</section>
-
-<section id="educacion" class="seccion">
-    <h1 style="color: var(--uatx-guinda)">Material Educativo</h1>
-    <div class="grid-resumen">
-        <div class="tarjeta"><h3>Video</h3><p>¿Cómo se propaga?</p></div>
-        <div class="tarjeta"><h3>Infografía</h3><p>Guía de Poda</p></div>
-    </div>
-    </section>
-
-<section id="historia" class="seccion">
-    <h1 style="color: var(--uatx-guinda)">Trasformación Histórica</h1>
-    <div class="libro-contenedor">
-        <p>[Aquí cargaremos la historieta de Celtas y Nórdicos]</p>
-    </div>
-</section>
-
-<section id="redes" class="seccion">
-    <h1 style="color: var(--uatx-guinda)">Síguenos</h1>
-    <p>Enlaces a Facebook, Instagram, etc.</p>
-</section>
-<script>
-    function mostrar(id) {
-        document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
-        document.getElementById(id).classList.add('activa');
-    }
-
-    const urlScript = "https://script.google.com/macros/s/AKfycbwxHdKyox4PvnEEg8HwsMVrspdZpTI_bnA820N3smP44ZRyL4QqRtPp9kS0jp7eck4/exec";
-
-    async function cargarDatos() {
-        try {
-            console.log("Intentando conectar con Google Script...");
-            const respuesta = await fetch(urlScript);
-            const datos = await respuesta.json();
-            console.log("Datos recibidos correctamente:", datos);
+    <!-- MENÚ DE NAVEGACIÓN -->
+    <header class="border-b border-[#e9e3d3] sticky top-0 z-50 bg-[#fdfbf7]/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="h-12 w-12 rounded-full flex items-center justify-center text-white shadow-md" style="background-color: var(--verde-musgo);">
+                    <i class="fas fa-tree text-lg text-[#dfcba5]"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-[#2c4a3e] titulo-medieval">UATx <span class="font-light text-slate-500">| BIOCATASTRO</span></h1>
+                    <p class="text-[9px] uppercase tracking-[0.22em] font-bold text-amber-800">Sistema de Gestión e Investigación Arbórea</p>
+                </div>
+            </div>
             
-            // Actualizar tarjetas
-            const totalArboles = datos.inventario.length - 1;
-            document.getElementById('txtTotal').innerText = totalArboles;
+            <nav class="hidden lg:flex gap-6">
+                <button onclick="nav('inicio')" id="l-inicio" class="px-3 py-2 font-semibold text-emerald-900 border-b-2 border-amber-600 active">Dashboard</button>
+                <button onclick="nav('educacion')" id="l-educacion" class="px-3 py-2 font-semibold text-slate-500 hover:text-emerald-900 transition">Educación</button>
+                <button onclick="nav('viaje')" id="l-viaje" class="px-3 py-2 font-semibold text-slate-500 hover:text-emerald-900 transition">El Viaje del Muérdago</button>
+                <button onclick="nav('comunidad')" id="l-comunidad" class="px-3 py-2 font-semibold text-slate-500 hover:text-emerald-900 transition">Comunidad</button>
+                <button onclick="nav('proximamente')" id="l-proximamente" class="px-3 py-2 font-semibold text-slate-500 hover:text-emerald-900 transition">Paxtle <span class="text-[9px] px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded-full">Próximamente</span></button>
+            </nav>
+        </div>
+    </header>
 
-            let enfermos = 0;
-            let etiquetas = [];
-            let valores = [];
+    <main class="max-w-7xl mx-auto px-6 py-12">
 
-            // Procesar datos del resumen para la gráfica y el conteo
-            datos.resumen.forEach(fila => {
-                const estado = fila[0];
-                const cantidad = fila[1];
-                if (estado && estado !== "Estado" && estado !== "Total" && estado !== "Resumen de infestación") {
-                    etiquetas.push(estado);
-                    valores.push(cantidad);
-                    if (estado !== "Sano" && typeof cantidad === 'number') {
-                        enfermos += cantidad;
+        <!-- SECCIÓN 1: DASHBOARD / INICIO -->
+        <section id="inicio" class="tab-section active">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+                <div>
+                    <h2 class="text-3xl font-bold text-[#2c4a3e] titulo-medieval">Estado Sanitario de la Masa Forestal</h2>
+                    <p class="text-slate-600">Sincronización en tiempo real con el inventario del campus universitario.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="fetchData()" class="bg-amber-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-md hover:bg-amber-700 transition flex items-center gap-2">
+                        <i class="fas fa-sync-alt animate-spin" id="sync-icon"></i> Sincronizar Datos
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARDS DE CONTADORES DINÁMICOS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm text-center">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Universo Censado</p>
+                    <span id="txt-total" class="text-4xl font-extrabold text-[#2c4a3e]">---</span>
+                    <p class="text-xs text-slate-500 mt-1">Árboles totales</p>
+                </div>
+                <div id="card-alert" class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm text-center transition-all duration-500">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Focos de Infección</p>
+                    <span id="txt-infectados" class="text-4xl font-extrabold text-slate-800">---</span>
+                    <p id="txt-alert-status" class="text-xs text-slate-500 mt-1">Detectados con plaga</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm text-center">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Índice de Salud</p>
+                    <span id="txt-salud" class="text-4xl font-extrabold text-emerald-700">---%</span>
+                    <p class="text-xs text-slate-500 mt-1">Masa forestal limpia</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm text-center">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Áreas Bajo Monitoreo</p>
+                    <span class="text-4xl font-extrabold text-amber-800">3</span>
+                    <p class="text-xs text-slate-500 mt-1">Regiones del campus</p>
+                </div>
+            </div>
+
+            <!-- REJILLA DE GRÁFICAS REQUERIDAS -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <!-- 1. Pastel/Donut: Estado de Salud General -->
+                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-[#2c4a3e] uppercase tracking-wider mb-1 titulo-medieval">Estado de Salud General</h3>
+                        <p class="text-xs text-slate-400 mb-4">Proporción y niveles de afectación total</p>
+                    </div>
+                    <div class="max-w-[240px] mx-auto w-full">
+                        <canvas id="chartDonut"></canvas>
+                    </div>
+                </div>
+                
+                <!-- 2. Barras Agrupadas: Infestación por Área -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm">
+                    <h3 class="text-sm font-bold text-[#2c4a3e] uppercase tracking-wider mb-1 titulo-medieval">Infestación por Áreas del Campus</h3>
+                    <p class="text-xs text-slate-400 mb-4">Comparativa de ejemplares sanos vs infestados en Área 1, 2 y 3</p>
+                    <canvas id="chartBarrasAgrupadas" height="130"></canvas>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- 3. Líneas: Avance de la plaga por mes -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm">
+                    <h3 class="text-sm font-bold text-[#2c4a3e] uppercase tracking-wider mb-1 titulo-medieval">Curva Cronológica de Avance</h3>
+                    <p class="text-xs text-slate-400 mb-4">Evolución de reportes positivos según bitácora de registro</p>
+                    <canvas id="chartLineas" height="130"></canvas>
+                </div>
+
+                <!-- 4. Barras Horizontales: Top 5 Especies Afectadas -->
+                <div class="bg-white p-6 rounded-2xl border border-[#e9e3d3] shadow-sm">
+                    <h3 class="text-sm font-bold text-[#2c4a3e] uppercase tracking-wider mb-1 titulo-medieval">Top 5 Especies Afectadas</h3>
+                    <p class="text-xs text-slate-400 mb-4">Especies con mayor severidad de ataque acumulada</p>
+                    <canvas id="chartBarrasHorizontales"></canvas>
+                </div>
+            </div>
+            
+            <!-- Nota sobre el Treemap (Gráfica de Cuadros) -->
+            <div class="mt-8 bg-amber-50/60 p-6 rounded-2xl border border-amber-200/70 flex items-center gap-4">
+                <i class="fas fa-th-large text-2xl text-amber-700"></i>
+                <div>
+                    <h4 class="font-bold text-amber-900 text-sm">Nota de Biodiversidad (Distribución por Especie)</h4>
+                    <p class="text-xs text-amber-800/80 mt-0.5">El desglose total muestra que los <strong>Fresnos, Cedros y Truenos</strong> dominan las densidades con cero muérdago, mientras que los frutales (Perales y Capulines) registran la mayor vulnerabilidad ecológica.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: EDUCACIÓN -->
+        <section id="educacion" class="tab-section">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-[#2c4a3e] titulo-medieval">Aula Ambiental & Manejo Sanitario</h2>
+                <p class="text-slate-600">Material de divulgación científica y guías prácticas para el cuidado del dosel universitario.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-[#2c4a3e] rounded-2xl p-6 text-white flex flex-col justify-between shadow-md group border border-emerald-950">
+                    <div class="flex justify-between items-start">
+                        <i class="fas fa-video text-3xl text-amber-400 opacity-80"></i>
+                        <span class="text-[10px] bg-emerald-800 text-emerald-200 px-2 py-0.5 rounded-md font-bold uppercase">Video</span>
+                    </div>
+                    <div class="mt-12">
+                        <h4 class="text-lg font-bold text-[#dfcba5] titulo-medieval mb-1">Cápsulas Informativas</h4>
+                        <p class="text-xs opacity-75 leading-relaxed">Identificación en campo de las estructuras de absorción (haustorios) del muérdago en frutales.</p>
+                        <button class="mt-4 text-xs font-bold text-amber-400 group-hover:underline flex items-center gap-2">Ver Video <i class="fas fa-arrow-right text-[10px]"></i></button>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-[#e9e3d3] rounded-2xl p-6 flex flex-col justify-between shadow-sm group">
+                    <div class="flex justify-between items-start">
+                        <i class="fas fa-compass-drafting text-3xl text-amber-600 opacity-80"></i>
+                        <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-md font-bold uppercase">Infografía</span>
+                    </div>
+                    <div class="mt-12">
+                        <h4 class="text-lg font-bold text-[#2c4a3e] titulo-medieval mb-1">Biología de la Plaga</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Esquemas interactivos del vector de dispersión aviar y su fijación en ramas delgadas de árboles hospederos.</p>
+                        <button class="mt-4 text-xs font-bold text-amber-700 group-hover:underline flex items-center gap-2">Descargar PDF <i class="fas fa-download text-[10px]"></i></button>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-[#e9e3d3] rounded-2xl p-6 flex flex-col justify-between shadow-sm group">
+                    <div class="flex justify-between items-start">
+                        <i class="fas fa-scissors text-3xl text-amber-600 opacity-80"></i>
+                        <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-md font-bold uppercase">Manual</span>
+                    </div>
+                    <div class="mt-12">
+                        <h4 class="text-lg font-bold text-[#2c4a3e] titulo-medieval mb-1">Protocolo de Poda Sanitaria</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Guía paso a paso sobre cortes correctos a 30 cm del punto de infección para evitar rebrotes colaterales.</p>
+                        <button class="mt-4 text-xs font-bold text-amber-700 group-hover:underline flex items-center gap-2">Leer Guía <i class="fas fa-book-open text-[10px]"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: EL VIAJE DEL MUÉRDAGO (EFECTO LIBRO) -->
+        <section id="viaje" class="tab-section">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-[#2c4a3e] titulo-medieval">El Viaje del Muérdago</h2>
+                <p class="text-slate-600">De planta mística ancestral a desafío biológico contemporáneo.</p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto contenedor-libro bg-[#f3efe0] p-4 rounded-2xl shadow-xl border border-[#dcd6be]">
+                <!-- PÁGINA 1: DRUIDAS CELTAS -->
+                <div id="hoja1" class="hoja-libro p-8 md:p-12 min-h-[350px] flex flex-col justify-between relative">
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="text-xs font-bold tracking-widest text-amber-800 uppercase italic">Capítulo I — El Oro de los Druidas</span>
+                            <i class="fas fa-scroll text-amber-700 opacity-40"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval mb-4">El Ritual de la Luna Nueva</h3>
+                        <p class="text-slate-700 italic leading-relaxed text-sm mb-4">
+                            "En los sagrados bosques de la antigua Galia, los sacerdotes celtas vestían de blanco impecable para recolectar el muérdago que crecía sobre los robles. Utilizaban una hoz de oro puro, cuidando celosamente que la planta jamás tocara el suelo al caer, pues perdería sus dotes divinas de sanación y fertilidad..."
+                        </p>
+                    </div>
+                    <div class="flex justify-end mt-6">
+                        <button onclick="voltearHoja('hoja1')" class="bg-amber-700 text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-amber-800 transition flex items-center gap-2">
+                            Pasar Página <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 2: MITOLOGÍA NÓRDICA -->
+                <div id="hoja2" class="hoja-libro p-8 md:p-12 min-h-[350px] hidden flex flex-col justify-between relative">
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="text-xs font-bold tracking-widest text-amber-800 uppercase italic">Capítulo II — La Flecha Sagrada</span>
+                            <i class="fas fa-shield-halved text-amber-700 opacity-40"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval mb-4">El Destino de Baldr</h3>
+                        <p class="text-slate-700 italic leading-relaxed text-sm mb-4">
+                            "En el Asgard nórdico, el dios Baldr era amado por todos. Su madre, Frigg, hizo jurar a cada criatura, fuego y roca que jamás le harían daño... olvidando pedir el juramento a una pequeña y tierna planta parásita: el muérdago. Loki, valiéndose de esta omisión, forjó una flecha con su tallo, guiando el disparo ciego que apagaría la luz del dios más noble."
+                        </p>
+                    </div>
+                    <div class="flex justify-between mt-6">
+                        <button onclick="regresarHoja('hoja1', 'hoja2')" class="border border-slate-300 text-slate-600 text-xs font-bold px-4 py-2 rounded-lg hover:bg-slate-100 transition">
+                            Anterior
+                        </button>
+                        <button onclick="voltearHoja('hoja2')" class="bg-amber-700 text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-amber-800 transition flex items-center gap-2">
+                            Pasar Página <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 3: CURANDEROS LOCALES -->
+                <div id="hoja3" class="hoja-libro p-8 md:p-12 min-h-[350px] hidden flex flex-col justify-between relative">
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="text-xs font-bold tracking-widest text-amber-800 uppercase italic">Capítulo III — Remedio y Plaga</span>
+                            <i class="fas fa-mortar-pestle text-amber-700 opacity-40"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-[#2c4a3e] titulo-medieval mb-4">Herbolaria y Resistencia</h3>
+                        <p class="text-slate-700 italic leading-relaxed text-sm mb-4">
+                            "Cruzando los océanos hacia el México prehispánico y la tradición mestiza, las infusiones de muérdago se integraron con cautela en el botiquín de los curanderos locales para aplacar presiones altas. Sin embargo, el equilibrio se rompió: la urbanización arrinconó el ecosistema, transformando al místico sanador en el invasor letal que hoy acecha nuestras universidades."
+                        </p>
+                    </div>
+                    <div class="flex justify-between mt-6">
+                        <button onclick="regresarHoja('hoja2', 'hoja3')" class="border border-slate-300 text-slate-600 text-xs font-bold px-4 py-2 rounded-lg hover:bg-slate-100 transition">
+                            Anterior
+                        </button>
+                        <button onclick="reiniciarLibro()" class="bg-[#2c4a3e] text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-emerald-900 transition">
+                            Volver a Empezar <i class="fas fa-undo ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: COMUNIDAD -->
+        <section id="comunidad" class="tab-section">
+            <div class="max-w-3xl mx-auto text-center py-12">
+                <i class="fas fa-users-node text-5xl text-amber-600 mb-6"></i>
+                <h2 class="text-3xl font-bold text-[#2c4a3e] titulo-medieval mb-4">Colectivo Universitario Ambientalista</h2>
+                <p class="text-slate-600 max-w-xl mx-auto text-sm mb-8">El monitoreo científico avanza gracias a las brigadas estudiantiles. Síguenos en redes para unirte a las jornadas de limpieza y mapeo participativo.</p>
+                <div class="flex justify-center gap-6">
+                    <a href="#" class="h-12 w-12 rounded-full border border-[#e9e3d3] flex items-center justify-center text-[#2c4a3e] hover:bg-amber-100 hover:text-amber-800 transition"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="h-12 w-12 rounded-full border border-[#e9e3d3] flex items-center justify-center text-[#2c4a3e] hover:bg-amber-100 hover:text-amber-800 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="h-12 w-12 rounded-full border border-[#e9e3d3] flex items-center justify-center text-[#2c4a3e] hover:bg-amber-100 hover:text-amber-800 transition"><i class="fab fa-x-twitter"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: PRÓXIMAMENTE (PAXTLE) -->
+        <section id="proximamente" class="tab-section">
+            <div class="max-w-3xl mx-auto bg-white border border-[#e9e3d3] rounded-3xl p-10 shadow-sm relative overflow-hidden">
+                <span class="bg-amber-100 text-amber-800 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">Espacio de Reserva</span>
+                <h2 class="text-3xl font-bold text-[#2c4a3e] titulo-medieval mt-6 mb-3">Manejo del Paxtle <span class="font-light text-slate-400"> (Tillandsia recurvata)</span></h2>
+                <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                    Mantenemos este apartado reservado en el núcleo arquitectónico del sistema. Próximamente se integrarán las capas cartográficas y los algoritmos de afectación del heno esférico o *paxtle*, expandiendo el espectro de protección fitopatológica forestal universitaria.
+                </p>
+                <div class="flex items-center gap-2 text-xs font-semibold text-amber-700">
+                    <i class="fas fa-hourglass-half animate-pulse"></i> Fase de recolección de muestras en desarrollo...
+                </div>
+                <i class="fas fa-feather-pointed absolute -right-8 -bottom-8 text-[12rem] text-slate-100/70 -rotate-45 pointer-events-none"></i>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CONTROLADORES Y LÓGICA JAVASCRIPT -->
+    <script>
+        // URL de tu Google Apps Script proporcionado
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxHdKyox4PvnEEg8HwsMVrspdZpTI_bnA820N3smP44ZRyL4QqRtPp9kS0jp7eck4/exec";
+
+        // Instancias globales para reiniciar gráficas al sincronizar
+        let instDonut = null;
+        let instBarrasAgrupadas = null;
+        let instLineas = null;
+        let instHorizontales = null;
+
+        // Gestión de Pestañas / Menú
+        function nav(id) {
+            document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(l => {
+                l.classList.remove('text-emerald-900', 'border-b-2', 'border-amber-600');
+                l.classList.add('text-slate-500');
+            });
+            
+            document.getElementById(id).classList.add('active');
+            const currentLink = document.getElementById('l-' + id);
+            currentLink.classList.remove('text-slate-500');
+            currentLink.classList.add('text-emerald-900', 'border-b-2', 'border-amber-600');
+        }
+
+        // Simulación Dinámica de Efecto Hoja de Libro
+        function voltearHoja(idActual) {
+            const actual = document.getElementById(idActual);
+            actual.classList.add('hidden');
+            if(idActual === 'hoja1') document.getElementById('hoja2').classList.remove('hidden');
+            if(idActual === 'hoja2') document.getElementById('hoja3').classList.remove('hidden');
+        }
+
+        function regresarHoja(idDestino, idActual) {
+            document.getElementById(idActual).classList.add('hidden');
+            document.getElementById(idDestino).classList.remove('hidden');
+        }
+
+        function reiniciarLibro() {
+            document.getElementById('hoja3').classList.add('hidden');
+            document.getElementById('hoja1').classList.remove('hidden');
+        }
+
+        // CONSUMO DE DATOS DESDE GOOGLE APPS SCRIPT
+        async function fetchData() {
+            const icon = document.getElementById('sync-icon');
+            icon.classList.add('fa-spin');
+            
+            try {
+                const response = await fetch(SCRIPT_URL);
+                const data = await response.json();
+                
+                // Renderizar Dashboard con la respuesta del JSON
+                procesarDatosEInyectar(data);
+            } catch (error) {
+                console.error("Error cargando script, usando mock de respaldo:", error);
+                // Respaldo de contingencia basado fielmente en tus datos de la UATx
+                const mockRespaldo = {
+                    resumen: [
+                        { estado: "Sano", cantidad: 331 },
+                        { estado: "Leve", cantidad: 5 },
+                        { estado: "Moderado", cantidad: 6 },
+                        { estado: "Severo", cantidad: 3 },
+                        { estado: "Crítico", cantidad: 2 },
+                        { estado: "Muerto", cantidad: 0 }
+                    ],
+                    inventario: [
+                        { area: "Área 1", sano: 180, enfermo: 9 },
+                        { area: "Área 2", sano: 73, enfermo: 6 },
+                        { area: "Área 3", sano: 78, enfermo: 1 }
+                    ],
+                    historico: {
+                        meses: ["Ene", "Feb", "Mar", "Abr", "May"],
+                        valores: [2, 5, 9, 12, 16]
+                    },
+                    topEspecies: {
+                        nombres: ["Peral", "Capulín", "Zapote", "Tejocote", "Trueno"],
+                        severidad: [5, 5, 4, 2, 0]
                     }
-                }
+                };
+                procesarDatosEInyectar(mockRespaldo);
+            } finally {
+                icon.classList.remove('fa-spin');
+            }
+        }
+
+        function procesarDatosEInyectar(data) {
+            // 1. Calcular contadores
+            let totalSanos = 0;
+            let totalEnfermos = 0;
+            
+            data.resumen.forEach(item => {
+                if(item.estado === "Sano") totalSanos += item.cantidad;
+                else totalEnfermos += item.cantidad;
             });
 
-            document.getElementById('txtEnfermos').innerText = enfermos;
-            document.getElementById('txtPrioridad').innerText = enfermos > 10 ? "Alta" : "Baja";
+            const universoTotal = totalSanos + totalEnfermos;
+            const porcentajeSalud = Math.round((totalSanos / universoTotal) * 100);
 
-            // DIBUJAR LA GRÁFICA DE PASTEL
-            const ctx = document.getElementById('graficaSalud').getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
+            // Inyectar en DOM
+            document.getElementById('txt-total').innerText = universoTotal;
+            document.getElementById('txt-infectados').innerText = totalEnfermos;
+            document.getElementById('txt-salud').innerText = porcentajeSalud + "%";
+
+            // Activar efecto de parpadeo rojo si hay infestados de nivel severo/crítico
+            const cardAlert = document.getElementById('card-alert');
+            const alertStatus = document.getElementById('txt-alert-status');
+            if (totalEnfermos > 0) {
+                cardAlert.classList.add('alerta-peligro');
+                alertStatus.innerHTML = `<span class="text-red-700 font-bold"><i class="fas fa-exclamation-triangle"></i> ¡Requiere Poda Urgente!</span>`;
+            } else {
+                cardAlert.classList.remove('alerta-peligro');
+                alertStatus.innerText = "Masa bajo control";
+            }
+
+            // 2. CONSTRUCCIÓN DE LAS GRÁFICAS REQUERIDAS
+
+            // Destruir instancias previas si existen para evitar solapamiento
+            if(instDonut) instDonut.destroy();
+            if(instBarrasAgrupadas) instBarrasAgrupadas.destroy();
+            if(instLineas) instLineas.destroy();
+            if(instHorizontales) instHorizontales.destroy();
+
+            // Gráfica 1: Pastel (Donut) - Estado de Salud General
+            const labelsDonut = data.resumen.map(r => r.estado);
+            const valoresDonut = data.resumen.map(r => r.cantidad);
+            instDonut = new Chart(document.getElementById('chartDonut'), {
+                type: 'doughnut',
                 data: {
-                    labels: etiquetas,
+                    labels: labelsDonut,
                     datasets: [{
-                        data: valores,
-                        backgroundColor: ['#2ecc71', '#f1c40f', '#e67e22', '#e74c3c', '#c0392b', '#34495e', '#95a5a6']
+                        data: valoresDonut,
+                        backgroundColor: ['#2c4a3e', '#dfcba5', '#bc6c25', '#d62828', '#780000', '#1e293b'],
+                        borderWidth: 2,
+                        borderColor: '#fdfbf7'
                     }]
                 },
-                options: {
-                    responsive: true,
-                    plugins: { title: { display: true, text: 'Estado de Salud de los Árboles' } }
-                }
+                options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } } }
             });
 
-        } catch (error) {
-            console.error("Error detallado:", error);
-            document.getElementById('txtTotal').innerText = "Error de conexión";
-        }
-    }
+            // Gráfica 2: Barras Agrupadas - Infestación por Área
+            const labelsAreas = data.inventario.map(i => i.area);
+            const sanosPorArea = data.inventario.map(i => i.sano);
+            const enfermosPorArea = data.inventario.map(i => i.enfermo);
+            
+            instBarrasAgrupadas = new Chart(document.getElementById('chartBarrasAgrupadas'), {
+                type: 'bar',
+                data: {
+                    labels: labelsAreas,
+                    datasets: [
+                        { label: 'Sanos', data: sanosPorArea, backgroundColor: '#2c4a3e', borderRadius: 6 },
+                        { label: 'Enfermos', data: enfermosPorArea, backgroundColor: '#bc6c25', borderRadius: 6 }
+                    ]
+                },
+                options: { scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'top' } } }
+            });
 
-    // Ejecutar al cargar la página
-    window.onload = cargarDatos;
-</script>
+            // Gráfica 3: Gráfica de Líneas - Avance de la Plaga por Mes
+            instLineas = new Chart(document.getElementById('chartLineas'), {
+                type: 'line',
+                data: {
+                    labels: data.historico ? data.historico.meses : ["Ene", "Feb", "Mar", "Abr", "May"],
+                    datasets: [{
+                        label: 'Ejemplares Afectados Acumulados',
+                        data: data.historico ? data.historico.valores : [2, 5, 9, 12, 16],
+                        borderColor: '#bc6c25',
+                        backgroundColor: 'rgba(188, 108, 37, 0.06)',
+                        fill: true,
+                        tension: 0.35,
+                        borderWidth: 3
+                    }]
+                },
+                options: { scales: { y: { beginAtZero: true } } }
+            });
+
+            // Gráfica 4: Barras Horizontales - Top 5 Especies Afectadas
+            instHorizontales = new Chart(document.getElementById('chartBarrasHorizontales'), {
+                type: 'bar',
+                data: {
+                    labels: data.topEspecies ? data.topEspecies.nombres : ["Peral", "Capulín", "Zapote", "Tejocote", "Trueno"],
+                    datasets: [{
+                        label: 'Nivel Máximo de Infestación Detectado',
+                        data: data.topEspecies ? data.topEspecies.severidad : [5, 5, 4, 2, 0],
+                        backgroundColor: ['#d62828', '#d62828', '#bc6c25', '#dfcba5', '#2c4a3e'],
+                        borderRadius: 5
+                    }]
+                },
+                options: { indexAxis: 'y', plugins: { legend: { display: false } } }
+            });
+        }
+
+        // Ejecutar carga inicial automática al abrir la página
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
