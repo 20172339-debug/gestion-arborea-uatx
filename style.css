@@ -463,3 +463,229 @@ main {
   }
 
 }
+/* =========================
+   NUEVA PALETA
+========================= */
+
+body {
+
+  background:
+    linear-gradient(
+      135deg,
+      #f4f7f5,
+      #edf2ef
+    );
+
+  color: #334155;
+}
+
+/* =========================
+   HEADER MODERNO
+========================= */
+
+header {
+
+  background:
+    rgba(255,255,255,0.7);
+
+  backdrop-filter: blur(12px);
+
+  border-bottom:
+    1px solid rgba(255,255,255,0.4);
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+nav button {
+
+  background: #5f8f74;
+
+  border:
+    1px solid rgba(255,255,255,0.3);
+
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.05);
+}
+
+nav button:hover {
+
+  background: #7bb89a;
+
+  transform:
+    translateY(-3px);
+}
+
+/* =========================
+   TARJETAS
+========================= */
+
+.stat-card,
+.chart-card,
+.edu-card,
+.book-back {
+
+  background:
+    rgba(255,255,255,0.65);
+
+  backdrop-filter: blur(12px);
+
+  border:
+    1px solid rgba(255,255,255,0.4);
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.06);
+}
+
+/* =========================
+   TITULOS
+========================= */
+
+.hero h2,
+.section-title {
+
+  color: #4f8a6d;
+}
+
+.logo h1 {
+
+  color: #4f8a6d;
+}
+
+/* =========================
+   GRAFICAS
+========================= */
+
+.chart-card {
+
+  height: 380px;
+}
+
+.chart-card canvas {
+
+  height: 260px !important;
+}
+
+/* =========================
+   ESPECIES
+========================= */
+
+.species-section {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(400px,1fr));
+
+  gap: 30px;
+
+  margin-top: 50px;
+}
+
+.species-box {
+
+  background:
+    rgba(255,255,255,0.65);
+
+  backdrop-filter: blur(12px);
+
+  border-radius: 30px;
+
+  padding: 30px;
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.06);
+}
+
+.species-box h2 {
+
+  margin-bottom: 25px;
+
+  color: #4f8a6d;
+}
+
+.species-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(160px,1fr));
+
+  gap: 15px;
+}
+
+.species-card {
+
+  background:
+    rgba(255,255,255,0.75);
+
+  border-radius: 20px;
+
+  padding: 18px;
+
+  transition: 0.3s;
+
+  border:
+    1px solid rgba(255,255,255,0.5);
+}
+
+.species-card:hover {
+
+  transform:
+    translateY(-5px);
+
+  box-shadow:
+    0 10px 20px rgba(0,0,0,0.08);
+}
+
+.species-card h3 {
+
+  font-size: 16px;
+
+  margin-bottom: 10px;
+
+  color: #4f8a6d;
+}
+
+.species-card p {
+
+  font-size: 28px;
+
+  font-weight: bold;
+}
+
+.species-card small {
+
+  color: #64748b;
+}
+
+/* =========================
+   AFECTADAS
+========================= */
+
+.affected h2 {
+
+  color: #c97b63;
+}
+
+.affected .species-card h3 {
+
+  color: #c97b63;
+}
+
+/* =========================
+   SCROLL
+========================= */
+
+::-webkit-scrollbar {
+
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+
+  background: #b7c9bb;
+
+  border-radius: 20px;
+}
