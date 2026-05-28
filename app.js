@@ -39,13 +39,13 @@ async function loadData() {
       data.infestacion.map(i => i.estado),
       data.infestacion.map(i => i.total),
       [
-        '#2d6a4f',
-        '#f4d35e',
-        '#ee964b',
-        '#f95738',
-        '#9d0208',
-        '#6a040f',
-        '#6c757d'
+        '#7bb89a',
+        '#d9c27f',
+        '#dba979',
+        '#c97b63',
+        '#b56576',
+        '#8d5a97',
+        '#6b7c93'
       ]
     );
 
@@ -58,7 +58,7 @@ async function loadData() {
       'bar',
       data.parcelas.map(p => p.area),
       data.parcelas.map(p => p.total),
-      '#2d6a4f'
+      '#7bb89a'
     );
 
     // =========================
@@ -71,50 +71,83 @@ async function loadData() {
       data.tipos.map(t => t.tipo),
       data.tipos.map(t => t.total),
       [
-        '#588157',
-        '#bc6c25',
-        '#6d597a',
-        '#adb5bd'
+        '#7bb89a',
+        '#d9c27f',
+        '#6b7c93',
+        '#c97b63'
       ]
     );
 
     // =========================
-    // TOTAL POR ESPECIE
+    // ESPECIES REGISTRADAS
     // =========================
 
-    createChart(
-      'chartEspecies',
-      'bar',
-      data.especies.map(e => e.especie),
-      data.especies.map(e => e.total),
-      '#386641',
-      true
-    );
-
-    // =========================
-    // INFESTACIÓN POR ESPECIE
-    // =========================
-
-    const infestadosPorEspecie = data.especies.map(e => {
-
-      return (
-        e.leve +
-        e.moderado +
-        e.medio +
-        e.severo +
-        e.critico +
-        e.muerto
+    const speciesContainer =
+      document.getElementById(
+        'speciesContainer'
       );
+
+    speciesContainer.innerHTML = '';
+
+    data.especies.forEach(especie => {
+
+      const card =
+        document.createElement('div');
+
+      card.className =
+        'species-card';
+
+      card.innerHTML = `
+        <h3>🌳 ${especie.especie}</h3>
+        <p>${especie.total}</p>
+        <small>ejemplares</small>
+      `;
+
+      speciesContainer.appendChild(card);
 
     });
 
-    createChart(
-      'chartNiveles',
-      'line',
-      data.especies.map(e => e.especie),
-      infestadosPorEspecie,
-      '#b91c1c'
-    );
+    // =========================
+    // ESPECIES AFECTADAS
+    // =========================
+
+    const affectedContainer =
+      document.getElementById(
+        'affectedContainer'
+      );
+
+    affectedContainer.innerHTML = '';
+
+    data.especies.forEach(especie => {
+
+      const afectados =
+
+        especie.leve +
+        especie.moderado +
+        especie.medio +
+        especie.severo +
+        especie.critico +
+        especie.muerto;
+
+      if(afectados > 0) {
+
+        const card =
+          document.createElement('div');
+
+        card.className =
+          'species-card';
+
+        card.innerHTML = `
+          <h3>🍂 ${especie.especie}</h3>
+          <p>${afectados}</p>
+          <small>afectados</small>
+        `;
+
+        affectedContainer.appendChild(card);
+
+      }
+
+    });
 
   } catch(error) {
 
@@ -160,8 +193,6 @@ function createChart(
       options: {
 
         responsive: true,
-
-        indexAxis: horizontal ? 'y' : 'x',
 
         plugins: {
 
