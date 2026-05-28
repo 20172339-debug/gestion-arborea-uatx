@@ -43,4 +43,348 @@
       <button onclick="showSection('dashboard')">
         <i class="fa-solid fa-chart-line"></i>
         Dashboard
+      </button>
+
+      <button onclick="showSection('historia')">
+        <i class="fa-solid fa-book"></i>
+        Historia
+      </button>
+
+      <button onclick="showSection('educacion')">
+        <i class="fa-solid fa-graduation-cap"></i>
+        Educación
+      </button>
+      
+      <button onclick="showSection('contacto')">
+        <i class="fa-solid fa-envelope"></i>
+        Contacto
+      </button>
+
+    </nav>
+
+  </header>
+
+  <main>
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboard" class="section active">
+
+      <!-- HERO -->
+
+      <div class="hero modern-hero">
+
+        <div class="hero-text">
+
+          <span class="hero-badge">
+            🌿 Plataforma Ambiental Universitaria
+          </span>
+<h2>
+            Monitoreo Inteligente del Muérdago
+          </h2>
+
+          <p>
+            Sistema dinámico de monitoreo fitosanitario,
+            análisis ecológico y gestión arbórea del campus.
+          </p>
+
+        </div>
+
+        <div class="hero-orb">
+          <div class="orb"></div>
+        </div>
+
+      </div>
+
+      <!-- STATS -->
+
+      <div class="stats-grid modern-stats">
+
+        <div class="stat-card glass green">
+          <div class="stat-icon">
+            <i class="fa-solid fa-tree"></i>
+          </div>
+
+          <div>
+            <h3>Total General</h3>
+            <span id="totalGeneral">0</span>
+          </div>
+          </div>
+
+        <div class="stat-card glass orange">
+          <div class="stat-icon">
+            <i class="fa-solid fa-virus"></i>
+          </div>
+
+          <div>
+            <h3>Infestados</h3>
+            <span id="infestados">0</span>
+          </div>
+        </div>
+
+        <div class="stat-card glass blue">
+          <div class="stat-icon">
+            <i class="fa-solid fa-heart"></i>
+          </div>
+
+          <div>
+            <h3>Saludables</h3>
+            <span id="saludables">0</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- GRAFICAS -->
+      
+      <div class="dashboard-layout">
+
+        <div class="left-panel">
+
+          <div class="chart-card premium-card large-card">
+            <div class="card-top">
+              <h3>Resumen de Infestación</h3>
+              <span>Estado fitosanitario</span>
+            </div>
+            <canvas id="chartInfestacion"></canvas>
+          </div>
+
+          <div class="mini-grid">
+
+            <div class="chart-card premium-card">
+              <div class="card-top">
+                <h3>Parcelas</h3>
+                <span>Distribución espacial</span>
+              </div>
+              <canvas id="chartParcelas"></canvas>
+            </div>
+
+            <div class="chart-card premium-card">
+              <div class="card-top">
+                <h3>Tipos</h3>
+                <span>Clasificación arbórea</span>
+              </div>
+              <canvas id="chartTipos"></canvas>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- PANEL LATERAL -->
+
+        <div class="right-panel">
+
+          <div class="species-panel glass-panel">
+
+            <div class="species-header">
+              <h2>🌳 Especies Registradas</h2>
+              <span>Campus UATx</span>
+            </div>
+
+            <div class="species-scroll" id="speciesContainer"></div>
+
+          </div>
+
+          <div class="species-panel glass-panel affected-panel">
+
+            <div class="species-header">
+              <h2>🍂 Especies Afectadas</h2>
+              <span>Con presencia de muérdago</span>
+            </div>
+
+            <div class="species-scroll" id="affectedContainer"></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- HISTORIA -->
+
+    <section id="historia" class="section">
+
+      <div class="section-headline">
+        <span>Memoria Cultural</span>
+        <h2>El Muérdago a Través del Tiempo</h2>
+      </div>
+
+      <div class="books-grid premium-books">
+
+        <div class="book ancient">
+          <div class="book-inner">
+
+            <div class="book-front">
+              <h3>Celtas</h3>
+              <p>Sabiduría Druida</p>
+            </div>
+
+            <div class="book-back">
+              <p>
+                Los druidas consideraban al muérdago una planta sagrada asociada con fertilidad, protección y curación espiritual.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="book nordic-book">
+          <div class="book-inner">
+
+            <div class="book-front nordic">
+              <h3>Nórdicos</h3>
+              <p>Mitología Escandinava</p>
+            </div>
+
+            <div class="book-back">
+              <p>
+                En la leyenda de Baldr, el muérdago representa vulnerabilidad, destino y el equilibrio entre vida y muerte.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="book healer-book">
+          <div class="book-inner">
+
+            <div class="book-front healer">
+              <h3>Curanderos</h3>
+              <p>Medicina Tradicional</p>
+            </div>
+
+            <div class="book-back">
+              <p>
+                Diversas culturas emplearon el muérdago en remedios ancestrales relacionados con la salud y la energía vital.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="book modern-book">
+          <div class="book-inner">
+
+            <div class="book-front modern">
+              <h3>Actualidad</h3>
+              <p>Ecología Moderna</p>
+            </div>
+
+            <div class="book-back">
+              <p>
+                Actualmente el muérdago es estudiado por su impacto ecológico y sanitario en ecosistemas urbanos.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- EDUCACION -->
+
+    <section id="educacion" class="section">
+
+      <div class="section-headline">
+        <span>Divulgación Ambiental</span>
+        <h2>Centro Educativo Multimedia</h2>
+      </div>
+
+      <div class="education-grid modern-education">
+
+        <div class="edu-card video-card">
+          <i class="fa-solid fa-video"></i>
+          <h3>Videos</h3>
+          <p>Documentales, recorridos y material audiovisual.</p>
+        </div>
+
+        <div class="edu-card info-card">
+          <i class="fa-solid fa-image"></i>
+          <h3>Infografías</h3>
+          <p>Recursos visuales educativos y científicos.</p>
+        </div>
+
+        <div class="edu-card poster-card">
+          <i class="fa-solid fa-scroll"></i>
+          <h3>Carteles</h3>
+          <p>Material gráfico de divulgación ambiental.</p>
+        </div>
+
+        <div class="edu-card comic-card">
+          <i class="fa-solid fa-book-open"></i>
+          <h3>Historietas</h3>
+          <p>Narrativas ilustradas para educación ecológica.</p>
+        </div>
+
+        <div class="edu-card audio-card">
+          <i class="fa-solid fa-microphone"></i>
+          <h3>Audios</h3>
+          <p>Podcast, entrevistas y cápsulas informativas.</p>
+        </div>
+
+        <div class="edu-card research-card">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <h3>Investigación</h3>
+          <p>Estudios científicos y documentación del proyecto.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- CONTACTO -->
+
+    <section id="contacto" class="section">
+
+      <div class="section-headline">
+        <span>Conecta con Nosotros</span>
+        <h2>Redes y Contacto</h2>
+      </div>
+
+      <div class="contact-wrapper">
+
+        <div class="contact-card glass-panel">
+
+          <h3>Proyecto Ambiental UATx</h3>
+
+          <p>
+            Espacio de colaboración, divulgación y monitoreo ambiental universitario.
+          </p>
+
+          <div class="contact-box modern-contact">
+
+            <a href="#">
+              <i class="fa-brands fa-facebook"></i>
+            </a>
+
+            <a href="#">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+
+            <a href="#">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
+
+            <a href="#">
+              <i class="fa-solid fa-envelope"></i>
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+
+</body>
 </html>
