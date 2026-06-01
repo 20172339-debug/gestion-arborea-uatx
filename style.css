@@ -350,8 +350,8 @@ main {
 /* INTERACTIVO DE LIBROS (CRÓNICAS) */
 .section-center-headline {
   text-center: center;
-  max-width: 600px;
-  margin: 0 auto 50px auto;
+  max-width: 1100px;
+  margin: 0 auto 70px auto;
   text-align: center;
 }
 
