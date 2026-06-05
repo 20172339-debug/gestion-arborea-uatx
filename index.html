@@ -294,7 +294,98 @@
         </div>
       </div>
     </section>
+<button onclick="showSection('medicinal')" id="btn-medicinal" class="nav-btn">
+  <i class="fa-solid fa-mortar-pestle"></i> Medicinal
+</button>
 
+  <!-- Medicinal -->
+<section id="medicinal" class="section">
+  <div class="dashboard-header">
+    <div>
+      <span class="section-badge">Etnobotánica y Farmacología</span>
+      <h2 class="fuente-editorial section-title">Herbario Medicinal de Especies Parasitarias</h2>
+    </div>
+  </div>
+
+  <div class="filter-container">
+    <button class="filter-chip active" onclick="filterMedicinal('todos', this)">Ver Todas</button>
+    <button class="filter-chip" onclick="filterMedicinal('uatx', this)">
+      <i class="fa-solid fa-graduation-cap"></i> Identificadas en UATx
+    </button>
+    <button class="filter-chip" onclick="filterMedicinal('global', this)">
+      <i class="fa-solid fa-earth-americas"></i> Otras Especies Medicinales
+    </button>
+  </div>
+
+  <div class="medicinal-grid">
+    
+    <div class="herbario-card" data-origen="uatx">
+      <div class="card-badge uatx-badge"><i class="fa-solid fa-location-dot"></i> Campus UATx</div>
+      <div class="herbario-header">
+        <span class="specie-sciname">Phoradendron velutinum</span>
+        <h3 class="fuente-editorial">Muérdago de Clima Templado</h3>
+      </div>
+      <div class="herbario-body">
+        <div class="propiedad-tag"><i class="fa-solid fa-heart-pulse"></i> Presión Arterial</div>
+        <p>Identificado en las brigadas del campus afectando principalmente a árboles frutales y exóticos. En la medicina tradicional regional, extractos controlados de sus hojas y tallos se han empleado en infusiones folclóricas para apaciguar afecciones cardíacas y estabilizar el pulso acelerado.</p>
+        <div class="info-tecnica">
+          <span><strong>Compuestos:</strong> Flavonoides, Aminas</span>
+          <span><strong>Riesgo:</strong> Toxicidad Alta</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="herbario-card" data-origen="global">
+      <div class="card-badge global-badge"><i class="fa-solid fa-globe"></i> Global (Europa)</div>
+      <div class="herbario-header">
+        <span class="specie-sciname">Viscum album</span>
+        <h3 class="fuente-editorial">Muérdago Blanco Europeo</h3>
+      </div>
+      <div class="herbario-body">
+        <div class="propiedad-tag"><i class="fa-solid fa-dna"></i> Terapias Coadyuvantes</div>
+        <p>Especie medicinal por excelencia a nivel mundial (no presente nativamente en el campus). Sus lectinas y viscotoxinas son estudiadas rigurosamente en Europa como inmunomoduladores en terapias complementarias contra procesos oncológicos, ayudando a mitigar efectos secundarios de tratamientos químicos.</p>
+        <div class="info-tecnica">
+          <span><strong>Compuestos:</strong> Lectinas, Viscotoxinas</span>
+          <span><strong>Riesgo:</strong> Regulado Clínicamente</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="herbario-card" data-origen="uatx">
+      <div class="card-badge uatx-badge"><i class="fa-solid fa-location-dot"></i> Campus UATx</div>
+      <div class="herbario-header">
+        <span class="specie-sciname">Arceuthobium vaginatum</span>
+        <h3 class="fuente-editorial">Muérdago Enano del Pino</h3>
+      </div>
+      <div class="herbario-body">
+        <div class="propiedad-tag"><i class="fa-solid fa-virus-slash"></i> Antimicrobiano Tópico</div>
+        <p>Esta variante hemiparásita microscópica ataca las coníferas de nuestras zonas forestales. En el saber herbolario de las comunidades de Tlaxcala, las decocciones concentradas de la planta completa se aplican externamente para el lavado de heridas rebeldes debido a sus aparentes cualidades antisépticas.</p>
+        <div class="info-tecnica">
+          <span><strong>Compuestos:</strong> Taninos, Polifenoles</span>
+          <span><strong>Riesgo:</strong> Solo Uso Externo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="herbario-card" data-origen="global">
+      <div class="card-badge global-badge"><i class="fa-solid fa-globe"></i> Global</div>
+      <div class="herbario-header">
+        <span class="specie-sciname">Loranthus europaeus</span>
+        <h3 class="fuente-editorial">Muérdago de los Robles</h3>
+      </div>
+      <div class="herbario-body">
+        <div class="propiedad-tag"><i class="fa-solid fa-hand-holding-medical"></i> Antiinflamatorio</div>
+        <p>Especie de distribución mediterránea y asiática. Históricamente apreciada por sus niveles masivos de antioxidantes y compuestos fenólicos. Tratada de manera artesanal, se utilizaba para elaborar ungüentos balsámicos orientados a disminuir inflamaciones articulares agudas y dolores reumáticos.</p>
+        <div class="info-tecnica">
+          <span><strong>Compuestos:</strong> Ácido gálico, Quercetina</span>
+          <span><strong>Riesgo:</strong> Toxicidad Moderada</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+    
     <!-- CONTACTO -->
     <section id="contacto" class="section">
       <div class="contact-card-premium">
