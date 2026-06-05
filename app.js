@@ -63,7 +63,7 @@ async function loadData() {
       'bar',
       data.parcelas.map(p => p.area),
       data.parcelas.map(p => p.total),
-      '#bfa15f',
+      #bfa15f',
       {
         plugins: { legend: { display: false } }
       }
@@ -107,11 +107,11 @@ async function loadData() {
     data.especies.forEach(e => {
       // Mapeo directo de tus propiedades del script
       let totalEnfermos = (Number(e.leve) || 0) + 
-                            (Number(e.moderado) || 0) + 
-                            (Number(e.medio) || 0) + 
-                            (Number(e.severo) || 0) + 
-                            (Number(e.critico) || 0) + 
-                            (Number(e.muerto) || 0);
+                          (Number(e.moderado) || 0) + 
+                          (Number(e.medio) || 0) + 
+                          (Number(e.severo) || 0) + 
+                          (Number(e.critico) || 0) + 
+                          (Number(e.muerto) || 0);
 
       if (totalEnfermos > 0) {
         const row = document.createElement('div');
@@ -178,3 +178,29 @@ window.onload = () => {
   // Sincronización en bucle cada 30 segundos
   setInterval(loadData, 30000);
 };
+
+// ========================================================
+// INTERACTIVE FILTER FOR MEDICINAL HERBARIUM
+// ========================================================
+function filterMedicinal(origen, element) {
+  // Cambiar estado activo en los botones de filtro (chips)
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.classList.remove('active');
+  });
+  element.classList.add('active');
+
+  // Filtrar tarjetas en el DOM de forma inmediata
+  const cards = document.querySelectorAll('.herbario-card');
+  
+  cards.forEach(card => {
+    if (origen === 'todos') {
+      card.style.display = 'flex';
+    } else {
+      if (card.getAttribute('data-origen') === origen) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    }
+  });
+}
