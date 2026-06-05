@@ -78,7 +78,7 @@ async function loadData() {
       }
     );
 
-    // 2. Gráfica de Distribución por Parcelas (CORREGIDO ERROR SINTÁCTICO DE COMILLAS)
+    // 2. Gráfica de Distribución por Parcelas
     createChart(
       'chartParcelas',
       'bar',
@@ -153,4 +153,83 @@ async function loadData() {
     if (syncIcon) syncIcon.classList.remove('fa-spin');
   } catch (error) {
     console.error('Error en el procesamiento de datos del Herbario:', error);
-    const syncIcon = document.getElementById('sync-icon
+    const syncIcon = document.getElementById('sync-icon');
+    if (syncIcon) syncIcon.classList.remove('fa-spin');
+  }
+}
+
+
+/* ======================================================== */
+/* CAPÍTULO 3: MOTOR CENTRAL DE RE-RENDERIZADO DE GRÁFICAS   */
+/* ======================================================== */
+function createChart(id, type, labels, data, color, customOptions = {}) {
+  if (charts[id]) {
+    charts[id].destroy();
+  }
+
+  const baseOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {},
+    scales: type === 'bar' ? {
+      y: { grid: { color: 'rgba(44, 37, 30, 0.05)' }, ticks: { font: { size: 10 } } },
+      x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+    } : {}
+  };
+
+  const mergedOptions = {
+    ...baseOptions,
+    ...customOptions,
+    plugins: {
+      ...baseOptions.plugins,
+      ...customOptions.plugins
+    },
+    scales: type === 'bar' ? {
+      ...baseOptions.scales,
+      ...customOptions.scales
+    } : {}
+  };
+
+  const ctx = document.getElementById(id);
+  if (ctx) {
+    charts[id] = new Chart(ctx, {
+      type: type,
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Ejemplares',
+          data: data,
+          backgroundColor: color,
+          borderWidth: 0,
+          borderRadius: type === 'bar' ? 6 : 0
+        }]
+      },
+      options: mergedOptions
+    });
+  }
+}
+
+
+/* ======================================================== */
+/* CAPÍTULO 4: FILTROS INTERACTIVOS DEL HERBARIO MEDICINAL  */
+/* ======================================================== */
+function filterMedicinal(origen, element) {
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.classList.remove('active');
+  });
+  element.classList.add('active');
+
+  const cards = document.querySelectorAll('.herbario-card');
+  
+  cards.forEach(card => {
+    if (origen === 'todos') {
+      card.style.display = 'flex';
+    } else {
+      if (card.getAttribute('data-origen') === origen) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    }
+  });
+}
