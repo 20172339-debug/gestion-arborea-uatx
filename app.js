@@ -1,7 +1,8 @@
-// Pegar aquí la URL pública de ejecución de tu Google Apps Script
+// URL pública de ejecución de tu Google Apps Script
 const API_URL = 'https://script.google.com/macros/s/AKfycbwBEphqvwYuGyhR-WZxyfAkwe4eW_reLvedcKT80mloneU5d6gfvua_t7nIltG1WHOr/exec';
 
 let charts = {};
+let galeriaMuerdagosData = []; // Guardará la lista global para filtrado en cliente
 
 // =========================
 // NAVEGACIÓN Y CORRECCIÓN DE DIMENSIONES
@@ -12,10 +13,13 @@ function showSection(id) {
   document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
 
   // Activar pestaña actual
-  document.getElementById(id).classList.add('active');
-  document.getElementById(`btn-${id}`).classList.add('active');
+  const sectionTarget = document.getElementById(id);
+  const btnTarget = document.getElementById(`btn-${id}`);
+  
+  if (sectionTarget) sectionTarget.classList.add('active');
+  if (btnTarget) btnTarget.classList.add('active');
 
-  // SOLUCIÓN AL BUG: Si regresa al dashboard, fuerza a Chart.js a recalcular el tamaño
+  // Fuerza a Chart.js a recalcular el tamaño al regresar al dashboard
   if (id === 'dashboard') {
     Object.keys(charts).forEach(key => {
       if (charts[key]) {
@@ -36,93 +40,132 @@ async function loadData() {
     const response = await fetch(API_URL);
     const data = await response.json();
 
-    // 1. ASIGNACIÓN DE TARJETAS NUMÉRICAS
+    // 1. ASIGNACIÓN DE TARJETAS NUMÉRICAS PRINCIPALES
     document.getElementById('totalGeneral').innerText = data.totalGeneral || 0;
     document.getElementById('infestados').innerText = data.infestados || 0;
 
-    // Cálculo dinámico del porcentaje de sanos
     let sanos = (data.totalGeneral - data.infestados) || 0;
     let porcentajeBioseguridad = data.totalGeneral > 0 ? Math.round((sanos / data.totalGeneral) * 100) : 0;
     document.getElementById('saludables').innerText = porcentajeBioseguridad + "%";
 
-    // 2. RENDER GRÁFICA I: SEVERIDAD DE INFESTACIÓN
-    createChart(
-      'chartInfestacion',
-      'bar',
-      data.infestacion.map(i => i.estado),
-      data.infestacion.map(i => i.total),
-      ['#c7bfa7', '#dfca9f', '#cfa375', '#bd7e60', '#ad5245', '#7a221e', '#45403c'],
-      {
-        plugins: { legend: { display: false } }
-      }
-    );
+    // 2. DESACOPLE Y RENDER DE SEVERIDAD DE INFESTACIÓN (SOLO INFESTADOS)
+    if (data.infestacion) {
+      // Extraer cantidad de sanos para el badge superior
+      const objSano = data.infestacion.find(i => i.estado === "Sano");
+      const numSanos = objSano ? objSano.total : sanos;
+      const cantSanosElem = document.getElementById('cantSanos');
+      if (cantSanosElem) cantSanosElem.innerText = numSanos;
+
+      // Mapeo directo para las tarjetas KPI de severidad
+      const sevMap = {
+        'Leve': 'sev-leve',
+        'Moderado': 'sev-moderado',
+        'Medio': 'sev-medio',
+        'Severo': 'sev-severo',
+        'Crítico': 'sev-critico',
+        'Muerto': 'sev-muerto'
+      };
+
+      data.infestacion.forEach(item => {
+        const elemId = sevMap[item.estado];
+        if (elemId) {
+          const el = document.getElementById(elemId);
+          if (el) el.innerText = item.total || 0;
+        }
+      });
+
+      // Filtrar el estado "Sano" para que la gráfica represente ÚNICAMENTE los infestados
+      const infestadosSolo = data.infestacion.filter(i => i.estado !== "Sano");
+
+      createChart(
+        'chartInfestacion',
+        'bar',
+        infestadosSolo.map(i => i.estado),
+        infestadosSolo.map(i => i.total),
+        ['#dfca9f', '#cfa375', '#bd7e60', '#ad5245', '#7a221e', '#45403c'],
+        {
+          plugins: { legend: { display: false } }
+        }
+      );
+    }
 
     // 3. RENDER GRÁFICA II: PARCELAS
-    createChart(
-      'chartParcelas',
-      'bar',
-      data.parcelas.map(p => p.area),
-      data.parcelas.map(p => p.total),
-      '#bfa15f',
-      {
-        plugins: { legend: { display: false } }
-      }
-    );
+    if (data.parcelas) {
+      createChart(
+        'chartParcelas',
+        'bar',
+        data.parcelas.map(p => p.area),
+        data.parcelas.map(p => p.total),
+        '#bfa15f',
+        {
+          plugins: { legend: { display: false } }
+        }
+      );
+    }
 
     // 4. RENDER GRÁFICA III: TIPOS ECOLÓGICOS
-    createChart(
-      'chartTipos',
-      'doughnut',
-      data.tipos.map(t => t.tipo),
-      data.tipos.map(t => t.total),
-      ['#2c251e', '#bfa15f', '#d0c8b3'],
-      {
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: { boxWidth: 8, font: { size: 9, family: 'Plus Jakarta Sans' } }
+    if (data.tipos) {
+      createChart(
+        'chartTipos',
+        'doughnut',
+        data.tipos.map(t => t.tipo),
+        data.tipos.map(t => t.total),
+        ['#2c251e', '#bfa15f', '#d0c8b3'],
+        {
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { boxWidth: 8, font: { size: 9, family: 'Plus Jakarta Sans' } }
+            }
           }
         }
-      }
-    );
+      );
+    }
 
     // 5. INYECCIÓN DE CENSO ABSOLUTO DE ESPECIES
     const speciesContainer = document.getElementById('speciesContainer');
-    speciesContainer.innerHTML = '';
+    if (speciesContainer && data.especies) {
+      speciesContainer.innerHTML = '';
+      data.especies.forEach(e => {
+        const row = document.createElement('div');
+        row.className = 'species-row-premium';
+        row.innerHTML = `
+          <span class="row-label">🌳 ${e.especie}</span>
+          <span class="row-counter">${e.total}</span>
+        `;
+        speciesContainer.appendChild(row);
+      });
+    }
 
-    data.especies.forEach(e => {
-      const row = document.createElement('div');
-      row.className = 'species-row-premium';
-      row.innerHTML = `
-        <span class="row-label">🌳 ${e.especie}</span>
-        <span class="row-counter">${e.total}</span>
-      `;
-      speciesContainer.appendChild(row);
-    });
-
-    // 6. INYECCIÓN DE ALERTAS SANITARIAS (SUMA DE GRADOS PARÁSITOS DE TU APP SCRIPT)
+    // 6. INYECCIÓN DE ALERTAS SANITARIAS
     const affectedContainer = document.getElementById('affectedContainer');
-    affectedContainer.innerHTML = '';
-
-    data.especies.forEach(e => {
-      // Mapeo directo de tus propiedades del script
-      let totalEnfermos = (Number(e.leve) || 0) + 
+    if (affectedContainer && data.especies) {
+      affectedContainer.innerHTML = '';
+      data.especies.forEach(e => {
+        let totalEnfermos = (Number(e.leve) || 0) + 
                             (Number(e.moderado) || 0) + 
                             (Number(e.medio) || 0) + 
                             (Number(e.severo) || 0) + 
                             (Number(e.critico) || 0) + 
                             (Number(e.muerto) || 0);
 
-      if (totalEnfermos > 0) {
-        const row = document.createElement('div');
-        row.className = 'species-row-premium';
-        row.innerHTML = `
-          <span class="row-label">🍂 ${e.especie}</span>
-          <span class="row-counter">${totalEnfermos}</span>
-        `;
-        affectedContainer.appendChild(row);
-      }
-    });
+        if (totalEnfermos > 0) {
+          const row = document.createElement('div');
+          row.className = 'species-row-premium';
+          row.innerHTML = `
+            <span class="row-label">🍂 ${e.especie}</span>
+            <span class="row-counter">${totalEnfermos}</span>
+          `;
+          affectedContainer.appendChild(row);
+        }
+      });
+    }
+
+    // 7. CARGA DE LA GALERÍA / ESTANTE DE MUÉRDAGOS
+    if (data.galeriaMuerdagos) {
+      galeriaMuerdagosData = data.galeriaMuerdagos;
+      renderGallery(galeriaMuerdagosData);
+    }
 
     if (syncIcon) syncIcon.classList.remove('fa-spin');
   } catch (error) {
@@ -133,14 +176,94 @@ async function loadData() {
 }
 
 // =========================
+// RENDERIZADO Y FILTRADO DE LA GALERÍA DE MUÉRDAGOS
+// =========================
+function renderGallery(lista) {
+  const muerdagosGrid = document.getElementById('muerdagosGrid');
+  if (!muerdagosGrid) return;
+
+  muerdagosGrid.innerHTML = '';
+
+  if (lista.length === 0) {
+    muerdagosGrid.innerHTML = `<p class="no-data-msg">No se encontraron especies en esta categoría.</p>`;
+    return;
+  }
+
+  lista.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'muerdago-card glass';
+
+    // Determinar si está detectado en el campus
+    const detectados = Number(m.detectadosEnCampus) || 0;
+    const badgeCampus = detectados > 0 
+      ? `<span class="badge-tag badge-campus-active"><i class="fa-solid fa-location-dot"></i> ${detectados} detectados</span>`
+      : `<span class="badge-tag badge-campus-inactive"><i class="fa-solid fa-circle-minus"></i> Sin registro en campus</span>`;
+
+    // Badges de Origen y Uso
+    const esNacional = (m.origen || '').toString().toLowerCase().includes('nacional');
+    const badgeOrigen = esNacional 
+      ? `<span class="badge-tag badge-nacional">🇲🇽 Nacional</span>`
+      : `<span class="badge-tag badge-extranjero">🌍 Extranjero</span>`;
+
+    const usoMed = (m.usoMedicinal || '').toString().trim();
+    const badgeUso = usoMed.toLowerCase() === 'si' || usoMed.toLowerCase() === 'sí'
+      ? `<span class="badge-tag badge-uso-si"><i class="fa-solid fa-notes-medical"></i> Uso Medicinal</span>`
+      : `<span class="badge-tag badge-uso-no"><i class="fa-solid fa-ban"></i> Sin Uso Medicinal</span>`;
+
+    card.innerHTML = `
+      <div class="card-header-bio">
+        <h4 class="muerdago-title fuente-editorial">${m.nombreComun}</h4>
+        <span class="muerdago-sci"><em>${m.nombreCientifico || 'S/N'}</em></span>
+      </div>
+      
+      <div class="card-badges-flex">
+        ${badgeOrigen}
+        ${badgeCampus}
+        ${badgeUso}
+      </div>
+
+      <div class="card-body-info">
+        <p><strong><i class="fa-solid fa-tree"></i> Hospedero Principal:</strong></p>
+        <p class="hospedero-text">${m.hospederoPrincipal || 'No especificado'}</p>
+      </div>
+    `;
+
+    muerdagosGrid.appendChild(card);
+  });
+}
+
+function filterGallery(categoria) {
+  // Actualizar botones activos
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  if (event && event.currentTarget) {
+    event.currentTarget.classList.add('active');
+  }
+
+  if (categoria === 'todos') {
+    renderGallery(galeriaMuerdagosData);
+  } else if (categoria === 'campus') {
+    const filtrados = galeriaMuerdagosData.filter(m => (Number(m.detectadosEnCampus) || 0) > 0);
+    renderGallery(filtrados);
+  } else if (categoria === 'nacional') {
+    const filtrados = galeriaMuerdagosData.filter(m => (m.origen || '').toString().toLowerCase().includes('nacional'));
+    renderGallery(filtrados);
+  } else if (categoria === 'extranjero') {
+    const filtrados = galeriaMuerdagosData.filter(m => (m.origen || '').toString().toLowerCase().includes('extranjero'));
+    renderGallery(filtrados);
+  }
+}
+
+// =========================
 // MOTOR CENTRAL DE GRÁFICAS
 // =========================
 function createChart(id, type, labels, data, color, customOptions = {}) {
+  const chartElem = document.getElementById(id);
+  if (!chartElem) return;
+
   if (charts[id]) {
     charts[id].destroy();
   }
 
-  // Opciones base obligatorias de escalamiento fluido
   const baseOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -150,11 +273,10 @@ function createChart(id, type, labels, data, color, customOptions = {}) {
     } : {}
   };
 
-  // Mezclar opciones estructurales con las personalizadas de cada gráfica
   const mergedOptions = Object.assign({}, baseOptions, customOptions);
 
   charts[id] = new Chart(
-    document.getElementById(id),
+    chartElem,
     {
       type: type,
       data: {
