@@ -31,6 +31,9 @@
       <button onclick="showSection('dashboard')" id="btn-dashboard" class="nav-btn active">
         <i class="fa-solid fa-chart-line"></i> Monitoreo
       </button>
+      <button onclick="showSection('galeria')" id="btn-galeria" class="nav-btn">
+        <i class="fa-solid fa-leaf"></i> Catálogo
+      </button>
       <button onclick="showSection('historia')" id="btn-historia" class="nav-btn">
         <i class="fa-solid fa-book"></i> Crónicas
       </button>
@@ -56,7 +59,7 @@
         </div>
       </div>
 
-      <!-- TARJETAS DE ESTADÍSTICAS -->
+      <!-- TARJETAS DE ESTADÍSTICAS PRINCIPALES -->
       <div class="stats-grid">
         <div class="stat-card glass">
           <div class="stat-content">
@@ -85,13 +88,45 @@
 
       <!-- CONTENEDOR DE GRÁFICAS Y LISTAS -->
       <div class="dashboard-layout">
-        <!-- LADO IZQUIERDO: GRÁFICAS -->
+        <!-- LADO IZQUIERDO: GRÁFICAS Y SEVERIDAD -->
         <div class="left-panel">
           <div class="chart-card large">
-            <h3>Severidad de la Infestación en el Campus</h3>
-            <!-- El contenedor con tamaño explícito relative frena el bug de Chart.js -->
+            <div class="chart-header-flex">
+              <h3>Severidad de la Infestación en el Campus</h3>
+              <span class="badge-sano"><i class="fa-solid fa-heart-pulse"></i> Sanos: <strong id="cantSanos">0</strong></span>
+            </div>
+            
+            <!-- Gráfica exclusiva para árboles infestados -->
             <div class="chart-container-fixed mat-infestation">
               <canvas id="chartInfestacion"></canvas>
+            </div>
+
+            <!-- TARJETITAS DE SEVERIDAD DETALLADA (Desacopladas para fácil lectura) -->
+            <div class="severity-cards-grid" id="severityCardsContainer">
+              <div class="sev-card card-leve">
+                <span class="sev-label">Leve</span>
+                <span id="sev-leve" class="sev-val">0</span>
+              </div>
+              <div class="sev-card card-moderado">
+                <span class="sev-label">Moderado</span>
+                <span id="sev-moderado" class="sev-val">0</span>
+              </div>
+              <div class="sev-card card-medio">
+                <span class="sev-label">Medio</span>
+                <span id="sev-medio" class="sev-val">0</span>
+              </div>
+              <div class="sev-card card-severo">
+                <span class="sev-label">Severo</span>
+                <span id="sev-severo" class="sev-val">0</span>
+              </div>
+              <div class="sev-card card-critico">
+                <span class="sev-label">Crítico</span>
+                <span id="sev-critico" class="sev-val">0</span>
+              </div>
+              <div class="sev-card card-muerto">
+                <span class="sev-label">Muerto</span>
+                <span id="sev-muerto" class="sev-val">0</span>
+              </div>
             </div>
           </div>
 
@@ -128,6 +163,30 @@
             <div class="species-scroll scroll-premium" id="affectedContainer"></div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- GALERÍA / ESTANTE DE MUÉRDAGOS (NUEVA SECCIÓN) -->
+    <section id="galeria" class="section">
+      <div class="dashboard-header">
+        <div>
+          <span class="section-badge">Catálogo Biológico</span>
+          <h2 class="fuente-editorial section-title">Estante Taxonómico de Muérdagos</h2>
+          <p class="section-subtitle">Especies de muérdagos identificadas (Nacionales y Extranjeras) con su registro de presencia en el campus UATx.</p>
+        </div>
+      </div>
+
+      <!-- FILTROS DE CATEGORÍA -->
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterGallery('todos')">Todos</button>
+        <button class="filter-btn" onclick="filterGallery('campus')"><i class="fa-solid fa-location-dot"></i> Detectados en Campus</button>
+        <button class="filter-btn" onclick="filterGallery('nacional')">🇲🇽 Nacionales</button>
+        <button class="filter-btn" onclick="filterGallery('extranjero')">🌍 Extranjeros</button>
+      </div>
+
+      <!-- GRID DINÁMICO DE TARJETAS DE MUÉRDAGOS -->
+      <div class="galeria-grid" id="muerdagosGrid">
+        <!-- Renderizado dinámico desde app.js -->
       </div>
     </section>
 
