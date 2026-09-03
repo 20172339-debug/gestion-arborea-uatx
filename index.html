@@ -5,21 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Biocatastro UATx | Alta Gestión Forestal</title>
   
-  <!-- Fuentes Editoriales y de Sistema -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Estilos y FontAwesome -->
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-  <!-- ==========================================
-       HEADER Y BARRA DE NAVEGACIÓN
-       ========================================== -->
   <header>
     <div class="logo">
       <div class="logo-icon">
@@ -50,12 +45,9 @@
     </nav>
   </header>
 
-  <!-- ==========================================
-       CONTENIDO PRINCIPAL (SECCIONES)
-       ========================================== -->
   <main>
     
-    <!-- 1. SECCIÓN: MONITOREO (DASHBOARD) -->
+    <!-- MONITOREO -->
     <section id="dashboard" class="section active">
       <div class="dashboard-header">
         <div>
@@ -137,7 +129,7 @@
       </div>
     </section>
 
-    <!-- 2. SECCIÓN: HERBARIO / ESPECIERO BOTÁNICO -->
+    <!-- HERBARIO / ESPECIERO BOTÁNICO -->
     <section id="herbario" class="section">
       <div class="section-center-headline">
         <span class="section-badge">Gabinete Botánico de Curiosidades</span>
@@ -146,42 +138,33 @@
       </div>
 
       <div class="vitrina-mueble">
-        <!-- REPISA 1: CAMPUS -->
         <div class="repisa-estante">
           <div class="placa-metalica">
             <i class="fa-solid fa-building-columns"></i>
             <span>Colección Universitaria</span>
           </div>
-          <div class="frascos-grid" id="repisa-universitaria">
-            <!-- Los frascos con la insignia roja se renderizan aquí mediante JavaScript -->
-          </div>
+          <div class="frascos-grid" id="repisa-universitaria"></div>
         </div>
 
-        <!-- REPISA 2: NACIONAL -->
         <div class="repisa-estante">
           <div class="placa-metalica">
             <i class="fa-solid fa-map-pin"></i>
             <span>Flora Parásita Nacional</span>
           </div>
-          <div class="frascos-grid" id="repisa-nacional">
-            <!-- Frascos de muérdagos nacionales de referencia -->
-          </div>
+          <div class="frascos-grid" id="repisa-nacional"></div>
         </div>
 
-        <!-- REPISA 3: INTERNACIONAL -->
         <div class="repisa-estante">
           <div class="placa-metalica">
             <i class="fa-solid fa-globe"></i>
             <span>Taxones Internacionales</span>
           </div>
-          <div class="frascos-grid" id="repisa-internacional">
-            <!-- Frascos de muérdagos internacionales y exóticos -->
-          </div>
+          <div class="frascos-grid" id="repisa-internacional"></div>
         </div>
       </div>
     </section>
 
-    <!-- 3. SECCIÓN: CRÓNICAS (LIBROS INTERACTIVOS 3D) -->
+    <!-- CRÓNICAS -->
     <section id="historia" class="section">
       <div class="section-center-headline">
         <span class="section-badge">Antropología y Sociología Botánica</span>
@@ -190,7 +173,6 @@
       </div>
 
       <div class="books-library">
-        <!-- Tomo I -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover celtas-cover">
@@ -209,7 +191,6 @@
           </div>
         </div>
 
-        <!-- Tomo II -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover nordicos-cover">
@@ -228,7 +209,6 @@
           </div>
         </div>
 
-        <!-- Tomo III -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover curanderos-cover">
@@ -241,13 +221,12 @@
             </div>
             <div class="book-page">
               <h4>El Saber de la Tierra</h4>
-              <p class="page-text scroll-premium">Los curanderos medievales y herbolarios tradicionales entendieron al muérdago como un regulador de los fluidos vitales. Usado bajo strictly dosis artesanales en infusiones ceremoniales, controlaba la presión del corazón, templaba el sistema nervioso alterado y equilibraba las energías de cuerpos debilitados.</p>
+              <p class="page-text scroll-premium">Los curanderos medievales y herbolarios tradicionales entendieron al muérdago como un regulador de los fluidos vitales. Usado bajo estrictas dosis artesanales en infusiones ceremoniales, controlaba la presión del corazón, templaba el sistema nervioso alterado y equilibraba las energías de cuerpos debilitados.</p>
               <span class="close-hint">Cerrar Tomo</span>
             </div>
           </div>
         </div>
 
-        <!-- Tomo IV -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover actualidad-cover">
@@ -268,7 +247,7 @@
       </div>
     </section>
 
-    <!-- 4. SECCIÓN: AULA EDUCATIVA -->
+    <!-- AULA EDUCATIVA -->
     <section id="educacion" class="section">
       <div class="dashboard-header">
         <div>
@@ -340,7 +319,7 @@
       </div>
     </section>
 
-    <!-- 5. SECCIÓN: CONTACTO -->
+    <!-- CONTACTO -->
     <section id="contacto" class="section">
       <div class="contact-card-premium">
         <div class="contact-info">
@@ -365,9 +344,7 @@
 
   </main>
 
-  <!-- ==========================================
-       VENTANA MODAL INTERACTIVA (EXPEDIENTE BOTÁNICO)
-       ========================================== -->
+  <!-- VENTANA MODAL BOTÁNICA -->
   <div class="modal-overlay" id="modalMuerdago" onclick="cerrarModalOuter(event)">
     <div class="modal-card glass">
       <button class="modal-close-btn" onclick="cerrarModalMuerdago()"><i class="fa-solid fa-xmark"></i></button>
@@ -392,7 +369,6 @@
             <p id="modalHospedadores">Cargando información...</p>
           </div>
 
-          <!-- DESPLEGABLE INTERACTIVO DE USO MEDICINAL -->
           <div class="medicinal-box" id="medicinalBox">
             <button class="btn-medicinal" id="btnMedicinalToggle" onclick="toggleDetalleMedicinal()">
               <span><i class="fa-solid fa-mortar-pestle"></i> Propiedades Medicinales y Tradicionales</span>
@@ -411,9 +387,6 @@
     </div>
   </div>
 
-  <!-- ==========================================
-       PIE DE PÁGINA
-       ========================================== -->
   <footer>
     © 2026 UNIVERSIDAD AUTÓNOMA DE TLAXCALA · COMUNIDAD UNIVERSITARIA NAHUALES UATx
   </footer>
