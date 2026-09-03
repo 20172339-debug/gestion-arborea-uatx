@@ -1,135 +1,53 @@
-// Endpoint de ejecución de Google Apps Script
+// Pegar aquí la URL pública de ejecución de tu Google Apps Script
 const API_URL = 'https://script.google.com/macros/s/AKfycbwBEphqvwYuGyhR-WZxyfAkwe4eW_reLvedcKT80mloneU5d6gfvua_t7nIltG1WHOr/exec';
 
 let charts = {};
 
-// ==========================================
-// BASE DE DATOS BOTÁNICA Y TAXONÓMICA
-// ==========================================
-const BASE_DATOS_MUERDAGOS = [
-  // --- REPISA 1: Colección Universitaria (Tlaxcala / Campus UATx) ---
-  {
-    id: "phoradendron-velutinum",
-    repisa: "universitaria",
-    nombreComun: "Muérdago de Encino (Toji)",
-    nombreCientifico: "Phoradendron velutinum",
-    familia: "Santalaceae",
-    hospedadores: "Quercus laurina, Quercus rugosa (Encinos de clima templado-frío).",
-    usoMedicinal: "Se emplea tradicionalmente en infusiones para equilibrar la presión arterial y disminuir palpitaciones.",
-    parteUsada: "Hojas y tallos jóvenes desecados a la sombra.",
-    precaucion: "Contiene viscotoxinas. Dosis no estandarizadas pueden ser tóxicas para el sistema cardiovascular.",
-    imagen: "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&w=600&q=80",
-    campusCount: 142
-  },
-  {
-    id: "psittacanthus-calyculatus",
-    repisa: "universitaria",
-    nombreComun: "Muérdago Naranjo",
-    nombreCientifico: "Psittacanthus calyculatus",
-    familia: "Loranthaceae",
-    hospedadores: "Fraxinus uhdei (Fresno), Populus alba (Álamo), Prunus serotina (Capulín).",
-    usoMedicinal: "Utilizado en la medicina popular regional para afecciones gastrointestinales y dolores reumáticos.",
-    parteUsada: "Hojas secas en decocción ligera.",
-    precaucion: "Requiere moderación estricta por alcaloides de alta reactividad orgánica.",
-    imagen: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=600&q=80",
-    campusCount: 98
-  },
-  {
-    id: "phoradendron-tomentosum",
-    repisa: "universitaria",
-    nombreComun: "Injerto de Tlaxcala",
-    nombreCientifico: "Phoradendron tomentosum",
-    familia: "Santalaceae",
-    hospedadores: "Prosopis laevigata (Mezquite), Acacia farnesiana (Huizache).",
-    usoMedicinal: "Empleado localmente en cataplasmas externas para aliviar inflamaciones articulares.",
-    parteUsada: "Tallo y ramas maceradas.",
-    precaucion: "No ingerir sin supervisión herbolaria experimentada.",
-    imagen: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=600&q=80",
-    campusCount: 45
-  },
+// =========================
+// HERBARIO — DATOS
+// =========================
 
-  // --- REPISA 2: Flora Parásita Nacional (México) ---
-  {
-    id: "struthanthus-interceptus",
-    repisa: "nacional",
-    nombreComun: "Matapalos Tropical",
-    nombreCientifico: "Struthanthus interceptus",
-    familia: "Loranthaceae",
-    hospedadores: "Arbolado urbano tropical, cítricos y leguminosas arbóreas.",
-    usoMedicinal: "Utilizado en herbolaria tradicional como coadyuvante en lavados cicatrizantes.",
-    parteUsada: "Corteza y hojas.",
-    precaucion: "Posible irritación dérmica en pieles sensibles.",
-    imagen: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=600&q=80",
-    campusCount: 12
-  },
-  {
-    id: "phoradendron-brachystachyum",
-    repisa: "nacional",
-    nombreComun: "Muérdago de Valle",
-    nombreCientifico: "Phoradendron brachystachyum",
-    familia: "Santalaceae",
-    hospedadores: "Matorral xerófilo y especies de bosque caducifolio.",
-    usoMedicinal: "Registrado en el Bajío para infusiones destinadas a calmar la ansiedad nerviosa.",
-    parteUsada: "Hojas molidas.",
-    precaucion: "Contraindicado en el embarazo y lactancia.",
-    imagen: "https://images.unsplash.com/photo-1470058869958-2a77ade41c02?auto=format&fit=crop&w=600&q=80",
-    campusCount: 5
-  },
-  {
-    id: "cladocolea-loniceroides",
-    repisa: "nacional",
-    nombreComun: "Muérdago Enano de la Meseta",
-    nombreCientifico: "Cladocolea loniceroides",
-    familia: "Loranthaceae",
-    hospedadores: "Arbolado de alta montaña y sauces fluviales.",
-    usoMedicinal: "Usos rituales de protección en comunidades rurales del centro del país.",
-    parteUsada: "Ramas completas.",
-    precaucion: "Planta con alta densidad de resinas; no apta para consumo interno.",
-    imagen: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=600&q=80",
-    campusCount: 0
-  },
-
-  // --- REPISA 3: Taxones Internacionales ---
-  {
-    id: "viscum-album",
-    repisa: "internacional",
-    nombreComun: "Muérdago Blanco Europeo",
-    nombreCientifico: "Viscum album",
-    familia: "Santalaceae",
-    hospedadores: "Malus domestica (Manzano), Populus, Pinus sylvestris.",
-    usoMedicinal: "Base de tratamientos complementarios (Iscador) e investigación oncológica europea por sus lectinas.",
-    parteUsada: "Extracto estandarizado de hoja y tallo.",
-    precaucion: "Las bayas blancas son altamente tóxicas por ingestión directa.",
-    imagen: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=600&q=80",
-    campusCount: 0
-  },
-  {
-    id: "arceuthobium-oxycedri",
-    repisa: "internacional",
-    nombreComun: "Muérdago Enano del Enebro",
-    nombreCientifico: "Arceuthobium oxycedri",
-    familia: "Santalaceae",
-    hospedadores: "Juniperus spp. (Enebros y Sabinas del Mediterráneo).",
-    usoMedicinal: "Astringente artesanal en antiguos tratados botánicos mediterráneos.",
-    parteUsada: "Extracto de brotes.",
-    precaucion: "Toxico si se consume en cantidades mayores.",
-    imagen: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80",
-    campusCount: 0
-  }
+// Respaldo local: se usa si el Apps Script todavía no envía "data.muerdagos".
+// En cuanto tu API devuelva ese campo (ver appscript.gs actualizado), estos
+// datos se ignoran automáticamente y se usan los reales de tu Excel.
+const DEMO_MUERDAGOS = [
+  { nombreComun: 'Muérdago Americano', nombreCientifico: 'Phoradendron leucarpum', origen: 'Nacional', usoMedicinal: 'Si', hospedero: 'Álamo, Sauce y Nogal', enCampus: 17 },
+  { nombreComun: 'Muérdago Toji', nombreCientifico: 'Phoradendron californicum', origen: 'Nacional', usoMedicinal: 'Si', hospedero: 'Mezquite, Encino y Árboles Urb.', enCampus: 8 },
+  { nombreComun: 'Muérdago Mexicano', nombreCientifico: 'Psittacanthus calyculatus', origen: 'Nacional', usoMedicinal: 'Si', hospedero: 'Mezquite, Encino y Árboles Urb.', enCampus: 1 },
+  { nombreComun: 'Muérdago Enano', nombreCientifico: 'Arceuthobium globosum', origen: 'Nacional', usoMedicinal: 'No', hospedero: 'Coníferas (Pinos)', enCampus: 0 },
+  { nombreComun: 'Muérdago Verdadero', nombreCientifico: 'Phoradendron velutinum', origen: 'Nacional', usoMedicinal: 'Si', hospedero: 'Frutales y Caducifolios', enCampus: 0 },
+  { nombreComun: 'Muérdago de los Encinos', nombreCientifico: 'Phoradendron serotinum', origen: 'Nacional', usoMedicinal: 'Si', hospedero: 'Encinos (Quercus)', enCampus: 0 },
+  { nombreComun: 'Muérdago Injerto / Clavelito', nombreCientifico: 'Struthanthus interruptus', origen: 'Nacional', usoMedicinal: 'Si', hospedero: 'Árboles Urbanos y Frutales', enCampus: 0 },
+  { nombreComun: 'Muérdago de Cacao / Bajero', nombreCientifico: 'Oryctanthus alveolatus', origen: 'Nacional', usoMedicinal: 'No', hospedero: 'Zonas Tropicales / Frutales', enCampus: 0 },
+  { nombreComun: 'Muérdago Blanco Europeo', nombreCientifico: 'Viscum album', origen: 'Extranjero', usoMedicinal: 'Si', hospedero: 'Árboles Templados Europeos', enCampus: 0 },
+  { nombreComun: 'Muérdago Australiano', nombreCientifico: 'Amyema miquelii', origen: 'Extranjero', usoMedicinal: 'No', hospedero: 'Eucaliptos', enCampus: 0 }
 ];
 
-// ==========================================
+// Textos educativos de uso medicinal tradicional (no dosis, solo referencia
+// divulgativa). Este dato no viene del Excel: edítalo libremente aquí.
+const USOS_MEDICINALES = {
+  'Muérdago Americano': 'En la medicina tradicional mexicana, las hojas y tallos de los muérdagos del género Phoradendron se han preparado en infusión como apoyo tradicional para el sistema circulatorio. Estudios preliminares también han explorado su actividad antimicrobiana frente a distintos patógenos.',
+  'Muérdago Toji': 'Al igual que otros muérdagos de Phoradendron, se le atribuye un uso tradicional relacionado con el equilibrio de la presión arterial. Su empleo herbolario suele limitarse a comunidades locales y no cuenta con evidencia clínica amplia.',
+  'Muérdago Mexicano': 'El muérdago mexicano (Psittacanthus calyculatus) es una de las especies parásitas mejor documentadas en la herbolaria popular del centro del país, empleada tradicionalmente en infusión como complemento para el bienestar cardiovascular.',
+  'Muérdago Verdadero': 'Se le da un uso similar al de otros Phoradendron: preparación en infusión de hojas como tónico tradicional, principalmente asociado al cuidado del corazón y la circulación.',
+  'Muérdago de los Encinos': 'Crece de forma específica sobre encinos y se ha empleado de manera tradicional en infusiones locales, con un uso etnobotánico comparable al de otras especies del género Phoradendron.',
+  'Muérdago Injerto / Clavelito': 'En la medicina tradicional mexicana se documenta su uso en infusión para la hipertensión y como estimulante de las contracciones gastrointestinales, además de un uso antidiabético reportado en distintas regiones del país.',
+  'Muérdago Blanco Europeo': 'El muérdago europeo (Viscum album) es la especie de muérdago con mayor respaldo de investigación: en fitoterapia se ha usado tradicionalmente como apoyo cardiovascular e inmunológico, y sus extractos estandarizados se investigan en Europa como terapia complementaria bajo supervisión médica estricta. No sustituye ningún tratamiento y su uso siempre debe ser supervisado por un profesional de la salud.'
+};
+
+// =========================
 // NAVEGACIÓN Y CORRECCIÓN DE DIMENSIONES
-// ==========================================
+// =========================
 function showSection(id) {
+  // Ocultar secciones e inactivar botones
   document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
 
+  // Activar pestaña actual
   document.getElementById(id).classList.add('active');
-  const navBtn = document.getElementById(`btn-${id}`);
-  if (navBtn) navBtn.classList.add('active');
+  document.getElementById(`btn-${id}`).classList.add('active');
 
-  // Ajuste dinámico de gráficas al volver al Dashboard
+  // SOLUCIÓN AL BUG: Si regresa al dashboard, fuerza a Chart.js a recalcular el tamaño
   if (id === 'dashboard') {
     Object.keys(charts).forEach(key => {
       if (charts[key]) {
@@ -139,95 +57,15 @@ function showSection(id) {
   }
 }
 
-// ==========================================
-// GENERADOR DINÁMICO DEL ESPECIERO (HERBARIO)
-// ==========================================
-function renderEspeciero() {
-  const repisaUni = document.getElementById('repisa-universitaria');
-  const repisaNac = document.getElementById('repisa-nacional');
-  const repisaInt = document.getElementById('repisa-internacional');
-
-  if (!repisaUni || !repisaNac || !repisaInt) return;
-
-  repisaUni.innerHTML = '';
-  repisaNac.innerHTML = '';
-  repisaInt.innerHTML = '';
-
-  BASE_DATOS_MUERDAGOS.forEach(item => {
-    const frascoHTML = `
-      <div class="frasco-item" onclick="abrirModalMuerdago('${item.id}')">
-        <div class="frasco-cristal">
-          <div class="liquido-conservante"></div>
-          <img src="${item.imagen}" alt="${item.nombreComun}" class="planta-muestra">
-          <div class="etiqueta-frasco">
-            <span class="etiqueta-titulo">${item.nombreComun}</span>
-            <span class="etiqueta-tax">${item.nombreCientifico}</span>
-          </div>
-        </div>
-      </div>
-    `;
-
-    if (item.repisa === 'universitaria') {
-      repisaUni.innerHTML += frascoHTML;
-    } else if (item.repisa === 'nacional') {
-      repisaNac.innerHTML += frascoHTML;
-    } else if (item.repisa === 'internacional') {
-      repisaInt.innerHTML += frascoHTML;
-    }
-  });
-}
-
-// ==========================================
-// LÓGICA DE VENTANA MODAL BOTÁNICA
-// ==========================================
-function abrirModalMuerdago(idSpecie) {
-  const especie = BASE_DATOS_MUERDAGOS.find(e => e.id === idSpecie);
-  if (!especie) return;
-
-  document.getElementById('modalImg').src = especie.imagen;
-  document.getElementById('modalFamilia').innerText = especie.familia;
-  document.getElementById('modalNombreComun').innerText = especie.nombreComun;
-  document.getElementById('modalNombreCientifico').innerText = especie.nombreCientifico;
-  document.getElementById('modalHospedadores').innerText = especie.hospedadores;
-  document.getElementById('modalCampusCount').innerText = `${especie.campusCount} ejemplares`;
-
-  // Datos Medicinales
-  document.getElementById('modalUsoMedicinal').innerText = especie.usoMedicinal;
-  document.getElementById('modalParteUsada').innerText = especie.parteUsada;
-  document.getElementById('modalPrecaucion').innerText = especie.precaucion;
-
-  // Resetear despliegue medicinal al abrir
-  const medicinalContent = document.getElementById('medicinalContent');
-  const btnToggle = document.getElementById('btnMedicinalToggle');
-  if (medicinalContent) medicinalContent.classList.add('hidden');
-  if (btnToggle) btnToggle.classList.remove('open');
-
-  const modal = document.getElementById('modalMuerdago');
-  if (modal) modal.classList.add('active');
-}
-
-function cerrarModalMuerdago() {
-  const modal = document.getElementById('modalMuerdago');
-  if (modal) modal.classList.remove('active');
-}
-
-function toggleDetalleMedicinal() {
-  const medicinalContent = document.getElementById('medicinalContent');
-  const btnToggle = document.getElementById('btnMedicinalToggle');
-  
-  if (medicinalContent && btnToggle) {
-    medicinalContent.classList.toggle('hidden');
-    btnToggle.classList.toggle('open');
-  }
-}
-
-// ==========================================
-// CONSUMO ASÍNCRONO DEL ENDPOINT DE APPS SCRIPT
-// ==========================================
+// =========================
+// CONSUMO ASÍNCRONO DEL ENDPOINT
+// =========================
 async function loadData() {
   try {
     const syncIcon = document.getElementById('sync-icon');
+    const syncIconHerbario = document.getElementById('sync-icon-herbario');
     if (syncIcon) syncIcon.classList.add('fa-spin');
+    if (syncIconHerbario) syncIconHerbario.classList.add('fa-spin');
 
     const response = await fetch(API_URL);
     const data = await response.json();
@@ -236,6 +74,7 @@ async function loadData() {
     document.getElementById('totalGeneral').innerText = data.totalGeneral || 0;
     document.getElementById('infestados').innerText = data.infestados || 0;
 
+    // Cálculo dinámico del porcentaje de sanos
     let sanos = (data.totalGeneral - data.infestados) || 0;
     let porcentajeBioseguridad = data.totalGeneral > 0 ? Math.round((sanos / data.totalGeneral) * 100) : 0;
     document.getElementById('saludables').innerText = porcentajeBioseguridad + "%";
@@ -247,7 +86,9 @@ async function loadData() {
       data.infestacion.map(i => i.estado),
       data.infestacion.map(i => i.total),
       ['#c7bfa7', '#dfca9f', '#cfa375', '#bd7e60', '#ad5245', '#7a221e', '#45403c'],
-      { plugins: { legend: { display: false } } }
+      {
+        plugins: { legend: { display: false } }
+      }
     );
 
     // 3. RENDER GRÁFICA II: PARCELAS
@@ -257,7 +98,9 @@ async function loadData() {
       data.parcelas.map(p => p.area),
       data.parcelas.map(p => p.total),
       '#bfa15f',
-      { plugins: { legend: { display: false } } }
+      {
+        plugins: { legend: { display: false } }
+      }
     );
 
     // 4. RENDER GRÁFICA III: TIPOS ECOLÓGICOS
@@ -279,59 +122,67 @@ async function loadData() {
 
     // 5. INYECCIÓN DE CENSO ABSOLUTO DE ESPECIES
     const speciesContainer = document.getElementById('speciesContainer');
-    if (speciesContainer) {
-      speciesContainer.innerHTML = '';
-      data.especies.forEach(e => {
-        const row = document.createElement('div');
-        row.className = 'species-row-premium';
-        row.innerHTML = `
-          <span class="row-label">🌳 ${e.especie}</span>
-          <span class="row-counter">${e.total}</span>
-        `;
-        speciesContainer.appendChild(row);
-      });
-    }
+    speciesContainer.innerHTML = '';
 
-    // 6. INYECCIÓN DE ALERTAS SANITARIAS
+    data.especies.forEach(e => {
+      const row = document.createElement('div');
+      row.className = 'species-row-premium';
+      row.innerHTML = `
+        <span class="row-label">🌳 ${e.especie}</span>
+        <span class="row-counter">${e.total}</span>
+      `;
+      speciesContainer.appendChild(row);
+    });
+
+    // 6. INYECCIÓN DE ALERTAS SANITARIAS (SUMA DE GRADOS PARÁSITOS DE TU APP SCRIPT)
     const affectedContainer = document.getElementById('affectedContainer');
-    if (affectedContainer) {
-      affectedContainer.innerHTML = '';
-      data.especies.forEach(e => {
-        let totalEnfermos = (Number(e.leve) || 0) + 
+    affectedContainer.innerHTML = '';
+
+    data.especies.forEach(e => {
+      // Mapeo directo de tus propiedades del script
+      let totalEnfermos = (Number(e.leve) || 0) + 
                             (Number(e.moderado) || 0) + 
                             (Number(e.medio) || 0) + 
                             (Number(e.severo) || 0) + 
                             (Number(e.critico) || 0) + 
                             (Number(e.muerto) || 0);
 
-        if (totalEnfermos > 0) {
-          const row = document.createElement('div');
-          row.className = 'species-row-premium';
-          row.innerHTML = `
-            <span class="row-label">🍂 ${e.especie}</span>
-            <span class="row-counter">${totalEnfermos}</span>
-          `;
-          affectedContainer.appendChild(row);
-        }
-      });
-    }
+      if (totalEnfermos > 0) {
+        const row = document.createElement('div');
+        row.className = 'species-row-premium';
+        row.innerHTML = `
+          <span class="row-label">🍂 ${e.especie}</span>
+          <span class="row-counter">${totalEnfermos}</span>
+        `;
+        affectedContainer.appendChild(row);
+      }
+    });
+
+    // 7. RENDER DE LA VITRINA DEL HERBARIO
+    renderHerbario(data.muerdagos && data.muerdagos.length ? data.muerdagos : DEMO_MUERDAGOS);
 
     if (syncIcon) syncIcon.classList.remove('fa-spin');
+    if (syncIconHerbario) syncIconHerbario.classList.remove('fa-spin');
   } catch (error) {
     console.error('Error en el procesamiento de datos del Herbario:', error);
-    const syncIcon = document.getElementById('sync-icon');
-    if (syncIcon) syncIcon.classList.remove('fa-spin');
+    // Si falla la API, igual mostramos la vitrina con los datos de respaldo
+    renderHerbario(DEMO_MUERDAGOS);
+    const syncIconErr = document.getElementById('sync-icon');
+    const syncIconHerbarioErr = document.getElementById('sync-icon-herbario');
+    if (syncIconErr) syncIconErr.classList.remove('fa-spin');
+    if (syncIconHerbarioErr) syncIconHerbarioErr.classList.remove('fa-spin');
   }
 }
 
-// ==========================================
-// MOTOR CENTRAL DE GRÁFICAS (CHART.JS)
-// ==========================================
+// =========================
+// MOTOR CENTRAL DE GRÁFICAS
+// =========================
 function createChart(id, type, labels, data, color, customOptions = {}) {
   if (charts[id]) {
     charts[id].destroy();
   }
 
+  // Opciones base obligatorias de escalamiento fluido
   const baseOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -341,13 +192,11 @@ function createChart(id, type, labels, data, color, customOptions = {}) {
     } : {}
   };
 
+  // Mezclar opciones estructurales con las personalizadas de cada gráfica
   const mergedOptions = Object.assign({}, baseOptions, customOptions);
 
-  const canvas = document.getElementById(id);
-  if (!canvas) return;
-
   charts[id] = new Chart(
-    canvas,
+    document.getElementById(id),
     {
       type: type,
       data: {
@@ -365,11 +214,144 @@ function createChart(id, type, labels, data, color, customOptions = {}) {
   );
 }
 
-// ==========================================
-// INICIALIZACIÓN DE LA APLICACIÓN
-// ==========================================
+// =========================
+// HERBARIO — RENDER DE LA VITRINA
+// =========================
+
+// Colores de "contenido" del frasco por repisa, para dar lectura visual
+// inmediata de a qué colección pertenece cada especie.
+const COLOR_LIQUIDO = {
+  1: '#bfa15f', // Colección Universitaria (dorado, en sintonía con la marca)
+  2: '#8a9b73', // Flora Parásita Nacional (verde salvia)
+  3: '#7e93ad'  // Taxones Internacionales (azul empolvado)
+};
+
+function codigoMuerdago(nombre) {
+  // Genera un código corto tipo etiqueta de espécimen (AME, TOJ, MEX...)
+  const limpio = nombre.replace(/muérdago/i, '').replace(/[^a-zA-ZÁÉÍÓÚÑ ]/g, '').trim();
+  const palabra = limpio.split(' ')[0] || nombre;
+  return palabra.substring(0, 3).toUpperCase();
+}
+
+function frascoSVG(codigo, colorLiquido) {
+  return `
+    <svg viewBox="0 0 90 150" class="frasco-svg" aria-hidden="true">
+      <ellipse cx="45" cy="140" rx="26" ry="5" class="frasco-sombra"></ellipse>
+      <rect x="30" y="8" width="30" height="14" rx="4" class="frasco-tapa"></rect>
+      <rect x="34" y="20" width="22" height="10" class="frasco-cuello"></rect>
+      <path d="M20 32 Q20 28 26 28 L64 28 Q70 28 70 32 L74 118 Q74 134 45 134 Q16 134 20 118 Z" class="frasco-vidrio"></path>
+      <path d="M23 82 Q23 128 45 128 Q67 128 67 82 L69 74 L21 74 Z" fill="${colorLiquido}" class="frasco-liquido"></path>
+      <path d="M40 60 Q35 50 42 44 Q48 50 44 60 Z" class="frasco-hoja"></path>
+      <rect x="30" y="90" width="30" height="16" rx="2" class="frasco-etiqueta"></rect>
+      <text x="45" y="101" text-anchor="middle" class="frasco-codigo">${codigo}</text>
+    </svg>`;
+}
+
+function clasificarRepisa(m) {
+  if (Number(m.enCampus) > 0) return 1;
+  if ((m.origen || '').toLowerCase().startsWith('nacional')) return 2;
+  return 3;
+}
+
+function crearFrasco(m, repisa) {
+  const btn = document.createElement('button');
+  btn.className = 'frasco frasco-nuevo';
+  btn.type = 'button';
+  btn.setAttribute('aria-label', `Ver ficha de ${m.nombreComun}`);
+
+  const badge = (repisa === 1 && Number(m.enCampus) > 0)
+    ? `<span class="frasco-badge">${m.enCampus}</span>`
+    : '';
+
+  btn.innerHTML = `
+    ${badge}
+    ${frascoSVG(codigoMuerdago(m.nombreComun), COLOR_LIQUIDO[repisa])}
+    <span class="frasco-tooltip">
+      <strong>${m.nombreComun}</strong>
+      <em>${m.nombreCientifico}</em>
+    </span>
+  `;
+
+  btn.addEventListener('click', () => abrirFicha(m, repisa));
+  setTimeout(() => btn.classList.remove('frasco-nuevo'), 500);
+  return btn;
+}
+
+function renderHerbario(muerdagos) {
+  const contenedores = { 1: document.getElementById('repisa-1'), 2: document.getElementById('repisa-2'), 3: document.getElementById('repisa-3') };
+  if (!contenedores[1] || !contenedores[2] || !contenedores[3]) return;
+
+  contenedores[1].innerHTML = '';
+  contenedores[2].innerHTML = '';
+  contenedores[3].innerHTML = '';
+
+  muerdagos.forEach(m => {
+    const repisa = clasificarRepisa(m);
+    contenedores[repisa].appendChild(crearFrasco(m, repisa));
+  });
+}
+
+// =========================
+// HERBARIO — FICHA TÉCNICA (MODAL)
+// =========================
+
+let fichaActual = null;
+
+function abrirFicha(m, repisa) {
+  fichaActual = m;
+
+  document.getElementById('fichaNombreComun').innerText = m.nombreComun;
+  document.getElementById('fichaNombreCientifico').innerText = m.nombreCientifico;
+  document.getElementById('fichaOrigen').innerText = m.origen || 'Desconocido';
+  document.getElementById('fichaHospedero').innerText = m.hospedero || 'No registrado';
+  document.getElementById('fichaCampus').innerText = Number(m.enCampus) > 0 ? `${m.enCampus} ejemplares` : 'No registrado';
+
+  const badge = document.getElementById('fichaEstado');
+  if (Number(m.enCampus) > 0) {
+    badge.innerText = 'Presente en el campus';
+    badge.className = 'ficha-badge en-campus';
+  } else {
+    badge.innerText = repisa === 3 ? 'Referencia internacional' : 'No registrado en el campus';
+    badge.className = 'ficha-badge no-registrado';
+  }
+
+  const bloqueMedicinal = document.getElementById('fichaMedicinalBloque');
+  const textoUso = document.getElementById('fichaUsoTexto');
+  const esMedicinal = (m.usoMedicinal || '').toLowerCase().startsWith('si') || (m.usoMedicinal || '').toLowerCase().startsWith('sí');
+
+  if (esMedicinal) {
+    bloqueMedicinal.style.display = 'block';
+    textoUso.innerText = USOS_MEDICINALES[m.nombreComun] || 'Esta especie está reportada con uso medicinal tradicional; su ficha detallada está en proceso de documentación.';
+    textoUso.classList.remove('visible');
+    document.getElementById('fichaMedicinalBtn').innerHTML = '<i class="fa-solid fa-mortar-pestle"></i> Ver uso medicinal tradicional';
+  } else {
+    bloqueMedicinal.style.display = 'none';
+  }
+
+  document.getElementById('fichaOverlay').classList.add('activa');
+}
+
+function cerrarFicha() {
+  document.getElementById('fichaOverlay').classList.remove('activa');
+  fichaActual = null;
+}
+
+function toggleUsoMedicinal() {
+  const texto = document.getElementById('fichaUsoTexto');
+  const btn = document.getElementById('fichaMedicinalBtn');
+  const visible = texto.classList.toggle('visible');
+  btn.innerHTML = visible
+    ? '<i class="fa-solid fa-mortar-pestle"></i> Ocultar uso medicinal tradicional'
+    : '<i class="fa-solid fa-mortar-pestle"></i> Ver uso medicinal tradicional';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') cerrarFicha();
+});
+
+// Carga Inicial al abrir el portal
 window.onload = () => {
-  renderEspeciero();
   loadData();
+  // Sincronización en bucle cada 30 segundos
   setInterval(loadData, 30000);
 };
