@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Biocatastro UATx | Alta Gestión Forestal</title>
+  <title>Biocatastro UATx | Observatorio Ambiental</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,10 +32,7 @@
         <i class="fa-solid fa-chart-line"></i> Monitoreo
       </button>
       <button onclick="showSection('galeria')" id="btn-galeria" class="nav-btn">
-        <i class="fa-solid fa-leaf"></i> Catálogo
-      </button>
-      <button onclick="showSection('historia')" id="btn-historia" class="nav-btn">
-        <i class="fa-solid fa-book"></i> Crónicas
+        <i class="fa-solid fa-jar"></i> Galería Botánica
       </button>
       <button onclick="showSection('educacion')" id="btn-educacion" class="nav-btn">
         <i class="fa-solid fa-graduation-cap"></i> Aula
@@ -47,89 +44,64 @@
   </header>
 
   <main>
-    <!-- DASHBOARD -->
+    <!-- SECCIÓN 1: MONITOREO (DASHBOARD) -->
     <section id="dashboard" class="section active">
       <div class="dashboard-header">
         <div>
           <span class="section-badge">Consolidado General</span>
-          <h2 class="fuente-editorial section-title">Estado general del arbolado</h2>
+          <h2 class="fuente-editorial section-title">Estado del Arbolado Universitario</h2>
         </div>
         <div class="sync-badge">
-          <i class="fa-solid fa-circle-notch fa-spin" id="sync-icon"></i> Sincronizado con el Herbario
+          <i class="fa-solid fa-circle-notch fa-spin" id="sync-icon"></i> Sincronizado con Sheets
         </div>
       </div>
 
-      <!-- TARJETAS DE ESTADÍSTICAS PRINCIPALES -->
-      <div class="stats-grid">
-        <div class="stat-card glass">
-          <div class="stat-content">
-            <p class="stat-label">Universo Censado</p>
-            <span id="totalGeneral" class="stat-number fuente-editorial">0</span>
+      <!-- RESUMEN EN TARJETAS POR NIVEL DE SEVERIDAD (INCLUYE SANOS) -->
+      <div class="levels-container">
+        <h3 class="fuente-editorial subtitle-small"><i class="fa-solid fa-layer-group"></i> Inventario por Nivel de Severidad</h3>
+        <div class="levels-grid" id="levelsGridContainer">
+          <!-- Generado dinámicamente con JavaScript desde Apps Script -->
+          <div class="level-card level-sano">
+            <span class="level-tag">Nivel 0</span>
+            <span class="level-name">Sanos</span>
+            <span id="count-sano" class="level-count">0</span>
           </div>
-          <i class="fa-solid fa-tree stat-bg-icon"></i>
-        </div>
-
-        <div class="stat-card glass alert">
-          <div class="stat-content">
-            <p class="stat-label">Focos de Infección</p>
-            <span id="infestados" class="stat-number fuente-editorial text-alert">0</span>
+          <div class="level-card level-leve">
+            <span class="level-tag">Nivel 1</span>
+            <span class="level-name">Leve</span>
+            <span id="count-leve" class="level-count">0</span>
           </div>
-          <i class="fa-solid fa-radiation stat-bg-icon"></i>
-        </div>
-
-        <div class="stat-card glass safe">
-          <div class="stat-content">
-            <p class="stat-label">Tasa de Bioseguridad</p>
-            <span id="saludables" class="stat-number fuente-editorial text-safe">0%</span>
+          <div class="level-card level-moderado">
+            <span class="level-tag">Nivel 2</span>
+            <span class="level-name">Moderado</span>
+            <span id="count-moderado" class="level-count">0</span>
           </div>
-          <i class="fa-solid fa-shield-halved stat-bg-icon"></i>
+          <div class="level-card level-medio">
+            <span class="level-tag">Nivel 3</span>
+            <span class="level-name">Medio</span>
+            <span id="count-medio" class="level-count">0</span>
+          </div>
+          <div class="level-card level-severo">
+            <span class="level-tag">Nivel 4</span>
+            <span class="level-name">Severo</span>
+            <span id="count-severo" class="level-count">0</span>
+          </div>
+          <div class="level-card level-critico">
+            <span class="level-tag">Nivel 5</span>
+            <span class="level-name">Crítico</span>
+            <span id="count-critico" class="level-count">0</span>
+          </div>
+          <div class="level-card level-muerto">
+            <span class="level-tag">Nivel 6</span>
+            <span class="level-name">Muerto</span>
+            <span id="count-muerto" class="level-count">0</span>
+          </div>
         </div>
       </div>
 
-      <!-- CONTENEDOR DE GRÁFICAS Y LISTAS -->
-      <div class="dashboard-layout">
-        <!-- LADO IZQUIERDO: GRÁFICAS Y SEVERIDAD -->
+      <!-- CONTENEDOR DE GRÁFICAS Y RESUMEN POR ESPECIE -->
+      <div class="dashboard-layout margin-top-lg">
         <div class="left-panel">
-          <div class="chart-card large">
-            <div class="chart-header-flex">
-              <h3>Severidad de la Infestación en el Campus</h3>
-              <span class="badge-sano"><i class="fa-solid fa-heart-pulse"></i> Sanos: <strong id="cantSanos">0</strong></span>
-            </div>
-            
-            <!-- Gráfica exclusiva para árboles infestados -->
-            <div class="chart-container-fixed mat-infestation">
-              <canvas id="chartInfestacion"></canvas>
-            </div>
-
-            <!-- TARJETITAS DE SEVERIDAD DETALLADA (Desacopladas para fácil lectura) -->
-            <div class="severity-cards-grid" id="severityCardsContainer">
-              <div class="sev-card card-leve">
-                <span class="sev-label">Leve</span>
-                <span id="sev-leve" class="sev-val">0</span>
-              </div>
-              <div class="sev-card card-moderado">
-                <span class="sev-label">Moderado</span>
-                <span id="sev-moderado" class="sev-val">0</span>
-              </div>
-              <div class="sev-card card-medio">
-                <span class="sev-label">Medio</span>
-                <span id="sev-medio" class="sev-val">0</span>
-              </div>
-              <div class="sev-card card-severo">
-                <span class="sev-label">Severo</span>
-                <span id="sev-severo" class="sev-val">0</span>
-              </div>
-              <div class="sev-card card-critico">
-                <span class="sev-label">Crítico</span>
-                <span id="sev-critico" class="sev-val">0</span>
-              </div>
-              <div class="sev-card card-muerto">
-                <span class="sev-label">Muerto</span>
-                <span id="sev-muerto" class="sev-val">0</span>
-              </div>
-            </div>
-          </div>
-
           <div class="mini-grid">
             <div class="chart-card">
               <h3>Distribución por Parcelas</h3>
@@ -147,137 +119,81 @@
           </div>
         </div>
 
-        <!-- LADO DERECHO: PANELES DE ESPECIES -->
         <div class="right-panel">
           <div class="species-panel">
             <div class="panel-header">
-              <h3 class="fuente-editorial"><i class="fa-solid fa-leaf"></i> Censo Absoluto</h3>
+              <h3 class="fuente-editorial"><i class="fa-solid fa-tree"></i> Censo por Especie de Árbol</h3>
             </div>
             <div class="species-scroll scroll-premium" id="speciesContainer"></div>
           </div>
-
-          <div class="species-panel alert-panel">
-            <div class="panel-header">
-              <h3 class="fuente-editorial text-alert"><i class="fa-solid fa-circle-exclamation"></i> Alerta Sanitaria</h3>
-            </div>
-            <div class="species-scroll scroll-premium" id="affectedContainer"></div>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- GALERÍA / ESTANTE DE MUÉRDAGOS (NUEVA SECCIÓN) -->
+    <!-- SECCIÓN 2: GALERÍA BOTÁNICA INTERACTIVA (VITRINA VIRTUAL) -->
     <section id="galeria" class="section">
-      <div class="dashboard-header">
-        <div>
-          <span class="section-badge">Catálogo Biológico</span>
-          <h2 class="fuente-editorial section-title">Estante Taxonómico de Muérdagos</h2>
-          <p class="section-subtitle">Especies de muérdagos identificadas (Nacionales y Extranjeras) con su registro de presencia en el campus UATx.</p>
-        </div>
-      </div>
-
-      <!-- FILTROS DE CATEGORÍA -->
-      <div class="filter-bar">
-        <button class="filter-btn active" onclick="filterGallery('todos')">Todos</button>
-        <button class="filter-btn" onclick="filterGallery('campus')"><i class="fa-solid fa-location-dot"></i> Detectados en Campus</button>
-        <button class="filter-btn" onclick="filterGallery('nacional')">🇲🇽 Nacionales</button>
-        <button class="filter-btn" onclick="filterGallery('extranjero')">🌍 Extranjeros</button>
-      </div>
-
-      <!-- GRID DINÁMICO DE TARJETAS DE MUÉRDAGOS -->
-      <div class="galeria-grid" id="muerdagosGrid">
-        <!-- Renderizado dinámico desde app.js -->
-      </div>
-    </section>
-
-    <!-- HISTORIA (LIBROS INTERACTIVOS TRIDIMENSIONALES) -->
-    <section id="historia" class="section">
       <div class="section-center-headline">
-        <span class="section-badge">Antropología y Sociología Botánica</span>
-        <h2 class="fuente-editorial section-title">Creencias, prácticas y significados asociados al muérdago</h2>
-        <p class="section-subtitle">Haz clic sobre cualquier tomo para hojear su historia ancestral.</p>
+        <span class="section-badge">Herbario Digital Interactivo</span>
+        <h2 class="fuente-editorial section-title">Vitrina Virtual de Exhibición Botánica</h2>
+        <p class="section-subtitle">Selecciona o explora los especímenes preservados sobre la repisa.</p>
       </div>
 
-      <div class="books-library">
-        <!-- Libro 1: Celtas -->
-        <div class="libro-caja" onclick="this.classList.toggle('abierto')">
-          <div class="book-wrapper">
-            <div class="book-cover celtas-cover">
-              <span class="tomo-num fuente-editorial">Tomo I</span>
-              <h3>Mística Celtíbera</h3>
-              <div class="cover-footer">
-                <p>Sabiduría de los Druidas.</p>
-                <span class="action-hint">Abrir tomo <i class="fa-solid fa-book-open"></i></span>
-              </div>
-            </div>
-            <div class="book-page">
-              <h4>El Ritual del Oro</h4>
-              <p class="page-text scroll-premium">Los sacerdotes druidas consideraban al muérdago una emanación divina, pues crecía suspendido entre el cielo y la tierra sin tocar jamás el suelo de manera directa. Recolectado exclusivamente con hoces de oro puro durante los solsticios, servía como un elixir de fertilidad absoluta y salvaguarda contra artes mágicas oscuras.</p>
-              <span class="close-hint">Cerrar Tomo</span>
-            </div>
-          </div>
-        </div>
+      <!-- FILTROS DE UBICACIÓN Y ORIGEN -->
+      <div class="gallery-filters">
+        <button class="filter-btn active" onclick="filtrarGaleria('todos')">Todos</button>
+        <button class="filter-btn" onclick="filtrarGaleria('uatx')">Campus UATx</button>
+        <button class="filter-btn" onclick="filtrarGaleria('nacional')">Nacional</button>
+        <button class="filter-btn" onclick="filtrarGaleria('extranjero')">Extranjero</button>
+      </div>
 
-        <!-- Libro 2: Nórdicos -->
-        <div class="libro-caja" onclick="this.classList.toggle('abierto')">
-          <div class="book-wrapper">
-            <div class="book-cover nordicos-cover">
-              <span class="tomo-num fuente-editorial">Tomo II</span>
-              <h3>Sagas Nórdicas</h3>
-              <div class="cover-footer">
-                <p>La tragedia de Baldr.</p>
-                <span class="action-hint">Abrir tomo <i class="fa-solid fa-book-open"></i></span>
-              </div>
-            </div>
-            <div class="book-page">
-              <h4>La Flecha del Destino</h4>
-              <p class="page-text scroll-premium">En los relatos del Edda, la reina Frigg hizo jurar a toda criatura viviente, elemento y mineral que jamás dañarían a su amado hijo Baldr. Al considerarlo inofensivo, omitió pedir el juramento al joven muérdago. El astuto Loki forjó una saeta con su rama, guiando al dios ciego Höðr para consumar la tragedia divina.</p>
-              <span class="close-hint">Cerrar Tomo</span>
-            </div>
-          </div>
+      <!-- ESCENARIO PRINCIPAL: ESTANTE O VITRINA DE CRISTAL -->
+      <div class="vitrina-stage">
+        <div class="shelf-container" id="shelfContainer">
+          <!-- Los capelos/frascos de cristal con muérdagos levitando se inyectan dinámicamente con JS -->
         </div>
+        <div class="wooden-shelf"></div> <!-- Estante flotante con textura visual -->
+      </div>
 
-        <!-- Libro 3: Curanderos -->
-        <div class="libro-caja" onclick="this.classList.toggle('abierto')">
-          <div class="book-wrapper">
-            <div class="book-cover curanderos-cover">
-              <span class="tomo-num fuente-editorial">Tomo III</span>
-              <h3>Medicina Tradicional</h3>
-              <div class="cover-footer">
-                <p>Medicina tradicional folclórica.</p>
-                <span class="action-hint">Abrir tomo <i class="fa-solid fa-book-open"></i></span>
+      <!-- MODAL O PANEL FICHA INTERACTIVA AL DAR CLIC -->
+      <div id="specimenModal" class="specimen-modal hidden">
+        <div class="modal-content glass">
+          <button class="close-modal-btn" onclick="cerrarFicha()">&times;</button>
+          <div class="modal-grid">
+            <div class="modal-specimen-view">
+              <div class="capelo-preview">
+                <img id="modalImg" src="assets/muerdago-demo.png" alt="Especie" class="floating-specimen">
               </div>
+              <span id="modalOriginBadge" class="origin-badge">UATx</span>
             </div>
-            <div class="book-page">
-              <h4>El Saber de la Tierra</h4>
-              <p class="page-text scroll-premium">Los curanderos medievales y herbolarios tradicionales entendieron al muérdago como un regulador de los fluidos vitales. Usado bajo estrictas dosis artesanales en infusiones ceremoniales, controlaba la presión del corazón, templaba el sistema nervioso alterado y equilibraba las energías de cuerpos debilitados.</p>
-              <span class="close-hint">Cerrar Tomo</span>
-            </div>
-          </div>
-        </div>
+            
+            <div class="modal-info-panel">
+              <h3 id="modalNombreComun" class="fuente-editorial">Nombre Común</h3>
+              <h5 id="modalNombreCientifico" class="scientific-name">Nombre Científico</h5>
+              
+              <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab('tab-estructura')">🔬 Estructura</button>
+                <button class="tab-btn" onclick="switchTab('tab-propiedades')">🍃 Propiedades</button>
+                <button class="tab-btn" onclick="switchTab('tab-riesgo')">⚠️ Hospedero / Riesgo</button>
+              </div>
 
-        <!-- Libro 4: Actualidad -->
-        <div class="libro-caja" onclick="this.classList.toggle('abierto')">
-          <div class="book-wrapper">
-            <div class="book-cover actualidad-cover">
-              <span class="tomo-num fuente-editorial">Tomo IV</span>
-              <h3>Ciencia Moderna</h3>
-              <div class="cover-footer">
-                <p>El desafío ecológico urbano.</p>
-                <span class="action-hint">Abrir tomo <i class="fa-solid fa-book-open"></i></span>
+              <div class="tabs-body">
+                <div id="tab-estructura" class="tab-content active">
+                  <p id="modalEstructura">Descripción de la morfología del espécimen.</p>
+                </div>
+                <div id="tab-propiedades" class="tab-content">
+                  <p id="modalPropiedades">Usos medicinales y bioculturales asociados.</p>
+                </div>
+                <div id="tab-riesgo" class="tab-content">
+                  <p id="modalRiesgo">Hospedero principal y comportamiento como plaga.</p>
+                </div>
               </div>
-            </div>
-            <div class="book-page">
-              <h4>El Reto en Tlaxcala</h4>
-              <p class="page-text scroll-premium">Hoy en día, la ciencia clasifica al muérdago como una planta hemiparásita agresiva. El cambio climático y el estrés hídrico de las ciudades han mermado las defensas naturales de los árboles, permitiendo que esta especie se propague como una plaga prioritaria que pone en riesgo el patrimonio forestal universitario.</p>
-              <span class="close-hint">Cerrar Tomo</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- EDUCACION (AULA MULTIMEDIA) -->
+    <!-- SECCIÓN 3: EDUCACIÓN (AULA MULTIMEDIA) -->
     <section id="educacion" class="section">
       <div class="dashboard-header">
         <div>
@@ -287,7 +203,6 @@
       </div>
 
       <div class="education-grid">
-        <!-- Tarjeta Video -->
         <div class="edu-card">
           <div class="edu-media-placeholder video-placeholder">
             <div class="media-overlay"></div>
@@ -300,7 +215,6 @@
           </div>
         </div>
 
-        <!-- Tarjeta Infografía -->
         <div class="edu-card">
           <div class="edu-media-placeholder vector-placeholder">
             <i class="fa-solid fa-diagram-project diagram-icon"></i>
@@ -313,7 +227,6 @@
           </div>
         </div>
 
-        <!-- Tarjeta Carteles -->
         <div class="edu-card">
           <div class="edu-media-placeholder poster-placeholder">
             <i class="fa-solid fa-scroll diagram-icon"></i>
@@ -324,37 +237,10 @@
             <p>Afiches tipográficos y visuales listos para impresión y distribución masiva dentro de las facultades del campus de la UATx.</p>
           </div>
         </div>
-
-        <!-- Tarjeta Historietas -->
-        <div class="edu-card">
-          <div class="edu-media-placeholder comic-placeholder">
-            <i class="fa-solid fa-book-open-reader diagram-icon"></i>
-          </div>
-          <div class="edu-content">
-            <span class="content-tag tag-comic">Narrativas Ilustradas</span>
-            <h4>El Vuelo del Zorzal y la Baya</h4>
-            <p>Historieta educativa interactiva orientada a explicar la dispersión zoócora involuntaria efectuada por la avifauna regional.</p>
-          </div>
-        </div>
-
-        <!-- Tarjeta Audios -->
-        <div class="edu-card">
-          <div class="edu-media-placeholder audio-placeholder">
-            <div class="audio-wave">
-              <span></span><span></span><span></span><span></span><span></span>
-            </div>
-            <span class="audio-timer">08:42 min</span>
-          </div>
-          <div class="edu-content">
-            <span class="content-tag tag-audio">Podcasts y Entrevistas</span>
-            <h4>Voces de la Ecología Tlaxcalteca</h4>
-            <p>Cápsula de audio discutiendo el preocupante aumento térmico del suelo local y su correlación directa con la propagación del muérdago.</p>
-          </div>
-        </div>
       </div>
     </section>
 
-    <!-- CONTACTO -->
+    <!-- SECCIÓN 4: CONTACTO -->
     <section id="contacto" class="section">
       <div class="contact-card-premium">
         <div class="contact-info">
