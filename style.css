@@ -139,7 +139,6 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-b: 1px solid var(--bordes);
   padding-bottom: 20px;
   margin-bottom: 35px;
   border-bottom: 1px solid var(--bordes);
@@ -170,7 +169,7 @@ main {
   color: #6c6256;
 }
 
-/* CONTADORES */
+/* CONTADORES PRINCIPALES */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -224,7 +223,7 @@ main {
   opacity: 0.06;
 }
 
-/* CAPA FIJA ANTI-BUG PARA GRÁFICAS */
+/* LAYOUT DE GRÁFICAS */
 .dashboard-layout {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -260,7 +259,22 @@ main {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #9c9285;
-  margin-bottom: 20px;
+}
+
+.chart-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.badge-sano {
+  font-size: 11px;
+  background: rgba(104, 126, 103, 0.12);
+  color: var(--color-sano);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 600;
 }
 
 /* IMPORTANTE: Bloqueo de dimensiones */
@@ -268,8 +282,52 @@ main {
   position: relative;
   width: 100% !important;
 }
-.chart-container-fixed.mat-infestation { height: 280px; }
+.chart-container-fixed.mat-infestation { height: 240px; }
 .chart-container-fixed.mat-mini { height: 220px; }
+
+/* SEVERIDAD: TARJETITAS DESACOPLADAS */
+.severity-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed rgba(191, 161, 95, 0.3);
+}
+
+@media (max-width: 768px) {
+  .severity-cards-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.sev-card {
+  background: var(--crema-fondo);
+  padding: 10px 8px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid rgba(191, 161, 95, 0.2);
+}
+
+.sev-label {
+  display: block;
+  font-size: 9px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #7c7265;
+  margin-bottom: 2px;
+}
+
+.sev-val {
+  font-family: monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.card-leve { border-bottom: 3px solid #dfca9f; }
+.card-moderado { border-bottom: 3px solid #cfa375; }
+.card-medio { border-bottom: 3px solid #bd7e60; }
+.card-severo { border-bottom: 3px solid #ad5245; }
+.card-critico { border-bottom: 3px solid #7a221e; }
+.card-muerto { border-bottom: 3px solid #45403c; }
 
 /* LISTAS DE ESPECIES ESTILIZADAS */
 .right-panel {
@@ -310,7 +368,6 @@ main {
   padding-right: 5px;
 }
 
-/* Chips elegantes compactos */
 .species-row-premium {
   display: flex;
   justify-content: space-between;
@@ -347,9 +404,116 @@ main {
   color: white;
 }
 
+/* GALERÍA / ESTANTE DE MUÉRDAGOS */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: white;
+  border: 1px solid var(--bordes);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cafe-profundo);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn.active, .filter-btn:hover {
+  background: var(--cafe-profundo);
+  color: var(--crema-fondo);
+}
+
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.muerdago-card {
+  background: white;
+  border-radius: 20px;
+  padding: 22px;
+  border: 1px solid var(--bordes);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.muerdago-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(44, 37, 30, 0.05);
+}
+
+.card-header-bio {
+  margin-bottom: 12px;
+}
+
+.muerdago-title {
+  font-size: 1.1rem;
+  color: var(--cafe-profundo);
+}
+
+.muerdago-sci {
+  font-size: 11px;
+  color: #8c8275;
+  display: block;
+  margin-top: 2px;
+}
+
+.card-badges-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 15px;
+}
+
+.badge-tag {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.badge-nacional { background: #e0eee3; color: #2e5936; }
+.badge-extranjero { background: #e3ecf5; color: #2e4759; }
+
+.badge-campus-active { background: #fce8e6; color: var(--color-alerta); }
+.badge-campus-inactive { background: #f0ede6; color: #8c8275; }
+
+.badge-uso-si { background: #fef3d6; color: #8a6300; }
+.badge-uso-no { background: #f5f5f5; color: #a0a0a0; }
+
+.card-body-info {
+  border-top: 1px solid rgba(191, 161, 95, 0.15);
+  padding-top: 10px;
+  font-size: 11.5px;
+  color: #6e6559;
+}
+
+.hospedero-text {
+  margin-top: 4px;
+  font-style: italic;
+  color: var(--cafe-profundo);
+}
+
+.no-data-msg {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: #9c9285;
+  font-style: italic;
+}
+
 /* INTERACTIVO DE LIBROS (CRÓNICAS) */
 .section-center-headline {
-  text-center: center;
   max-width: 1100px;
   margin: 0 auto 90px auto;
   text-align: center;
@@ -381,7 +545,6 @@ main {
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Tapas del libro */
 .book-cover {
   position: absolute;
   inset: 0;
@@ -432,7 +595,6 @@ main {
   color: var(--dorado-brillante);
 }
 
-/* Interior del Libro (Hojas) */
 .book-page {
   position: absolute;
   inset: 0;
@@ -472,7 +634,6 @@ main {
   color: #aaa295;
 }
 
-/* Animación Flip 3D al dar Clic */
 .libro-caja.abierto .book-cover {
   transform: rotateY(-145deg);
 }
@@ -509,7 +670,7 @@ main {
 .video-placeholder {
   background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=600');
   background-size: cover;
-  background-center: center;
+  background-position: center;
 }
 
 .media-overlay {
@@ -612,7 +773,7 @@ main {
 }
 
 @media (max-width: 768px) {
-  .contact-card-premium { grid-template-columns: 1fr; gap: 25px; pading: 25px; }
+  .contact-card-premium { grid-template-columns: 1fr; gap: 25px; padding: 25px; }
 }
 
 .contact-info p { font-size: 12.5px; line-height: 1.6; margin: 15px 0 25px 0; color: #5c5347; }
@@ -632,7 +793,7 @@ main {
 .contact-action-box h5 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
 .contact-action-box p { font-size: 11.5px; color: #7c7265; line-height: 1.5; }
 
-/* CUSTOM SCROLLBAR PREMUM */
+/* CUSTOM SCROLLBAR PREMIUM */
 .scroll-premium::-webkit-scrollbar { width: 4px; }
 .scroll-premium::-webkit-scrollbar-track { background: transparent; }
 .scroll-premium::-webkit-scrollbar-thumb { background: var(--dorado); border-radius: 10px; }
