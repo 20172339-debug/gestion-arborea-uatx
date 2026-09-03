@@ -32,9 +32,7 @@ body {
   letter-spacing: 0.05em;
 }
 
-/* ==========================================
-   NAVBAR
-   ========================================== */
+/* NAVBAR */
 header {
   position: sticky;
   top: 0;
@@ -107,9 +105,7 @@ nav {
   color: var(--crema-fondo);
 }
 
-/* ==========================================
-   MAIN & ESTRUCTURA DE SECCIONES
-   ========================================== */
+/* MAIN & ESTRUCTURA DE SECCIONES */
 main {
   padding: 40px;
   max-width: 1600px;
@@ -119,6 +115,7 @@ main {
   position: relative;
 }
 
+/* Evita fallos de ChartJS destruyendo alturas */
 .section {
   position: absolute;
   top: 0;
@@ -137,13 +134,12 @@ main {
   transform: translateY(0);
 }
 
-/* ==========================================
-   DASHBOARD DESIGN
-   ========================================== */
+/* DASHBOARD DESIGN */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-b: 1px solid var(--bordes);
   padding-bottom: 20px;
   margin-bottom: 35px;
   border-bottom: 1px solid var(--bordes);
@@ -174,6 +170,7 @@ main {
   color: #6c6256;
 }
 
+/* CONTADORES */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -193,8 +190,13 @@ main {
   overflow: hidden;
 }
 
-.stat-card.alert { border-bottom: 4px solid var(--color-alerta); }
-.stat-card.safe { border-bottom: 4px solid var(--color-sano); }
+.stat-card.alert {
+  border-bottom: 4px solid var(--color-alerta);
+}
+
+.stat-card.safe {
+  border-bottom: 4px solid var(--color-sano);
+}
 
 .stat-label {
   font-size: 11px;
@@ -222,7 +224,7 @@ main {
   opacity: 0.06;
 }
 
-/* DASHBOARD LAYOUT & GRÁFICAS */
+/* CAPA FIJA ANTI-BUG PARA GRÁFICAS */
 .dashboard-layout {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -261,6 +263,7 @@ main {
   margin-bottom: 20px;
 }
 
+/* IMPORTANTE: Bloqueo de dimensiones */
 .chart-container-fixed {
   position: relative;
   width: 100% !important;
@@ -268,7 +271,7 @@ main {
 .chart-container-fixed.mat-infestation { height: 280px; }
 .chart-container-fixed.mat-mini { height: 220px; }
 
-/* LISTAS DE ESPECIES */
+/* LISTAS DE ESPECIES ESTILIZADAS */
 .right-panel {
   display: flex;
   flex-direction: column;
@@ -307,6 +310,7 @@ main {
   padding-right: 5px;
 }
 
+/* Chips elegantes compactos */
 .species-row-premium {
   display: flex;
   justify-content: space-between;
@@ -320,9 +324,14 @@ main {
   transition: transform 0.2s;
 }
 
-.species-row-premium:hover { transform: translateX(3px); }
+.species-row-premium:hover {
+  transform: translateX(3px);
+}
 
-.row-label { font-weight: 500; color: var(--cafe-profundo); }
+.row-label {
+  font-weight: 500;
+  color: var(--cafe-profundo);
+}
 
 .row-counter {
   font-family: monospace;
@@ -338,300 +347,9 @@ main {
   color: white;
 }
 
-/* ==========================================
-   HERBARIO / ESPECIERO BOTÁNICO (NUEVO)
-   ========================================== */
-.vitrina-mueble {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-  background: rgba(245, 240, 225, 0.4);
-  padding: 35px;
-  border-radius: 24px;
-  border: 1px solid var(--bordes);
-  box-shadow: inset 0 0 30px rgba(191, 161, 95, 0.08);
-}
-
-.repisa-estante {
-  border-bottom: 8px solid #a68d53;
-  padding-bottom: 25px;
-  position: relative;
-}
-
-.placa-metalica {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #d8be82 0%, #a68d53 100%);
-  color: var(--cafe-profundo);
-  padding: 6px 16px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  margin-bottom: 25px;
-}
-
-.frascos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 25px;
-  align-items: end;
-}
-
-.frasco-item {
-  cursor: pointer;
-  perspective: 1000px;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.frasco-item:hover {
-  transform: translateY(-8px) scale(1.02);
-}
-
-.frasco-cristal {
-  position: relative;
-  height: 220px;
-  background: rgba(255, 255, 255, 0.45);
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  border-radius: 12px 12px 18px 18px;
-  box-shadow: 0 10px 20px rgba(44, 37, 30, 0.08), inset 0 0 15px rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(4px);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 10px;
-}
-
-/* Tapa de madera o corcho */
-.frasco-cristal::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
-  height: 12px;
-  background: #7a5c37;
-  border-radius: 4px 4px 0 0;
-  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3);
-}
-
-.liquido-conservante {
-  position: absolute;
-  inset: 15px 4px 4px 4px;
-  background: linear-gradient(180deg, rgba(223, 193, 125, 0.1) 0%, rgba(191, 161, 95, 0.25) 100%);
-  border-radius: 0 0 14px 14px;
-  pointer-events: none;
-}
-
-.planta-muestra {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 8px;
-  filter: sepia(0.25) contrast(1.05);
-  margin-bottom: 8px;
-  z-index: 1;
-}
-
-.etiqueta-frasco {
-  background: #fdfbf7;
-  border: 1px solid #d9d0b8;
-  padding: 6px 8px;
-  border-radius: 4px;
-  text-align: center;
-  z-index: 2;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.etiqueta-titulo {
-  display: block;
-  font-weight: 700;
-  font-size: 10px;
-  color: var(--cafe-profundo);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.etiqueta-tax {
-  display: block;
-  font-size: 9px;
-  font-style: italic;
-  color: #7c7265;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* ==========================================
-   VENTANA MODAL & MEDICINAL
-   ========================================== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(44, 37, 30, 0.65);
-  backdrop-filter: blur(8px);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.modal-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modal-card {
-  background: var(--crema-fondo);
-  border: 1px solid var(--dorado);
-  border-radius: 24px;
-  max-width: 800px;
-  width: 100%;
-  padding: 30px;
-  position: relative;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-}
-
-.modal-close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  border: none;
-  background: var(--crema-card);
-  color: var(--cafe-profundo);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-}
-
-.modal-close-btn:hover { background: var(--dorado); color: white; }
-
-.modal-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: 30px;
-  align-items: start;
-}
-
-@media (max-width: 768px) {
-  .modal-grid { grid-template-columns: 1fr; }
-}
-
-.modal-media img {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  border-radius: 16px;
-  border: 1px solid var(--bordes);
-}
-
-.modal-badge-campus {
-  margin-top: 12px;
-  background: var(--crema-card);
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 11px;
-  color: #6c6256;
-  text-align: center;
-  border: 1px solid var(--bordes);
-}
-
-.sub-cientifico {
-  font-style: italic;
-  color: #7c7265;
-  font-size: 13px;
-  margin-bottom: 12px;
-}
-
-.modal-divider {
-  border: none;
-  border-top: 1px solid var(--bordes);
-  margin: 15px 0;
-}
-
-.modal-detail p {
-  font-size: 12px;
-  color: #5c5347;
-  line-height: 1.5;
-  margin-top: 4px;
-}
-
-/* CAJA MEDICINAL Y BOTÓN ACORDEÓN */
-.medicinal-box {
-  margin-top: 20px;
-  border: 1px solid var(--bordes);
-  border-radius: 14px;
-  overflow: hidden;
-  background: white;
-}
-
-.btn-medicinal {
-  width: 100%;
-  padding: 12px 16px;
-  background: var(--crema-card);
-  border: none;
-  text-align: left;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--cafe-profundo);
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background 0.2s;
-}
-
-.btn-medicinal:hover { background: #ebdcb2; }
-
-.btn-medicinal .icon-arrow {
-  transition: transform 0.3s;
-}
-
-.btn-medicinal.open .icon-arrow {
-  transform: rotate(180deg);
-}
-
-.medicinal-content {
-  padding: 15px;
-  font-size: 11.5px;
-  line-height: 1.6;
-  color: #4a4238;
-}
-
-.medicinal-content.hidden {
-  display: none;
-}
-
-.medicinal-content p {
-  margin-bottom: 8px;
-}
-
-.text-warning {
-  color: var(--color-alerta);
-}
-
-/* ==========================================
-   HISTORIA (CRÓNICAS DE LIBROS 3D)
-   ========================================== */
+/* INTERACTIVO DE LIBROS (CRÓNICAS) */
 .section-center-headline {
+  text-center: center;
   max-width: 1100px;
   margin: 0 auto 90px auto;
   text-align: center;
@@ -663,6 +381,7 @@ main {
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Tapas del libro */
 .book-cover {
   position: absolute;
   inset: 0;
@@ -713,6 +432,7 @@ main {
   color: var(--dorado-brillante);
 }
 
+/* Interior del Libro (Hojas) */
 .book-page {
   position: absolute;
   inset: 0;
@@ -752,13 +472,12 @@ main {
   color: #aaa295;
 }
 
+/* Animación Flip 3D al dar Clic */
 .libro-caja.abierto .book-cover {
   transform: rotateY(-145deg);
 }
 
-/* ==========================================
-   EDUCACIÓN (AULA MULTIMEDIA)
-   ========================================== */
+/* SECCIÓN EDUCACIÓN (AULA) */
 .education-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -790,7 +509,7 @@ main {
 .video-placeholder {
   background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=600');
   background-size: cover;
-  background-position: center;
+  background-center: center;
 }
 
 .media-overlay {
@@ -831,7 +550,9 @@ main {
   opacity: 0.5;
 }
 
-.edu-content { padding: 20px; }
+.edu-content {
+  padding: 20px;
+}
 
 .content-tag {
   font-size: 9px;
@@ -861,6 +582,7 @@ main {
   line-height: 1.5;
 }
 
+/* Audio Player Animado */
 .audio-placeholder { background: var(--cafe-profundo); color: white; }
 .audio-timer { position: absolute; top: 15px; right: 15px; font-size: 10px; background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; }
 .audio-wave { display: flex; gap: 4px; align-items: center; }
@@ -875,9 +597,7 @@ main {
   100% { transform: scaleY(1); }
 }
 
-/* ==========================================
-   CONTACT CARD & FOOTER
-   ========================================== */
+/* CONTACT CARD */
 .contact-card-premium {
   max-width: 900px;
   margin: 0 auto;
@@ -892,7 +612,7 @@ main {
 }
 
 @media (max-width: 768px) {
-  .contact-card-premium { grid-template-columns: 1fr; gap: 25px; padding: 25px; }
+  .contact-card-premium { grid-template-columns: 1fr; gap: 25px; pading: 25px; }
 }
 
 .contact-info p { font-size: 12.5px; line-height: 1.6; margin: 15px 0 25px 0; color: #5c5347; }
@@ -912,6 +632,7 @@ main {
 .contact-action-box h5 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
 .contact-action-box p { font-size: 11.5px; color: #7c7265; line-height: 1.5; }
 
+/* CUSTOM SCROLLBAR PREMUM */
 .scroll-premium::-webkit-scrollbar { width: 4px; }
 .scroll-premium::-webkit-scrollbar-track { background: transparent; }
 .scroll-premium::-webkit-scrollbar-thumb { background: var(--dorado); border-radius: 10px; }
@@ -926,3 +647,305 @@ footer {
   color: #9c9285;
   margin-top: 60px;
 }
+/* =========================================
+   HERBARIO — VITRINA BOTÁNICA
+   ========================================= */
+
+.herbario-intro {
+  font-size: 13px;
+  color: #7c7265;
+  max-width: 640px;
+  margin-bottom: 35px;
+  line-height: 1.6;
+}
+
+.vitrina-botanica {
+  background: linear-gradient(180deg, var(--crema-card) 0%, #efe7d2 100%);
+  border: 1px solid var(--bordes);
+  border-radius: 24px;
+  padding: 45px 40px 30px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  box-shadow: inset 0 2px 12px rgba(44, 37, 30, 0.05);
+}
+
+.estante-nivel {
+  position: relative;
+  padding-bottom: 26px;
+  border-bottom: 10px solid rgba(44, 37, 30, 0.9);
+  border-image: linear-gradient(90deg, #3a3025, #574838, #3a3025) 1;
+  box-shadow: 0 8px 14px -6px rgba(44, 37, 30, 0.35);
+}
+
+.estante-final {
+  border-bottom-width: 10px;
+}
+
+.placa-repisa {
+  position: absolute;
+  top: -14px;
+  left: 24px;
+  background: var(--cafe-profundo);
+  color: var(--dorado-brillante);
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 4px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+.frascos-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 22px;
+  padding: 20px 6px 4px 6px;
+  min-height: 150px;
+}
+
+.frascos-fila:empty::after {
+  content: "Sin especímenes registrados en esta repisa";
+  font-size: 11px;
+  color: #a89e8f;
+  font-style: italic;
+}
+
+/* FRASCO */
+.frasco {
+  position: relative;
+  width: 76px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.35s ease;
+}
+
+.frasco:hover,
+.frasco:focus-visible {
+  transform: translateY(-10px) scale(1.12);
+  filter: drop-shadow(0 10px 14px rgba(44, 37, 30, 0.3)) brightness(1.05);
+  z-index: 5;
+}
+
+.frasco-svg { width: 100%; height: auto; overflow: visible; }
+
+.frasco-tapa { fill: var(--cafe-profundo); }
+.frasco-cuello { fill: rgba(191, 161, 95, 0.4); }
+.frasco-vidrio {
+  fill: rgba(255, 255, 255, 0.5);
+  stroke: var(--dorado);
+  stroke-width: 1.4;
+  transition: fill 0.35s ease;
+}
+.frasco:hover .frasco-vidrio { fill: rgba(255, 255, 255, 0.75); }
+
+.frasco-liquido { opacity: 0.6; transition: opacity 0.35s ease; }
+.frasco:hover .frasco-liquido { opacity: 0.85; }
+
+.frasco-hoja { fill: var(--dorado); opacity: 0.85; }
+.frasco-etiqueta { fill: #fcf9f2; stroke: var(--dorado); stroke-width: 1; }
+.frasco-codigo {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  fill: var(--cafe-profundo);
+  letter-spacing: 0.5px;
+}
+.frasco-sombra { fill: rgba(44, 37, 30, 0.15); transition: opacity 0.35s ease; }
+.frasco:hover .frasco-sombra { opacity: 0.5; }
+
+/* Burbuja roja de ejemplares en campus */
+.frasco-badge {
+  position: absolute;
+  top: -4px;
+  right: 2px;
+  background: var(--color-alerta);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--crema-card);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+/* Etiqueta flotante al pasar el cursor */
+.frasco-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: var(--cafe-profundo);
+  color: var(--crema-fondo);
+  padding: 8px 12px;
+  border-radius: 10px;
+  white-space: nowrap;
+  font-size: 10.5px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 10;
+}
+
+.frasco-tooltip strong { display: block; font-size: 11px; }
+.frasco-tooltip em { color: var(--dorado-brillante); font-style: italic; font-size: 9.5px; }
+
+.frasco-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--cafe-profundo);
+}
+
+.frasco:hover .frasco-tooltip,
+.frasco:focus-visible .frasco-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@keyframes frascoEntrada {
+  from { opacity: 0; transform: translateY(14px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.frasco-nuevo {
+  animation: frascoEntrada 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* =========================================
+   FICHA TÉCNICA (MODAL)
+   ========================================= */
+
+.ficha-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 37, 30, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+}
+
+.ficha-overlay.activa {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ficha-modal {
+  background: var(--crema-fondo);
+  border-radius: 24px;
+  border: 1px solid var(--bordes);
+  max-width: 440px;
+  width: 100%;
+  padding: 40px;
+  position: relative;
+  transform: scale(0.92) translateY(10px);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.ficha-overlay.activa .ficha-modal {
+  transform: scale(1) translateY(0);
+}
+
+.ficha-cerrar {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--bordes);
+  background: var(--crema-card);
+  color: var(--cafe-profundo);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.ficha-cerrar:hover { background: var(--cafe-profundo); color: white; }
+
+.ficha-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--crema-card);
+  color: #7c7265;
+  margin-bottom: 12px;
+}
+
+.ficha-badge.en-campus { background: rgba(173, 82, 69, 0.12); color: var(--color-alerta); }
+.ficha-badge.no-registrado { background: rgba(104, 126, 103, 0.12); color: var(--color-sano); }
+
+.ficha-modal h3 { font-size: 1.5rem; margin-bottom: 2px; }
+.ficha-cientifico { font-style: italic; color: #8c8275; font-size: 13px; margin-bottom: 24px; }
+
+.ficha-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px solid var(--bordes);
+  padding-top: 18px;
+}
+
+.ficha-dato { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; }
+.ficha-dato-label { color: #8c8275; }
+.ficha-dato-valor { font-weight: 600; text-align: right; }
+
+.ficha-medicinal-bloque { margin-top: 24px; }
+
+.ficha-medicinal-btn {
+  width: 100%;
+  background: var(--cafe-profundo);
+  color: var(--crema-fondo);
+  border: none;
+  padding: 13px 18px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.ficha-medicinal-btn:hover { background: #4a3f31; }
+
+.ficha-uso-texto {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #5c5347;
+  margin-top: 14px;
+  padding: 16px;
+  background: var(--crema-card);
+  border-radius: 12px;
+  border: 1px solid var(--bordes);
+  display: none;
+}
+
+.ficha-uso-texto.visible { display: block; }
