@@ -14,7 +14,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
- 
+
+  <!-- NAVBAR PREMIUM -->
   <header>
     <div class="logo">
       <div class="logo-icon">
@@ -31,7 +32,7 @@
         <i class="fa-solid fa-chart-line"></i> Monitoreo
       </button>
       <button onclick="showSection('herbario')" id="btn-herbario" class="nav-btn">
-        <i class="fa-solid fa-flask"></i> Herbario
+        <i class="fa-solid fa-mortar-pestle"></i> Herbario
       </button>
       <button onclick="showSection('historia')" id="btn-historia" class="nav-btn">
         <i class="fa-solid fa-book"></i> Crónicas
@@ -46,6 +47,7 @@
   </header>
 
   <main>
+    <!-- DASHBOARD -->
     <section id="dashboard" class="section active">
       <div class="dashboard-header">
         <div>
@@ -57,6 +59,7 @@
         </div>
       </div>
 
+      <!-- TARJETAS DE ESTADÍSTICAS -->
       <div class="stats-grid">
         <div class="stat-card glass">
           <div class="stat-content">
@@ -83,10 +86,13 @@
         </div>
       </div>
 
+      <!-- CONTENEDOR DE GRÁFICAS Y LISTAS -->
       <div class="dashboard-layout">
+        <!-- LADO IZQUIERDO: GRÁFICAS -->
         <div class="left-panel">
           <div class="chart-card large">
             <h3>Severidad de la Infestación en el Campus</h3>
+            <!-- El contenedor con tamaño explícito relative frena el bug de Chart.js -->
             <div class="chart-container-fixed mat-infestation">
               <canvas id="chartInfestacion"></canvas>
             </div>
@@ -109,6 +115,7 @@
           </div>
         </div>
 
+        <!-- LADO DERECHO: PANELES DE ESPECIES -->
         <div class="right-panel">
           <div class="species-panel">
             <div class="panel-header">
@@ -127,45 +134,75 @@
       </div>
     </section>
 
+    <!-- HERBARIO (VITRINA BOTÁNICA) -->
     <section id="herbario" class="section">
-      <div class="section-center-headline">
-        <span class="section-badge">Gabinete Botánico de Curiosidades</span>
-        <h2 class="fuente-editorial section-title">Colección y Taxonomía de Muérdagos</h2>
-        <p class="section-subtitle">Pasa el cursor para identificar la especie o haz clic en un frasco para explorar su ficha técnica e interactuar con sus propiedades medicinales.</p>
+      <div class="dashboard-header">
+        <div>
+          <span class="section-badge">Gabinete de Curiosidades</span>
+          <h2 class="fuente-editorial section-title">Herbario de Muérdagos</h2>
+        </div>
+        <div class="sync-badge">
+          <i class="fa-solid fa-circle-notch" id="sync-icon-herbario"></i> Sincronizado con el Inventario
+        </div>
       </div>
 
-      <div class="vitrina-mueble">
-        
-        <div class="repisa-estante">
-          <div class="placa-metalica">
-            <i class="fa-solid fa-building-columns"></i>
-            <span>Colección Universitaria</span>
-          </div>
-          <div class="frascos-grid" id="repisa-universitaria">
-            </div>
+      <p class="herbario-intro">Cada frasco resguarda una especie de muérdago catalogada por la brigada. Pasa el cursor para identificarla y haz clic para abrir su ficha técnica.</p>
+
+      <div class="vitrina-botanica" id="vitrinaBotanica">
+
+        <div class="estante-nivel">
+          <span class="placa-repisa">Colección Universitaria</span>
+          <div class="frascos-fila" id="repisa-1"></div>
         </div>
 
-        <div class="repisa-estante">
-          <div class="placa-metalica">
-            <i class="fa-solid fa-map-pin"></i>
-            <span>Flora Parásita Nacional</span>
-          </div>
-          <div class="frascos-grid" id="repisa-nacional">
-            </div>
+        <div class="estante-nivel">
+          <span class="placa-repisa">Flora Parásita Nacional</span>
+          <div class="frascos-fila" id="repisa-2"></div>
         </div>
 
-        <div class="repisa-estante">
-          <div class="placa-metalica">
-            <i class="fa-solid fa-globe"></i>
-            <span>Taxones Internacionales</span>
-          </div>
-          <div class="frascos-grid" id="repisa-internacional">
-            </div>
+        <div class="estante-nivel estante-final">
+          <span class="placa-repisa">Taxones Internacionales</span>
+          <div class="frascos-fila" id="repisa-3"></div>
         </div>
 
       </div>
     </section>
 
+    <!-- FICHA TÉCNICA (MODAL DEL HERBARIO) -->
+    <div class="ficha-overlay" id="fichaOverlay" onclick="if(event.target===this) cerrarFicha()">
+      <div class="ficha-modal">
+        <button class="ficha-cerrar" onclick="cerrarFicha()" aria-label="Cerrar ficha">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <span class="ficha-badge" id="fichaEstado">En campus</span>
+        <h3 class="fuente-editorial" id="fichaNombreComun">—</h3>
+        <p class="ficha-cientifico" id="fichaNombreCientifico">—</p>
+
+        <div class="ficha-datos">
+          <div class="ficha-dato">
+            <span class="ficha-dato-label">Origen</span>
+            <span class="ficha-dato-valor" id="fichaOrigen">—</span>
+          </div>
+          <div class="ficha-dato">
+            <span class="ficha-dato-label">Hospedero principal</span>
+            <span class="ficha-dato-valor" id="fichaHospedero">—</span>
+          </div>
+          <div class="ficha-dato">
+            <span class="ficha-dato-label">Ejemplares en campus</span>
+            <span class="ficha-dato-valor" id="fichaCampus">—</span>
+          </div>
+        </div>
+
+        <div id="fichaMedicinalBloque" class="ficha-medicinal-bloque">
+          <button class="ficha-medicinal-btn" id="fichaMedicinalBtn" onclick="toggleUsoMedicinal()">
+            <i class="fa-solid fa-mortar-pestle"></i> Ver uso medicinal tradicional
+          </button>
+          <p class="ficha-uso-texto" id="fichaUsoTexto"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORIA (LIBROS INTERACTIVOS TRIDIMENSIONALES) -->
     <section id="historia" class="section">
       <div class="section-center-headline">
         <span class="section-badge">Antropología y Sociología Botánica</span>
@@ -174,6 +211,7 @@
       </div>
 
       <div class="books-library">
+        <!-- Libro 1: Celtas -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover celtas-cover">
@@ -192,6 +230,7 @@
           </div>
         </div>
 
+        <!-- Libro 2: Nórdicos -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover nordicos-cover">
@@ -210,6 +249,7 @@
           </div>
         </div>
 
+        <!-- Libro 3: Curanderos -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover curanderos-cover">
@@ -228,6 +268,7 @@
           </div>
         </div>
 
+        <!-- Libro 4: Actualidad -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover actualidad-cover">
@@ -248,6 +289,7 @@
       </div>
     </section>
 
+    <!-- EDUCACION (AULA MULTIMEDIA) -->
     <section id="educacion" class="section">
       <div class="dashboard-header">
         <div>
@@ -257,6 +299,7 @@
       </div>
 
       <div class="education-grid">
+        <!-- Tarjeta Video -->
         <div class="edu-card">
           <div class="edu-media-placeholder video-placeholder">
             <div class="media-overlay"></div>
@@ -269,6 +312,7 @@
           </div>
         </div>
 
+        <!-- Tarjeta Infografía -->
         <div class="edu-card">
           <div class="edu-media-placeholder vector-placeholder">
             <i class="fa-solid fa-diagram-project diagram-icon"></i>
@@ -281,6 +325,7 @@
           </div>
         </div>
 
+        <!-- Tarjeta Carteles -->
         <div class="edu-card">
           <div class="edu-media-placeholder poster-placeholder">
             <i class="fa-solid fa-scroll diagram-icon"></i>
@@ -292,6 +337,7 @@
           </div>
         </div>
 
+        <!-- Tarjeta Historietas -->
         <div class="edu-card">
           <div class="edu-media-placeholder comic-placeholder">
             <i class="fa-solid fa-book-open-reader diagram-icon"></i>
@@ -303,6 +349,7 @@
           </div>
         </div>
 
+        <!-- Tarjeta Audios -->
         <div class="edu-card">
           <div class="edu-media-placeholder audio-placeholder">
             <div class="audio-wave">
@@ -319,6 +366,7 @@
       </div>
     </section>
 
+    <!-- CONTACTO -->
     <section id="contacto" class="section">
       <div class="contact-card-premium">
         <div class="contact-info">
@@ -341,48 +389,6 @@
       </div>
     </section>
   </main>
-
-  <div class="modal-overlay" id="modalMuerdago">
-    <div class="modal-card glass">
-      <button class="modal-close-btn" onclick="cerrarModalMuerdago()"><i class="fa-solid fa-xmark"></i></button>
-      
-      <div class="modal-grid">
-        <div class="modal-media">
-          <img id="modalImg" src="" alt="Especie Muérdago">
-          <div class="modal-badge-campus" id="modalCampusBadge">
-            <i class="fa-solid fa-location-dot"></i> Registrado en Campus: <strong id="modalCampusCount">0</strong>
-          </div>
-        </div>
-
-        <div class="modal-info">
-          <span class="section-badge" id="modalFamilia">Familia Botánica</span>
-          <h3 class="fuente-editorial" id="modalNombreComun">Nombre Común</h3>
-          <p class="sub-cientifico" id="modalNombreCientifico">Nombre Científico</p>
-          
-          <hr class="modal-divider">
-
-          <div class="modal-detail">
-            <strong><i class="fa-solid fa-tree"></i> Hospedadores Principales:</strong>
-            <p id="modalHospedadores">Cargando información...</p>
-          </div>
-
-          <div class="medicinal-box" id="medicinalBox">
-            <button class="btn-medicinal" id="btnMedicinalToggle" onclick="toggleDetalleMedicinal()">
-              <i class="fa-solid fa-mortar-pestle"></i> Propiedades Medicinales y Tradicionales
-              <i class="fa-solid fa-chevron-down icon-arrow"></i>
-            </button>
-            
-            <div class="medicinal-content hidden" id="medicinalContent">
-              <p><strong>Uso Tradicional:</strong> <span id="modalUsoMedicinal">--</span></p>
-              <p><strong>Parte Utilizada:</strong> <span id="modalParteUsada">--</span></p>
-              <p class="text-warning"><strong><i class="fa-solid fa-triangle-exclamation"></i> Precaución:</strong> <span id="modalPrecaucion">--</span></p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
 
   <footer>
     © 2026 UNIVERSIDAD AUTÓNOMA DE TLAXCALA · COMUNIDAD UNIVERSITARIA NAHUALES UATx
