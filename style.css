@@ -33,7 +33,7 @@ body {
 }
 
 /* ==========================================
-   NAVBAR
+   NAVBAR & CABECERA
    ========================================== */
 header {
   position: sticky;
@@ -41,11 +41,20 @@ header {
   z-index: 999;
   background: rgba(252, 249, 242, 0.85);
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   padding: 15px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--bordes);
+}
+
+@media (max-width: 900px) {
+  header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+  }
 }
 
 .logo {
@@ -86,6 +95,8 @@ nav {
   padding: 4px;
   border-radius: 30px;
   border: 1px solid rgba(191, 161, 95, 0.1);
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .nav-btn {
@@ -119,6 +130,12 @@ main {
   position: relative;
 }
 
+@media (max-width: 600px) {
+  main {
+    padding: 20px 15px;
+  }
+}
+
 .section {
   position: absolute;
   top: 0;
@@ -147,6 +164,14 @@ main {
   padding-bottom: 20px;
   margin-bottom: 35px;
   border-bottom: 1px solid var(--bordes);
+}
+
+@media (max-width: 600px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 }
 
 .section-badge {
@@ -339,7 +364,7 @@ main {
 }
 
 /* ==========================================
-   HERBARIO / ESPECIERO BOTÁNICO (NUEVO)
+   HERBARIO / ESPECIERO BOTÁNICO
    ========================================== */
 .vitrina-mueble {
   display: flex;
@@ -352,6 +377,10 @@ main {
   border-radius: 24px;
   border: 1px solid var(--bordes);
   box-shadow: inset 0 0 30px rgba(191, 161, 95, 0.08);
+}
+
+@media (max-width: 600px) {
+  .vitrina-mueble { padding: 15px; }
 }
 
 .repisa-estante {
@@ -401,6 +430,7 @@ main {
   border-radius: 12px 12px 18px 18px;
   box-shadow: 0 10px 20px rgba(44, 37, 30, 0.08), inset 0 0 15px rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -478,6 +508,7 @@ main {
   inset: 0;
   background: rgba(44, 37, 30, 0.65);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 2000;
   display: flex;
   align-items: center;
@@ -502,6 +533,8 @@ main {
   padding: 30px;
   position: relative;
   box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-close-btn {
@@ -520,6 +553,7 @@ main {
   align-items: center;
   justify-content: center;
   transition: background 0.2s;
+  z-index: 10;
 }
 
 .modal-close-btn:hover { background: var(--dorado); color: white; }
@@ -912,6 +946,7 @@ main {
 .contact-action-box h5 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
 .contact-action-box p { font-size: 11.5px; color: #7c7265; line-height: 1.5; }
 
+/* PERSONALIZACIÓN DE SCROLLBAR */
 .scroll-premium::-webkit-scrollbar { width: 4px; }
 .scroll-premium::-webkit-scrollbar-track { background: transparent; }
 .scroll-premium::-webkit-scrollbar-thumb { background: var(--dorado); border-radius: 10px; }
