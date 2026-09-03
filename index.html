@@ -14,8 +14,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-
-  <!-- NAVBAR PREMIUM -->
+ 
   <header>
     <div class="logo">
       <div class="logo-icon">
@@ -31,8 +30,8 @@
       <button onclick="showSection('dashboard')" id="btn-dashboard" class="nav-btn active">
         <i class="fa-solid fa-chart-line"></i> Monitoreo
       </button>
-      <button onclick="showSection('galeria')" id="btn-galeria" class="nav-btn">
-        <i class="fa-solid fa-images"></i> Galería
+      <button onclick="showSection('herbario')" id="btn-herbario" class="nav-btn">
+        <i class="fa-solid fa-flask"></i> Herbario
       </button>
       <button onclick="showSection('historia')" id="btn-historia" class="nav-btn">
         <i class="fa-solid fa-book"></i> Crónicas
@@ -47,7 +46,6 @@
   </header>
 
   <main>
-    <!-- DASHBOARD -->
     <section id="dashboard" class="section active">
       <div class="dashboard-header">
         <div>
@@ -59,7 +57,6 @@
         </div>
       </div>
 
-      <!-- TARJETAS DE ESTADÍSTICAS -->
       <div class="stats-grid">
         <div class="stat-card glass">
           <div class="stat-content">
@@ -86,9 +83,7 @@
         </div>
       </div>
 
-      <!-- CONTENEDOR DE GRÁFICAS Y LISTAS -->
       <div class="dashboard-layout">
-        <!-- LADO IZQUIERDO: GRÁFICAS -->
         <div class="left-panel">
           <div class="chart-card large">
             <h3>Severidad de la Infestación en el Campus</h3>
@@ -114,7 +109,6 @@
           </div>
         </div>
 
-        <!-- LADO DERECHO: PANELES DE ESPECIES Y MUÉRDAGOS -->
         <div class="right-panel">
           <div class="species-panel">
             <div class="panel-header">
@@ -125,7 +119,7 @@
 
           <div class="species-panel alert-panel">
             <div class="panel-header">
-              <h3 class="fuente-editorial text-alert"><i class="fa-solid fa-circle-exclamation"></i> Especies de Muérdago</h3>
+              <h3 class="fuente-editorial text-alert"><i class="fa-solid fa-circle-exclamation"></i> Alerta Sanitaria</h3>
             </div>
             <div class="species-scroll scroll-premium" id="affectedContainer"></div>
           </div>
@@ -133,21 +127,45 @@
       </div>
     </section>
 
-    <!-- GALERÍA BOTÁNICA -->
-    <section id="galeria" class="section">
-      <div class="dashboard-header">
-        <div>
-          <span class="section-badge">Registro Visual</span>
-          <h2 class="fuente-editorial section-title">Galería Botánica e Infestación</h2>
-        </div>
+    <section id="herbario" class="section">
+      <div class="section-center-headline">
+        <span class="section-badge">Gabinete Botánico de Curiosidades</span>
+        <h2 class="fuente-editorial section-title">Colección y Taxonomía de Muérdagos</h2>
+        <p class="section-subtitle">Pasa el cursor para identificar la especie o haz clic en un frasco para explorar su ficha técnica e interactuar con sus propiedades medicinales.</p>
       </div>
 
-      <div class="gallery-grid" id="galleryContainer">
-        <!-- Tarjetas dinámicas generadas mediante JavaScript -->
+      <div class="vitrina-mueble">
+        
+        <div class="repisa-estante">
+          <div class="placa-metalica">
+            <i class="fa-solid fa-building-columns"></i>
+            <span>Colección Universitaria</span>
+          </div>
+          <div class="frascos-grid" id="repisa-universitaria">
+            </div>
+        </div>
+
+        <div class="repisa-estante">
+          <div class="placa-metalica">
+            <i class="fa-solid fa-map-pin"></i>
+            <span>Flora Parásita Nacional</span>
+          </div>
+          <div class="frascos-grid" id="repisa-nacional">
+            </div>
+        </div>
+
+        <div class="repisa-estante">
+          <div class="placa-metalica">
+            <i class="fa-solid fa-globe"></i>
+            <span>Taxones Internacionales</span>
+          </div>
+          <div class="frascos-grid" id="repisa-internacional">
+            </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- CRÓNICAS (LIBROS INTERACTIVOS) -->
     <section id="historia" class="section">
       <div class="section-center-headline">
         <span class="section-badge">Antropología y Sociología Botánica</span>
@@ -156,7 +174,6 @@
       </div>
 
       <div class="books-library">
-        <!-- Libro 1: Celtas -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover celtas-cover">
@@ -175,7 +192,6 @@
           </div>
         </div>
 
-        <!-- Libro 2: Nórdicos -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover nordicos-cover">
@@ -194,7 +210,6 @@
           </div>
         </div>
 
-        <!-- Libro 3: Curanderos -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover curanderos-cover">
@@ -213,7 +228,6 @@
           </div>
         </div>
 
-        <!-- Libro 4: Actualidad -->
         <div class="libro-caja" onclick="this.classList.toggle('abierto')">
           <div class="book-wrapper">
             <div class="book-cover actualidad-cover">
@@ -234,7 +248,6 @@
       </div>
     </section>
 
-    <!-- AULA MULTIMEDIA -->
     <section id="educacion" class="section">
       <div class="dashboard-header">
         <div>
@@ -306,7 +319,6 @@
       </div>
     </section>
 
-    <!-- CONTACTO -->
     <section id="contacto" class="section">
       <div class="contact-card-premium">
         <div class="contact-info">
@@ -329,6 +341,48 @@
       </div>
     </section>
   </main>
+
+  <div class="modal-overlay" id="modalMuerdago">
+    <div class="modal-card glass">
+      <button class="modal-close-btn" onclick="cerrarModalMuerdago()"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div class="modal-grid">
+        <div class="modal-media">
+          <img id="modalImg" src="" alt="Especie Muérdago">
+          <div class="modal-badge-campus" id="modalCampusBadge">
+            <i class="fa-solid fa-location-dot"></i> Registrado en Campus: <strong id="modalCampusCount">0</strong>
+          </div>
+        </div>
+
+        <div class="modal-info">
+          <span class="section-badge" id="modalFamilia">Familia Botánica</span>
+          <h3 class="fuente-editorial" id="modalNombreComun">Nombre Común</h3>
+          <p class="sub-cientifico" id="modalNombreCientifico">Nombre Científico</p>
+          
+          <hr class="modal-divider">
+
+          <div class="modal-detail">
+            <strong><i class="fa-solid fa-tree"></i> Hospedadores Principales:</strong>
+            <p id="modalHospedadores">Cargando información...</p>
+          </div>
+
+          <div class="medicinal-box" id="medicinalBox">
+            <button class="btn-medicinal" id="btnMedicinalToggle" onclick="toggleDetalleMedicinal()">
+              <i class="fa-solid fa-mortar-pestle"></i> Propiedades Medicinales y Tradicionales
+              <i class="fa-solid fa-chevron-down icon-arrow"></i>
+            </button>
+            
+            <div class="medicinal-content hidden" id="medicinalContent">
+              <p><strong>Uso Tradicional:</strong> <span id="modalUsoMedicinal">--</span></p>
+              <p><strong>Parte Utilizada:</strong> <span id="modalParteUsada">--</span></p>
+              <p class="text-warning"><strong><i class="fa-solid fa-triangle-exclamation"></i> Precaución:</strong> <span id="modalPrecaucion">--</span></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer>
     © 2026 UNIVERSIDAD AUTÓNOMA DE TLAXCALA · COMUNIDAD UNIVERSITARIA NAHUALES UATx
