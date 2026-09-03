@@ -5,6 +5,8 @@
   --dorado: #bfa15f;
   --dorado-brillante: #dfc17d;
   --bordes: rgba(191, 161, 95, 0.25);
+  
+  /* Tonos alertas e infografías */
   --color-sano: #687e67;
   --color-alerta: #ad5245;
 }
@@ -30,6 +32,9 @@ body {
   letter-spacing: 0.05em;
 }
 
+/* ==========================================
+   NAVBAR & CABECERA
+   ========================================== */
 header {
   position: sticky;
   top: 0;
@@ -113,6 +118,9 @@ nav {
   color: var(--crema-fondo);
 }
 
+/* ==========================================
+   MAIN & ESTRUCTURA DE SECCIONES
+   ========================================== */
 main {
   padding: 40px;
   max-width: 1600px;
@@ -146,7 +154,9 @@ main {
   transform: translateY(0);
 }
 
-/* DASHBOARD */
+/* ==========================================
+   DASHBOARD DESIGN
+   ========================================== */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -237,6 +247,7 @@ main {
   opacity: 0.06;
 }
 
+/* DASHBOARD LAYOUT & GRÁFICAS */
 .dashboard-layout {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -282,6 +293,7 @@ main {
 .chart-container-fixed.mat-infestation { height: 280px; }
 .chart-container-fixed.mat-mini { height: 220px; }
 
+/* LISTAS DE ESPECIES */
 .right-panel {
   display: flex;
   flex-direction: column;
@@ -351,7 +363,9 @@ main {
   color: white;
 }
 
-/* HERBARIO / ESPECIERO BOTÁNICO */
+/* ==========================================
+   HERBARIO / ESPECIERO BOTÁNICO
+   ========================================== */
 .vitrina-mueble {
   display: flex;
   flex-direction: column;
@@ -402,27 +416,10 @@ main {
   cursor: pointer;
   perspective: 1000px;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
 }
 
 .frasco-item:hover {
-  transform: translateY(-8px) scale(1.08);
-  filter: drop-shadow(0 0 12px rgba(191, 161, 95, 0.7));
-}
-
-.badge-conteo-rojo {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: var(--color-alerta);
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  z-index: 10;
-  border: 2px solid white;
+  transform: translateY(-8px) scale(1.02);
 }
 
 .frasco-cristal {
@@ -441,6 +438,7 @@ main {
   padding: 10px;
 }
 
+/* Tapa de madera o corcho */
 .frasco-cristal::before {
   content: '';
   position: absolute;
@@ -502,7 +500,9 @@ main {
   text-overflow: ellipsis;
 }
 
-/* MODAL Y MEDICINAL */
+/* ==========================================
+   VENTANA MODAL & MEDICINAL
+   ========================================== */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -608,6 +608,7 @@ main {
   margin-top: 4px;
 }
 
+/* CAJA MEDICINAL Y BOTÓN ACORDEÓN */
 .medicinal-box {
   margin-top: 20px;
   border: 1px solid var(--bordes);
@@ -633,8 +634,14 @@ main {
 }
 
 .btn-medicinal:hover { background: #ebdcb2; }
-.btn-medicinal .icon-arrow { transition: transform 0.3s; }
-.btn-medicinal.open .icon-arrow { transform: rotate(180deg); }
+
+.btn-medicinal .icon-arrow {
+  transition: transform 0.3s;
+}
+
+.btn-medicinal.open .icon-arrow {
+  transform: rotate(180deg);
+}
 
 .medicinal-content {
   padding: 15px;
@@ -643,11 +650,21 @@ main {
   color: #4a4238;
 }
 
-.medicinal-content.hidden { display: none; }
-.medicinal-content p { margin-bottom: 8px; }
-.text-warning { color: var(--color-alerta); }
+.medicinal-content.hidden {
+  display: none;
+}
 
-/* HISTORIA / CRÓNICAS */
+.medicinal-content p {
+  margin-bottom: 8px;
+}
+
+.text-warning {
+  color: var(--color-alerta);
+}
+
+/* ==========================================
+   HISTORIA (CRÓNICAS DE LIBROS 3D)
+   ========================================== */
 .section-center-headline {
   max-width: 1100px;
   margin: 0 auto 90px auto;
@@ -773,7 +790,9 @@ main {
   transform: rotateY(-145deg);
 }
 
-/* EDUCACIÓN */
+/* ==========================================
+   EDUCACIÓN (AULA MULTIMEDIA)
+   ========================================== */
 .education-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -830,8 +849,22 @@ main {
 }
 
 .play-btn:hover { transform: scale(1.1); }
-.diagram-icon { font-size: 3rem; color: var(--dorado); opacity: 0.5; }
-.file-spec { position: absolute; bottom: 12px; right: 15px; font-size: 9px; font-family: monospace; opacity: 0.5; }
+
+.diagram-icon {
+  font-size: 3rem;
+  color: var(--dorado);
+  opacity: 0.5;
+}
+
+.file-spec {
+  position: absolute;
+  bottom: 12px;
+  right: 15px;
+  font-size: 9px;
+  font-family: monospace;
+  opacity: 0.5;
+}
+
 .edu-content { padding: 20px; }
 
 .content-tag {
@@ -850,8 +883,17 @@ main {
 .tag-comic { background: #f2e6f7; color: #763b94; }
 .tag-audio { background: #fce1e6; color: #9c2e43; }
 
-.edu-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-.edu-content p { font-size: 12px; color: #6e6559; line-height: 1.5; }
+.edu-content h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.edu-content p {
+  font-size: 12px;
+  color: #6e6559;
+  line-height: 1.5;
+}
 
 .audio-placeholder { background: var(--cafe-profundo); color: white; }
 .audio-timer { position: absolute; top: 15px; right: 15px; font-size: 10px; background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; }
@@ -867,7 +909,9 @@ main {
   100% { transform: scaleY(1); }
 }
 
-/* CONTACTO */
+/* ==========================================
+   CONTACT CARD & FOOTER
+   ========================================== */
 .contact-card-premium {
   max-width: 900px;
   margin: 0 auto;
@@ -902,6 +946,7 @@ main {
 .contact-action-box h5 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
 .contact-action-box p { font-size: 11.5px; color: #7c7265; line-height: 1.5; }
 
+/* PERSONALIZACIÓN DE SCROLLBAR */
 .scroll-premium::-webkit-scrollbar { width: 4px; }
 .scroll-premium::-webkit-scrollbar-track { background: transparent; }
 .scroll-premium::-webkit-scrollbar-thumb { background: var(--dorado); border-radius: 10px; }
