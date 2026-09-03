@@ -1,31 +1,35 @@
-// Endpoint del Apps Script desplegado
+// URL pública de ejecución de tu Google Apps Script
 const API_URL = 'https://script.google.com/macros/s/AKfycbwBEphqvwYuGyhR-WZxyfAkwe4eW_reLvedcKT80mloneU5d6gfvua_t7nIltG1WHOr/exec';
 
 let charts = {};
-let muerdagosGaleria = []; // Almacén local de datos para la Galería / Vitrina
 
 // =========================
-// NAVEGACIÓN Y CORRECCIÓN DE GRÁFICAS
+// NAVEGACIÓN Y CORRECCIÓN DE DIMENSIONES
 // =========================
 function showSection(id) {
+  // Ocultar secciones e inactivar botones
   document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
 
+  // Activar pestaña actual
   const targetSection = document.getElementById(id);
   const targetBtn = document.getElementById(`btn-${id}`);
-  
+
   if (targetSection) targetSection.classList.add('active');
   if (targetBtn) targetBtn.classList.add('active');
 
+  // SOLUCIÓN AL BUG: Si regresa al dashboard, fuerza a Chart.js a recalcular el tamaño
   if (id === 'dashboard') {
     Object.keys(charts).forEach(key => {
-      if (charts[key]) charts[key].resize();
+      if (charts[key]) {
+        charts[key].resize();
+      }
     });
   }
 }
 
 // =========================
-// CONSUMO Y PROCESAMIENTO DE DATOS
+// CONSUMO ASÍNCRONO DEL ENDPOINT
 // =========================
 async function loadData() {
   try {
@@ -35,189 +39,182 @@ async function loadData() {
     const response = await fetch(API_URL);
     const data = await response.json();
 
-    // 1. CARGA DE CONTEO EN TARJETAS POR NIVEL DE SEVERIDAD
-    renderNivelesTarjetas(data);
+    // 1. ASIGNACIÓN DE TARJETAS NUMÉRICAS
+    document.getElementById('totalGeneral').innerText = data.totalGeneral || 0;
+    document.getElementById('infestados').innerText = data.infestados || 0;
 
-    // 2. RENDER GRÁFICAS DEL DASHBOARD
-    createChart(
-      'chartParcelas',
-      'bar',
-      data.parcelas.map(p => p.area),
-      data.parcelas.map(p => p.total),
-      '#bfa15f',
-      { plugins: { legend: { display: false } } }
-    );
+    // Cálculo dinámico del porcentaje de sanos
+    let sanos = (data.totalGeneral - data.infestados) || 0;
+    let porcentajeBioseguridad = data.totalGeneral > 0 ? Math.round((sanos / data.totalGeneral) * 100) : 0;
+    document.getElementById('saludables').innerText = porcentajeBioseguridad + "%";
 
-    createChart(
-      'chartTipos',
-      'doughnut',
-      data.tipos.map(t => t.tipo),
-      data.tipos.map(t => t.total),
-      ['#2c251e', '#bfa15f', '#d0c8b3'],
-      {
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: { boxWidth: 8, font: { size: 9, family: 'Plus Jakarta Sans' } }
+    // 2. RENDER GRÁFICA I: SEVERIDAD DE INFESTACIÓN
+    if (data.infestacion && data.infestacion.length > 0) {
+      createChart(
+        'chartInfestacion',
+        'bar',
+        data.infestacion.map(i => i.estado),
+        data.infestacion.map(i => i.total),
+        ['#c7bfa7', '#dfca9f', '#cfa375', '#bd7e60', '#ad5245', '#7a221e', '#45403c'],
+        {
+          plugins: { legend: { display: false } }
+        }
+      );
+    }
+
+    // 3. RENDER GRÁFICA II: PARCELAS
+    if (data.parcelas && data.parcelas.length > 0) {
+      createChart(
+        'chartParcelas',
+        'bar',
+        data.parcelas.map(p => p.area),
+        data.parcelas.map(p => p.total),
+        '#bfa15f',
+        {
+          plugins: { legend: { display: false } }
+        }
+      );
+    }
+
+    // 4. RENDER GRÁFICA III: TIPOS ECOLÓGICOS
+    if (data.tipos && data.tipos.length > 0) {
+      createChart(
+        'chartTipos',
+        'doughnut',
+        data.tipos.map(t => t.tipo),
+        data.tipos.map(t => t.total),
+        ['#2c251e', '#bfa15f', '#d0c8b3'],
+        {
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { boxWidth: 8, font: { size: 9, family: 'Plus Jakarta Sans' } }
+            }
           }
         }
-      }
-    );
+      );
+    }
 
-    // 3. CENSO POR ESPECIE DE ÁRBOL
+    // 5. INYECCIÓN DE CENSO ABSOLUTO DE ESPECIES
     const speciesContainer = document.getElementById('speciesContainer');
     if (speciesContainer) {
       speciesContainer.innerHTML = '';
-      data.especies.forEach(e => {
-        const row = document.createElement('div');
-        row.className = 'species-row-premium';
-        row.innerHTML = `
-          <span class="row-label"><i class="fa-solid fa-tree"></i> ${e.especie}</span>
-          <span class="row-counter">${e.total}</span>
-        `;
-        speciesContainer.appendChild(row);
-      });
+      if (data.especies) {
+        data.especies.forEach(e => {
+          const row = document.createElement('div');
+          row.className = 'species-row-premium';
+          row.innerHTML = `
+            <span class="row-label">🌿 ${e.especie}</span>
+            <span class="row-counter">${e.total}</span>
+          `;
+          speciesContainer.appendChild(row);
+        });
+      }
     }
 
-    // 4. ALMACENAR Y RENDERIZAR LA GALERÍA DE MUÉRDAGOS
-    if (data.galeriaMuerdagos) {
-      muerdagosGaleria = data.galeriaMuerdagos;
-      renderGaleria('todos');
+    // 6. INYECCIÓN DE ALERTAS SANITARIAS
+    const affectedContainer = document.getElementById('affectedContainer');
+    if (affectedContainer) {
+      affectedContainer.innerHTML = '';
+      if (data.especies) {
+        data.especies.forEach(e => {
+          let totalEnfermos = (Number(e.leve) || 0) + 
+                              (Number(e.moderado) || 0) + 
+                              (Number(e.medio) || 0) + 
+                              (Number(e.severo) || 0) + 
+                              (Number(e.critico) || 0) + 
+                              (Number(e.muerto) || 0);
+
+          if (totalEnfermos > 0) {
+            const row = document.createElement('div');
+            row.className = 'species-row-premium';
+            row.innerHTML = `
+              <span class="row-label">⚠️ ${e.especie}</span>
+              <span class="row-counter">${totalEnfermos}</span>
+            `;
+            affectedContainer.appendChild(row);
+          }
+        });
+      }
     }
+
+    // 7. INYECCIÓN DINÁMICA DE LA GALERÍA BOTÁNICA
+    renderGallery(data);
 
     if (syncIcon) syncIcon.classList.remove('fa-spin');
   } catch (error) {
-    console.error('Error al sincronizar con Apps Script:', error);
+    console.error('Error en el procesamiento de datos del Herbario:', error);
     const syncIcon = document.getElementById('sync-icon');
     if (syncIcon) syncIcon.classList.remove('fa-spin');
   }
 }
 
 // =========================
-// TARJETAS DE NIVELES (REEMPLAZO DE GRÁFICA DE SANOS)
+// RENDERIZADO DE GALERÍA DE ESPECIES
 // =========================
-function renderNivelesTarjetas(data) {
-  let conteos = {
-    sano: 0, leve: 0, moderado: 0,
-    medio: 0, severo: 0, critico: 0, muerto: 0
-  };
+function renderGallery(data) {
+  const galleryContainer = document.getElementById('galleryContainer');
+  if (!galleryContainer) return;
 
-  // Mapear la información obtenida del resumen de infestación
-  if (data.infestacion && Array.isArray(data.infestacion)) {
-    data.infestacion.forEach(item => {
-      const estadoLower = item.estado.toLowerCase();
-      if (estadoLower.includes("sano")) conteos.sano = item.total;
-      else if (estadoLower.includes("leve")) conteos.leve = item.total;
-      else if (estadoLower.includes("moderado")) conteos.moderado = item.total;
-      else if (estadoLower.includes("medio")) conteos.medio = item.total;
-      else if (estadoLower.includes("severo")) conteos.severo = item.total;
-      else if (estadoLower.includes("crítico") || estadoLower.includes("critico")) conteos.critico = item.total;
-      else if (estadoLower.includes("muerto")) conteos.muerto = item.total;
-    });
-  }
+  galleryContainer.innerHTML = '';
 
-  // Asignar los conteos a sus respectivos IDs en las tarjetas del HTML
-  Object.keys(conteos).forEach(key => {
-    const el = document.getElementById(`count-${key}`);
-    if (el) el.innerText = conteos[key];
-  });
-}
-
-// =========================
-// VITRINA VIRTUAL Y ESTANTE DE CRISTAL (GALERÍA)
-// =========================
-function renderGaleria(filtro) {
-  const shelfContainer = document.getElementById('shelfContainer');
-  if (!shelfContainer) return;
-
-  shelfContainer.innerHTML = '';
-
-  const listaFiltrada = muerdagosGaleria.filter(item => {
-    if (filtro === 'uatx') return item.enCampus || item.origen.toLowerCase().includes('uatx');
-    if (filtro === 'nacional') return item.origen.toLowerCase().includes('nacional');
-    if (filtro === 'extranjero') return item.origen.toLowerCase().includes('extranjero');
-    return true; // Todos
-  });
-
-  if (listaFiltrada.length === 0) {
-    shelfContainer.innerHTML = `<p class="empty-msg">No hay especímenes registrados en esta categoría.</p>`;
+  if (!data.especies || data.especies.length === 0) {
+    galleryContainer.innerHTML = '<p class="no-data">No hay imágenes ni especies disponibles en este momento.</p>';
     return;
   }
 
-  listaFiltrada.forEach((esp, index) => {
-    const jar = document.createElement('div');
-    jar.className = 'capelo-item';
-    jar.onclick = () => abrirFicha(esp);
+  data.especies.forEach(e => {
+    // Si la especie trae URL de imagen en el endpoint la usa, si no, coloca un fallback
+    const imageUrl = e.imagenUrl || e.urlImagen || 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=600&q=80';
 
-    // Ajuste de animación individual para dar dinamismo a la levitación
-    const delay = (index % 3) * 0.5;
+    let totalEnfermos = (Number(e.leve) || 0) + 
+                        (Number(e.moderado) || 0) + 
+                        (Number(e.medio) || 0) + 
+                        (Number(e.severo) || 0) + 
+                        (Number(e.critico) || 0) + 
+                        (Number(e.muerto) || 0);
 
-    jar.innerHTML = `
-      <div class="jar-tooltip">
-        <span class="tooltip-common">${esp.nombreComun}</span>
-        <span class="tooltip-scientific">${esp.nombreCientifico || 'S/N'}</span>
+    const card = document.createElement('div');
+    card.className = 'gallery-card glass';
+
+    card.innerHTML = `
+      <div class="gallery-image-wrapper">
+        <img src="${imageUrl}" alt="${e.especie}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=600&q=80';">
+        <span class="gallery-badge ${totalEnfermos > 0 ? 'alert' : 'safe'}">
+          ${totalEnfermos > 0 ? `${totalEnfermos} Afectados` : 'Saludable'}
+        </span>
       </div>
-      <div class="glass-capelo">
-        <div class="glass-reflection"></div>
-        <img src="assets/muerdago-demo.png" alt="${esp.nombreComun}" class="floating-specimen" style="animation-delay: ${delay}s;">
+      <div class="gallery-content">
+        <h3 class="fuente-editorial">${e.especie}</h3>
+        <div class="gallery-stats">
+          <div>
+            <small>Población Censada</small>
+            <strong>${e.total || 0} ejemplares</strong>
+          </div>
+          <div>
+            <small>Focos Activos</small>
+            <strong class="${totalEnfermos > 0 ? 'text-alert' : 'text-safe'}">${totalEnfermos}</strong>
+          </div>
+        </div>
       </div>
-      <div class="jar-base"></div>
     `;
-    shelfContainer.appendChild(jar);
+
+    galleryContainer.appendChild(card);
   });
 }
 
-function filtrarGaleria(filtro) {
-  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-  if (event && event.target) event.target.classList.add('active');
-  renderGaleria(filtro);
-}
-
 // =========================
-// MODAL / FICHA INTERACTIVA DEL ESPÉCIMEN
-// =========================
-function abrirFicha(esp) {
-  const modal = document.getElementById('specimenModal');
-  if (!modal) return;
-
-  document.getElementById('modalNombreComun').innerText = esp.nombreComun;
-  document.getElementById('modalNombreCientifico').innerText = esp.nombreCientifico || 'Sin clasificación científica';
-  document.getElementById('modalOriginBadge').innerText = esp.enCampus ? `Detectados en Campus: ${esp.detectadosEnCampus}` : `Origen: ${esp.origen}`;
-
-  document.getElementById('modalEstructura').innerText = `Planta hemiparásita con estructura adaptada para la penetración del xilema arbóreo. Su patrón vegetativo presenta raíces modificadas (haustorios).`;
-  document.getElementById('modalPropiedades').innerText = esp.usoMedicinal ? esp.usoMedicinal : 'No se registran aplicaciones medicinales locales en la base de datos.';
-  document.getElementById('modalRiesgo').innerText = `Hospedero principal reportado: ${esp.hospederoPrincipal || 'Variados'}. Constituye un factor de riesgo para el deterioro del dosel urbano.`;
-
-  switchTab('tab-estructura');
-  modal.classList.remove('hidden');
-}
-
-function cerrarFicha() {
-  const modal = document.getElementById('specimenModal');
-  if (modal) modal.classList.add('hidden');
-}
-
-function switchTab(tabId) {
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-
-  const activeContent = document.getElementById(tabId);
-  if (activeContent) activeContent.classList.add('active');
-
-  if (event && event.target && event.target.classList.contains('tab-btn')) {
-    event.target.classList.add('active');
-  }
-}
-
-// =========================
-// MOTOR DE GRÁFICAS CHART.JS
+// MOTOR CENTRAL DE GRÁFICAS
 // =========================
 function createChart(id, type, labels, data, color, customOptions = {}) {
-  const canvas = document.getElementById(id);
-  if (!canvas) return;
+  const canvasElement = document.getElementById(id);
+  if (!canvasElement) return;
 
-  if (charts[id]) charts[id].destroy();
+  if (charts[id]) {
+    charts[id].destroy();
+  }
 
+  // Opciones base obligatorias de escalamiento fluido
   const baseOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -227,26 +224,31 @@ function createChart(id, type, labels, data, color, customOptions = {}) {
     } : {}
   };
 
+  // Mezclar opciones estructurales con las personalizadas de cada gráfica
   const mergedOptions = Object.assign({}, baseOptions, customOptions);
 
-  charts[id] = new Chart(canvas, {
-    type: type,
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Ejemplares',
-        data: data,
-        backgroundColor: color,
-        borderWidth: 0,
-        borderRadius: type === 'bar' ? 6 : 0
-      }]
-    },
-    options: mergedOptions
-  });
+  charts[id] = new Chart(
+    canvasElement,
+    {
+      type: type,
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Ejemplares',
+          data: data,
+          backgroundColor: color,
+          borderWidth: 0,
+          borderRadius: type === 'bar' ? 6 : 0
+        }]
+      },
+      options: mergedOptions
+    }
+  );
 }
 
-// Carga Inicial
+// Carga Inicial al abrir el portal
 window.onload = () => {
   loadData();
-  setInterval(loadData, 30000); // Recarga automática cada 30 segundos
+  // Sincronización en bucle cada 30 segundos
+  setInterval(loadData, 30000);
 };
